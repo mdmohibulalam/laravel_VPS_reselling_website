@@ -55,10 +55,10 @@ class ProvisioningJob implements ShouldQueue
                         'ip_address' => $result->data['ipAddress'] ?? null,
                         'encrypted_credentials' => encrypt($result->data['initialPassword'] ?? ''),
                         'default_user' => $result->data['defaultUser'] ?? 'root',
-                        'status' => 'provisioned',
+                        'status' => 'contabo_ok',
                     ]);
                     
-                    Order::where('id', $service->order_id)->update(['status' => 'provisioned']);
+                    Order::where('id', $service->order_id)->update(['status' => 'contabo_ok']);
                 } else {
                     $service->update(['status' => 'provisioning_failed']);
                     Order::where('id', $service->order_id)->update(['status' => 'failed']);

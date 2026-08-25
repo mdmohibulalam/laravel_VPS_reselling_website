@@ -29,18 +29,20 @@ class OrderForm
                             ->prefix('$')
                             ->required()
                             ->numeric(),
-                        Select::make('status')
-                            ->label('Order Status')
-                            ->options([
-                                'pending_approval' => 'Pending Review',
-                                'provisioning' => 'Provisioning...',
-                                'provisioned' => 'Provisioned (Ready to Deliver)',
+                        TextInput::make('status')
+                            ->label('Current Order Status')
+                            ->disabled()
+                            ->default('pending')
+                            ->dehydrated()
+                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                                'pending' => 'Pending (Unpaid)',
+                                'provision' => 'Provision / Processing (Paid)',
+                                'contabo_ok' => 'Contabo OK (Ready to Deliver)',
                                 'active' => 'Active / Delivered',
                                 'failed' => 'Failed',
-                                'rejected' => 'Rejected',
                                 'cancelled' => 'Cancelled',
-                            ])
-                            ->required(),
+                                default => ucfirst($state),
+                            }),
                     ])
                     ->columns(2),
             ]);

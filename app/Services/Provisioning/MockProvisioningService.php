@@ -13,7 +13,7 @@ class MockProvisioningService implements ProvisioningServiceInterface
         $defaultUser = $orderData['default_user'] ?? 'root';
         $rootPassword = $orderData['root_password'] ?? (Str::password(14, true, true, false, false) . 'A1!');
 
-        return ProvisioningResult::success([
+        $result = ProvisioningResult::success([
             'instanceId' => $instanceId,
             'ipAddress' => $randomIp,
             'initialPassword' => $rootPassword,
@@ -23,6 +23,16 @@ class MockProvisioningService implements ProvisioningServiceInterface
             'productId' => $orderData['product_id'] ?? 'V153',
             'imageId' => $orderData['image_id'] ?? 'Ubuntu-22.04',
         ], 'Mock instance created successfully.');
+
+        \App\Models\ProvisioningLog::create([
+            'service_id' => $orderData['service_id'] ?? null,
+            'action' => 'create_instance',
+            'request_payload' => $orderData,
+            'response_payload' => $result->data,
+            'is_success' => true,
+        ]);
+
+        return $result;
     }
 
     public function getInstance(string $instanceId): ProvisioningResult

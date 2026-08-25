@@ -18,7 +18,13 @@ class ProvisioningLogResource extends Resource
 {
     protected static ?string $model = ProvisioningLog::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $navigationLabel = 'API Error Logs';
+    protected static string|\UnitEnum|null $navigationGroup = 'System Settings';
+    protected static ?int $navigationSort = 100;
+    protected static ?string $modelLabel = 'API Log';
+    protected static ?string $pluralModelLabel = 'API Logs';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBugAnt;
 
     public static function form(Schema $schema): Schema
     {
@@ -41,8 +47,16 @@ class ProvisioningLogResource extends Resource
     {
         return [
             'index' => ListProvisioningLogs::route('/'),
-            'create' => CreateProvisioningLog::route('/create'),
-            'edit' => EditProvisioningLog::route('/{record}/edit'),
         ];
+    }
+    
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+    
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return false;
     }
 }

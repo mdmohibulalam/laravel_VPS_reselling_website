@@ -76,7 +76,7 @@ class ViewService extends ViewRecord
                 ->requiresConfirmation()
                 ->modalHeading('Power On Virtual Server')
                 ->modalDescription('Are you sure you want to boot up and power on this server?')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->action(function (ProvisioningServiceInterface $service) {
                     $res = $service->startInstance($this->record->contabo_instance_id);
                     if ($res->success) {
@@ -94,7 +94,7 @@ class ViewService extends ViewRecord
                 ->requiresConfirmation()
                 ->modalHeading('Reboot Server')
                 ->modalDescription('This will reboot your server. All unsaved system state in memory will be lost. Continue?')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->action(function (ProvisioningServiceInterface $service) {
                     $res = $service->rebootInstance($this->record->contabo_instance_id);
                     if ($res->success) {
@@ -112,7 +112,7 @@ class ViewService extends ViewRecord
                 ->requiresConfirmation()
                 ->modalHeading('Force Power Off')
                 ->modalDescription('Stopping a compute instance is like pulling the power cord. Data may be lost if not cleanly saved. Continue?')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->action(function (ProvisioningServiceInterface $service) {
                     $res = $service->stopInstance($this->record->contabo_instance_id);
                     if ($res->success) {
@@ -130,7 +130,7 @@ class ViewService extends ViewRecord
                 ->requiresConfirmation()
                 ->modalHeading('Clean ACPI Shutdown')
                 ->modalDescription('This sends a clean shutdown ACPI signal to the guest operating system.')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->action(function (ProvisioningServiceInterface $service) {
                     $res = $service->shutdownInstance($this->record->contabo_instance_id);
                     if ($res->success) {
@@ -147,7 +147,7 @@ class ViewService extends ViewRecord
                 ->modalHeading('Reset Root / Administrator Password')
                 ->modalDescription('Set a new root password for your server. A cloud-init password update will be applied.')
                 ->modalSubmitActionLabel('Update Password')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->form([
                     TextInput::make('new_password')
                         ->label('New Root Password')
@@ -174,7 +174,7 @@ class ViewService extends ViewRecord
                 ->modalHeading('Boot into Linux Rescue System')
                 ->modalDescription('Rescue system boots a lightweight Linux environment with your disk mounted for diagnostics and emergency data repair.')
                 ->modalSubmitActionLabel('Boot into Rescue System')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->form([
                     TextInput::make('rescue_password')
                         ->label('Temporary Rescue Password')
@@ -198,7 +198,7 @@ class ViewService extends ViewRecord
                 ->modalHeading('Reinstall Server Operating System')
                 ->modalDescription('WARNING: This will completely erase all data on the virtual server and install a fresh operating system.')
                 ->modalSubmitActionLabel('Confirm & Wipe Server')
-                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'provisioned']))
+                ->visible(fn () => !empty($this->record->contabo_instance_id) && in_array($this->record->status, ['active', 'contabo_ok']))
                 ->form([
                     Select::make('image_id')
                         ->label('Select Operating System')

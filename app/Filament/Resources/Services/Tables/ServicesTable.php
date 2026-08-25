@@ -46,18 +46,19 @@ class ServicesTable
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
-                        'provisioned' => 'info',
-                        'awaiting_provisioning' => 'warning',
+                        'contabo_ok' => 'info',
+                        'provisioning' => 'warning',
                         'suspended' => 'danger',
-                        'terminated' => 'gray',
+                        'terminated', 'cancelled' => 'gray',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'awaiting_provisioning' => 'Awaiting Provisioning',
-                        'provisioned' => 'Provisioned',
+                        'provisioning' => 'Provisioning',
+                        'contabo_ok' => 'Contabo OK',
                         'active' => 'Active',
                         'suspended' => 'Suspended',
                         'terminated' => 'Terminated',
+                        'cancelled' => 'Cancelled',
                         default => ucfirst($state),
                     }),
                 TextColumn::make('billing_cycle')

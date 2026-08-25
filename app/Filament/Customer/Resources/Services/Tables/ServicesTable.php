@@ -38,18 +38,20 @@ class ServicesTable
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
-                        'provisioned' => 'info',
-                        'awaiting_provisioning' => 'warning',
+                        'contabo_ok' => 'info',
+                        'provisioning', 'pending' => 'warning',
                         'suspended' => 'danger',
-                        'terminated' => 'gray',
+                        'terminated', 'cancelled' => 'gray',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'awaiting_provisioning' => 'Awaiting Setup',
-                        'provisioned' => 'Ready / Active',
+                        'pending' => 'Pending (Unpaid)',
+                        'provisioning' => 'Provisioning',
+                        'contabo_ok' => 'Provisioning', // Show as provisioning to customer until delivered
                         'active' => 'Active',
                         'suspended' => 'Suspended',
                         'terminated' => 'Terminated',
+                        'cancelled' => 'Cancelled',
                         default => ucfirst($state),
                     }),
                 TextColumn::make('next_due_date')

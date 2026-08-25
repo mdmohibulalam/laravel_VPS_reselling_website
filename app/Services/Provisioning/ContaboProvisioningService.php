@@ -41,15 +41,18 @@ class ContaboProvisioningService implements ProvisioningServiceInterface
         }
 
         return Cache::remember('contabo_oauth_access_token', 280, function () {
-            $response = Http::asForm()
-                ->timeout(15)
-                ->post($this->authUrl, [
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'username' => $this->apiUser,
-                    'password' => $this->apiPassword,
-                    'grant_type' => 'password',
-                ]);
+            $http = Http::asForm()->timeout(15);
+            if (app()->isLocal()) {
+                $http = $http->withoutVerifying();
+            }
+
+            $response = $http->post($this->authUrl, [
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'username' => $this->apiUser,
+                'password' => $this->apiPassword,
+                'grant_type' => 'password',
+            ]);
 
             if ($response->failed()) {
                 $errorMsg = $response->json('error_description') ?? $response->json('error') ?? $response->body();
@@ -70,38 +73,47 @@ class ContaboProvisioningService implements ProvisioningServiceInterface
      */
     protected function request(string $method, string $endpoint, array $data = [], ?int $serviceId = null, string $action = '')
     {
-        $token = $this->getAccessToken();
-        $url = $this->baseUrl . '/v1/' . ltrim($endpoint, '/');
-        $requestId = (string) Str::uuid();
+        try {
+            $token = $this->getAccessToken();
+            $url = $this->baseUrl . '/v1/' . ltrim($endpoint, '/');
+            $requestId = (string) Str::uuid();
 
-        $http = Http::withToken($token)
-            ->acceptJson()
-            ->withHeaders([
-                'x-request-id' => $requestId,
-                'Content-Type' => 'application/json',
-            ])
-            ->timeout(30);
+            $http = Http::withToken($token)
+                ->acceptJson()
+                ->withHeaders([
+                    'x-request-id' => $requestId,
+                    'Content-Type' => 'application/json',
+                ])
+                ->timeout(30);
 
-        $method = strtolower($method);
+            if (app()->isLocal()) {
+                $http = $http->withoutVerifying();
+            }
 
-        if ($method === 'get') {
-            $response = $http->get($url, $data);
-        } elseif ($method === 'post') {
-            $response = $http->post($url, $data);
-        } elseif ($method === 'put') {
-            $response = $http->put($url, $data);
-        } elseif ($method === 'patch') {
-            $response = $http->patch($url, $data);
-        } elseif ($method === 'delete') {
-            $response = $http->delete($url, $data);
-        } else {
-            throw new Exception("Unsupported HTTP method: {$method}");
+            $method = strtolower($method);
+
+            if ($method === 'get') {
+                $response = $http->get($url, $data);
+            } elseif ($method === 'post') {
+                $response = $http->post($url, $data);
+            } elseif ($method === 'put') {
+                $response = $http->put($url, $data);
+            } elseif ($method === 'patch') {
+                $response = $http->patch($url, $data);
+            } elseif ($method === 'delete') {
+                $response = $http->delete($url, $data);
+            } else {
+                throw new Exception("Unsupported HTTP method: {$method}");
+            }
+
+            // Log request & response
+            $this->logProvisioning($serviceId, $action, $data, $response->json() ?? ['raw' => $response->body()], $response->successful());
+
+            return $response;
+        } catch (\Exception $e) {
+            $this->logProvisioning($serviceId, $action, $data, ['error' => $e->getMessage()], false);
+            throw $e;
         }
-
-        // Log request & response
-        $this->logProvisioning($serviceId, $action, $data, $response->json() ?? ['raw' => $response->body()], $response->successful());
-
-        return $response;
     }
 
     /**

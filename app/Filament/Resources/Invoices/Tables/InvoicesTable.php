@@ -14,11 +14,13 @@ class InvoicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->label('Customer')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('order_id')
-                    ->numeric()
+                TextColumn::make('order.order_number')
+                    ->label('Order #')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('invoice_number')
                     ->searchable(),
@@ -32,7 +34,21 @@ class InvoicesTable
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'paid' => 'success',
+                        'pending', 'unpaid' => 'warning',
+                        'refunded' => 'info',
+                        'cancelled' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending', 'unpaid' => 'Pending (Unpaid)',
+                        'paid' => 'Paid',
+                        'refunded' => 'Refunded',
+                        'cancelled' => 'Cancelled',
+                        default => ucfirst($state),
+                    }),
                 TextColumn::make('stripe_payment_intent_id')
                     ->searchable(),
                 TextColumn::make('due_date')
@@ -54,7 +70,7 @@ class InvoicesTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                \Filament\Actions\ViewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

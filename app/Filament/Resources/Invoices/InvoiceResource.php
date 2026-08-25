@@ -30,6 +30,11 @@ class InvoiceResource extends Resource
         return InvoicesTable::configure($table);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return \App\Filament\Resources\Invoices\Infolists\InvoiceInfolist::configure($schema);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -42,6 +47,7 @@ class InvoiceResource extends Resource
         return [
             'index' => ListInvoices::route('/'),
             'create' => CreateInvoice::route('/create'),
+            'view' => \App\Filament\Resources\Invoices\Pages\ViewInvoice::route('/{record}'),
             'edit' => EditInvoice::route('/{record}/edit'),
         ];
     }

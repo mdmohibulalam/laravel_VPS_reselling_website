@@ -40,4 +40,15 @@ class Order extends Model
     {
         return $this->hasMany(Service::class);
     }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Order $order) {
+            $order->services()->delete();
+            $order->items()->delete();
+            if ($order->invoice) {
+                $order->invoice()->delete();
+            }
+        });
+    }
 }
