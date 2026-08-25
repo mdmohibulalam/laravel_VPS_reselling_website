@@ -15,11 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Generate Filament Shield Roles & Permissions automatically
+        \Illuminate\Support\Facades\Artisan::call('shield:generate --all --panel=admin --no-interaction');
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create Default Customer
+        if (!User::where('email', 'test@example.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
+
+        // Create Default Admin
+        if (!\App\Models\Admin::where('email', 'admin@example.com')->exists()) {
+            $admin = \App\Models\Admin::create([
+                'name' => 'Super Admin',
+                'email' => 'admin@example.com',
+                'password' => bcrypt('password'),
+            ]);
+
+            $admin->assignRole('super_admin');
+        }
     }
 }
