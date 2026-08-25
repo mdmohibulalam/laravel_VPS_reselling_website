@@ -47,21 +47,21 @@ class ProvisioningJob implements ShouldQueue
 
         switch ($this->action) {
             case 'create':
+                $this->payload['service_id'] = $service->id;
                 $result = $provisioningService->createInstance($this->payload);
                 if ($result->success) {
                     $service->update([
                         'contabo_instance_id' => $result->data['instanceId'] ?? null,
                         'ip_address' => $result->data['ipAddress'] ?? null,
                         'encrypted_credentials' => encrypt($result->data['initialPassword'] ?? ''),
-                        'status' => 'active',
+                        'default_user' => $result->data['defaultUser'] ?? 'root',
+                        'status' => 'provisioned',
                     ]);
                     
-                    // Update Order status
-                    Order::where('id', $service->order_id)->update(['status' => 'active']);
+                    Order::where('id', $service->order_id)->update(['status' => 'provisioned']);
                 } else {
                     $service->update(['status' => 'provisioning_failed']);
                     Order::where('id', $service->order_id)->update(['status' => 'failed']);
-                    // TODO: Notify admin of failure
                 }
                 break;
                 

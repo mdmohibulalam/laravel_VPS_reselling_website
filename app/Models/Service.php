@@ -20,6 +20,22 @@ class Service extends Model
         ];
     }
 
+    /**
+     * Decrypt and return the root password on demand.
+     */
+    public function getDecryptedPasswordAttribute(): ?string
+    {
+        if (empty($this->encrypted_credentials)) {
+            return null;
+        }
+
+        try {
+            return decrypt($this->encrypted_credentials);
+        } catch (\Exception $e) {
+            return $this->encrypted_credentials;
+        }
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

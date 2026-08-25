@@ -2,9 +2,8 @@
 
 namespace App\Filament\Customer\Resources\Services;
 
-use App\Filament\Customer\Resources\Services\Pages\CreateService;
-use App\Filament\Customer\Resources\Services\Pages\EditService;
 use App\Filament\Customer\Resources\Services\Pages\ListServices;
+use App\Filament\Customer\Resources\Services\Pages\ViewService;
 use App\Filament\Customer\Resources\Services\Schemas\ServiceForm;
 use App\Filament\Customer\Resources\Services\Tables\ServicesTable;
 use App\Models\Service;
@@ -20,6 +19,8 @@ class ServiceResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $navigationLabel = 'My Services';
+
     public static function form(Schema $schema): Schema
     {
         return ServiceForm::configure($schema);
@@ -32,17 +33,14 @@ class ServiceResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ListServices::route('/'),
-            'create' => CreateService::route('/create'),
-            'edit' => EditService::route('/{record}/edit'),
+            'view' => ViewService::route('/{record}'),
         ];
     }
     
