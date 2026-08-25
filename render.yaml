@@ -1,0 +1,58 @@
+services:
+  # 1. The Main Web Application
+  - type: web
+    name: vps-reselling-web
+    env: docker
+    plan: free
+    dockerCommand: /usr/local/bin/start
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        fromService:
+          type: web
+          name: vps-reselling-web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vps-reselling-db
+          property: connectionString
+      - key: PROVISIONING_MODE
+        value: mock
+      # NOTE: Make sure to add your real Stripe keys inside the Render Dashboard!
+      - key: STRIPE_KEY
+        value: ""
+      - key: STRIPE_SECRET
+        value: ""
+
+  # 2. The Background Queue Worker (For Provisioning Jobs)
+  - type: worker
+    name: vps-reselling-worker
+    env: docker
+    plan: free
+    dockerCommand: php artisan queue:work --sleep=3 --tries=3
+    envVars:
+      - key: APP_KEY
+        fromService:
+          type: web
+          name: vps-reselling-web
+          envVarKey: APP_KEY
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vps-reselling-db
+          property: connectionString
+
+databases:
+  # 3. The Managed PostgreSQL Database
+  - name: vps-reselling-db
+    databaseName: vps_app
+    user: vps_user
+    plan: free
