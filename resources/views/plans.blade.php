@@ -30,15 +30,15 @@
                             <ul class="space-y-4 mb-8">
                                 <li class="flex items-center text-slate-300">
                                     <svg class="w-5 h-5 text-primary-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    {{ $specs['cores'] ?? 'N/A' }} vCPU Cores
+                                    {{ !empty($specs['cores']) ? (str_contains(strtolower($specs['cores']), 'core') || str_contains(strtolower($specs['cores']), 'vcpu') ? $specs['cores'] : $specs['cores'] . ' vCPU Cores') : 'N/A vCPU Cores' }}
                                 </li>
                                 <li class="flex items-center text-slate-300">
                                     <svg class="w-5 h-5 text-primary-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    {{ $specs['memory'] ?? 'N/A' }} RAM
+                                    {{ !empty($specs['memory']) ? (str_contains(strtolower($specs['memory']), 'ram') ? $specs['memory'] : $specs['memory'] . ' RAM') : 'N/A RAM' }}
                                 </li>
                                 <li class="flex items-center text-slate-300">
                                     <svg class="w-5 h-5 text-primary-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    {{ $specs['storage'] ?? 'N/A' }} Storage
+                                    {{ !empty($specs['storage']) ? (str_contains(strtolower($specs['storage']), 'storage') ? $specs['storage'] : $specs['storage'] . ' Storage') : 'N/A Storage' }}
                                 </li>
                                 <li class="flex items-center text-slate-300">
                                     <svg class="w-5 h-5 text-primary-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>

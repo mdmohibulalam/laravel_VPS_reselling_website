@@ -2,9 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CmsPage extends Model
 {
-    //
+    use HasFactory;
+
+    protected $guarded = [];
+
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+        ];
+    }
 }

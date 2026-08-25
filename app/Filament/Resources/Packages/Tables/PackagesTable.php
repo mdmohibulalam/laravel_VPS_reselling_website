@@ -16,27 +16,39 @@ class PackagesTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('category')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'vps' => 'info',
+                        'rdp' => 'warning',
+                        default => 'gray',
+                    }),
+                TextColumn::make('specs.cores')
+                    ->label('Cores')
+                    ->placeholder('N/A'),
+                TextColumn::make('specs.memory')
+                    ->label('RAM')
+                    ->placeholder('N/A'),
+                TextColumn::make('specs.storage')
+                    ->label('Storage')
+                    ->placeholder('N/A'),
                 TextColumn::make('price_monthly')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('price_quarterly')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('price_semi_annually')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('price_annually')
-                    ->numeric()
+                    ->label('Monthly')
+                    ->money('USD')
                     ->sortable(),
                 TextColumn::make('setup_fee')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Setup Fee')
+                    ->money('USD')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('contabo_product_id')
-                    ->searchable(),
+                    ->label('Contabo ID')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_active')
+                    ->label('Active')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
