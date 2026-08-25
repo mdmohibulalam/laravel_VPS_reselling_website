@@ -15,7 +15,9 @@ class ProvisioningServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ProvisioningServiceInterface::class, function ($app) {
-            if (config('services.provisioning.mode') === 'live') {
+            $mode = strtolower((string) config('services.provisioning.mode', 'mock'));
+            
+            if (in_array($mode, ['contabo', 'live', 'real'])) {
                 return new ContaboProvisioningService();
             }
             

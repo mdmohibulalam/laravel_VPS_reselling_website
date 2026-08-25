@@ -30,6 +30,11 @@ class UserResource extends Resource
         return UsersTable::configure($table);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return \App\Filament\Resources\Users\Infolists\UserInfolist::configure($schema);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -42,6 +47,7 @@ class UserResource extends Resource
         return [
             'index' => ListUsers::route('/'),
             'create' => CreateUser::route('/create'),
+            'view' => \App\Filament\Resources\Users\Pages\ViewUser::route('/{record}'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }

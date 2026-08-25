@@ -13,13 +13,13 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'is_suspended'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
     public function canAccessPanel(Panel $panel): bool
     {
-        return $panel->getId() === 'customer';
+        return $panel->getId() === 'customer' && !$this->is_suspended;
     }
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;

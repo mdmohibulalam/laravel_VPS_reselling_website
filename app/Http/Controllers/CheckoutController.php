@@ -77,7 +77,7 @@ class CheckoutController extends Controller
             'user_id' => $user->id,
             'order_number' => 'ORD-' . strtoupper(Str::random(10)),
             'total_amount' => $package->price_monthly,
-            'status' => 'pending_approval',
+            'status' => 'pending',
         ]);
         
         // Create Invoice
@@ -88,7 +88,7 @@ class CheckoutController extends Controller
             'amount' => $package->price_monthly,
             'tax' => 0,
             'total' => $package->price_monthly,
-            'status' => $request->payment_type === 'stripe' ? 'paid' : 'unpaid',
+            'status' => $request->payment_type === 'stripe' ? 'paid' : 'pending',
             'stripe_payment_intent_id' => $paymentIntent->id ?? null,
             'due_date' => $request->payment_type === 'stripe' ? null : now()->addDays(7),
             'paid_at' => $request->payment_type === 'stripe' ? now() : null,
@@ -99,7 +99,7 @@ class CheckoutController extends Controller
             'user_id' => $user->id,
             'order_id' => $order->id,
             'package_id' => $package->id,
-            'status' => 'awaiting_provisioning',
+            'status' => 'pending',
             'billing_cycle' => 'monthly',
             'next_due_date' => now()->addMonth(),
         ]);

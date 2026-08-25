@@ -7,39 +7,31 @@ use App\Models\Service;
 use App\Services\Provisioning\ProvisioningServiceInterface;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Str;
 use App\Mail\ServiceDeliveredMail;
 use Illuminate\Support\Facades\Mail;
 
-class EditOrder extends EditRecord
+class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('cancel_order')
-                ->label('Cancel')
-                ->icon('heroicon-o-x-circle')
-                ->color('danger')
-                ->requiresConfirmation()
-                ->modalHeading('Cancel Order')
-                ->visible(fn () => !in_array($this->record->status, ['cancelled', 'active']))
-                ->action(function () {
-                    $this->record->update(['status' => 'cancelled']);
-                    Notification::make()->title('Order Cancelled')->success()->send();
-                }),
+
 
             Action::make('provision_contabo')
                 ->label('Go to Contabo')
                 ->icon('heroicon-o-cloud-arrow-up')
                 ->color('warning')
                 ->modalHeading('Provision VPS via Contabo API')
+                ->modalDescription('Configure server parameters and submit to Contabo API to provision the server instance.')
+                ->modalSubmitActionLabel('Provision on Contabo')
                 ->visible(fn () => in_array($this->record->status, ['pending', 'provision', 'failed']))
                 ->form(function () {
                     $service = $this->record->services()->first();
@@ -56,19 +48,35 @@ class EditOrder extends EditRecord
                             ->options([
                                 'EU' => 'European Union (Germany)',
                                 'US-central' => 'United States (Central)',
+                                'US-east' => 'United States (East)',
+                                'US-west' => 'United States (West)',
+                                'SIN' => 'Singapore (Asia)',
+                                'UK' => 'United Kingdom',
+                                'AUS' => 'Australia',
                             ])
-                            ->default('EU')
+                            ->default(config('services.contabo.default_region', 'EU'))
                             ->required(),
                         Select::make('image_id')
-                            ->label('OS Image')
+                            ->label('Operating System Image')
                             ->options([
                                 'afecbb85-e2fc-46f0-9684-b46b1faf00bb' => 'Ubuntu 22.04 LTS',
+                                '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d' => 'Ubuntu 20.04 LTS',
+                                'a2c26e8f-84a5-4f3e-9c0e-b06511928cc0' => 'Debian 12',
+                                'c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f' => 'Windows Server 2022',
                             ])
                             ->default('afecbb85-e2fc-46f0-9684-b46b1faf00bb')
                             ->required(),
-                        TextInput::make('default_user')->default('root')->required(),
-                        TextInput::make('root_password')->default(fn () => Str::password(16, true, true, false, false) . 'A1!')->required(),
-                        TextInput::make('display_name')->default('VPS-' . $this->record->order_number),
+                        TextInput::make('default_user')
+                            ->label('Default User')
+                            ->default('root')
+                            ->required(),
+                        TextInput::make('root_password')
+                            ->label('Root Password')
+                            ->default(fn () => Str::password(16, true, true, false, false) . 'A1!')
+                            ->required(),
+                        TextInput::make('display_name')
+                            ->label('Server Display Name')
+                            ->default('VPS-' . $this->record->order_number),
                     ];
                 })
                 ->action(function (array $data, ProvisioningServiceInterface $provisioningService) {
@@ -98,6 +106,8 @@ class EditOrder extends EditRecord
                                 'encrypted_credentials' => encrypt($result->data['initialPassword'] ?? $data['root_password']),
                                 'default_user' => $result->data['defaultUser'] ?? $data['default_user'],
                                 'server_name' => $data['display_name'],
+                                'os_image' => 'Linux OS',
+                                'region' => $data['region'],
                                 'status' => 'contabo_ok',
                             ]);
                             $successCount++;
@@ -127,15 +137,56 @@ class EditOrder extends EditRecord
                         $service->update(['status' => 'active', 'next_due_date' => now()->addMonth()]);
                         try {
                             Mail::to($this->record->user->email)->send(new ServiceDeliveredMail(
-                                $service, $this->record->user, $service->decrypted_password ?? 'N/A', $service->default_user ?? 'root'
+                                $service,
+                                $this->record->user,
+                                $service->decrypted_password ?? 'N/A',
+                                $service->default_user ?? 'root'
                             ));
                         } catch (\Exception $e) {}
                     }
                     Notification::make()->title('Service Delivered!')->success()->send();
                 }),
 
-            ViewAction::make(),
-            DeleteAction::make(),
+
+
+            Action::make('sync_status')
+                ->label('Sync Contabo Status')
+                ->icon('heroicon-o-arrow-path')
+                ->color('info')
+                ->visible(fn () => $this->record->status === 'contabo_ok' && (empty($this->record->services->first()?->ip_address) || in_array($this->record->services->first()?->ip_address, ['Pending IP', 'Pending Assignment'])))
+                ->action(function (ProvisioningServiceInterface $provisioningService) {
+                    $service = $this->record->services->first();
+                    if ($service && $service->contabo_instance_id) {
+                        $result = $provisioningService->getInstance($service->contabo_instance_id);
+                        $fetchedIp = $result->data['ipAddress'] ?? '';
+                        
+                        if ($result->success && !empty($fetchedIp) && !in_array($fetchedIp, ['Pending IP', 'Pending Assignment'])) {
+                            $service->update(['ip_address' => $fetchedIp]);
+                            Notification::make()->title('IP Address Synced!')->success()->send();
+                            return;
+                        }
+                    }
+                    Notification::make()->title('Still Pending')->body('Contabo has not assigned an IP yet. Check your Contabo billing.')->warning()->send();
+                }),
+
+            \Filament\Actions\ActionGroup::make([
+                Action::make('cancel_order')
+                    ->label('Cancel Order')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Cancel Order')
+                    ->visible(fn () => !in_array($this->record->status, ['cancelled', 'active']))
+                    ->action(function () {
+                        $this->record->update(['status' => 'cancelled']);
+                        Notification::make()->title('Order Cancelled')->success()->send();
+                    }),
+                EditAction::make(),
+                DeleteAction::make(),
+            ])
+            ->label('More Actions')
+            ->icon('heroicon-m-ellipsis-vertical')
+            ->color('gray'),
         ];
     }
 }

@@ -8,9 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This file is for storing the credentials for third party services such
-    | as Resend, Postmark, AWS, and more. This file provides the de facto
-    | location for this type of information, allowing packages to have
-    | a conventional file to locate the various service credentials.
+    | as Resend, Postmark, AWS, Stripe, Contabo, and more.
     |
     */
 
@@ -35,16 +33,25 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
     'provisioning' => [
-        'mode' => env('PROVISIONING_MODE', 'mock'),
+        'mode' => env('PROVISIONING_MODE', 'mock'), // 'contabo', 'live', or 'mock'
     ],
 
     'contabo' => [
         'base_url' => env('CONTABO_API_BASE_URL', 'https://api.contabo.com'),
+        'auth_url' => env('CONTABO_AUTH_URL', 'https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token'),
         'client_id' => env('CONTABO_CLIENT_ID'),
         'client_secret' => env('CONTABO_CLIENT_SECRET'),
         'api_user' => env('CONTABO_API_USER'),
         'api_password' => env('CONTABO_API_PASSWORD'),
+        'default_region' => env('CONTABO_DEFAULT_REGION', 'EU'),
+        'default_image_id' => env('CONTABO_DEFAULT_IMAGE_ID', 'afecbb85-e2fc-46f0-9684-b46b1faf00bb'), // Ubuntu 22.04 LTS default
     ],
 
 ];

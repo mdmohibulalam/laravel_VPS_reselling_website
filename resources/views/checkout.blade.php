@@ -9,9 +9,9 @@
                     <h3 class="text-xl font-bold text-white mb-2">{{ $package->name }}</h3>
                     @php $specs = is_string($package->specs) ? json_decode($package->specs, true) : $package->specs; @endphp
                     <ul class="text-slate-400 space-y-2 mb-6">
-                        <li>{{ $specs['cores'] ?? 'N/A' }} vCPU Cores</li>
-                        <li>{{ $specs['memory'] ?? 'N/A' }} RAM</li>
-                        <li>{{ $specs['storage'] ?? 'N/A' }} Storage</li>
+                        <li>{{ !empty($specs['cores']) ? (str_contains(strtolower($specs['cores']), 'core') || str_contains(strtolower($specs['cores']), 'vcpu') ? $specs['cores'] : $specs['cores'] . ' vCPU Cores') : 'N/A vCPU Cores' }}</li>
+                        <li>{{ !empty($specs['memory']) ? (str_contains(strtolower($specs['memory']), 'ram') ? $specs['memory'] : $specs['memory'] . ' RAM') : 'N/A RAM' }}</li>
+                        <li>{{ !empty($specs['storage']) ? (str_contains(strtolower($specs['storage']), 'storage') ? $specs['storage'] : $specs['storage'] . ' Storage') : 'N/A Storage' }}</li>
                         <li>{{ strtolower($package->category) === 'rdp' ? 'Windows OS (RDP)' : 'Linux OS' }}</li>
                     </ul>
                     <div class="border-t border-white/10 pt-4 flex justify-between items-center text-lg font-bold text-white">

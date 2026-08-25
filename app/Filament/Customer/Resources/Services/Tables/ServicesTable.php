@@ -2,9 +2,8 @@
 
 namespace App\Filament\Customer\Resources\Services\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use App\Models\Service;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,45 +13,61 @@ class ServicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('order_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('package_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('contabo_instance_id')
+                TextColumn::make('package.name')
+                    ->label('Product / Service')
+                    ->badge()
+                    ->color('primary')
+                    ->weight('bold')
                     ->searchable(),
                 TextColumn::make('ip_address')
+                    ->label('Primary IP Address')
+                    ->searchable()
+                    ->placeholder('Pending Provisioning')
+                    ->copyable()
+                    ->weight('semibold'),
+                TextColumn::make('server_name')
+                    ->label('Hostname / Server')
+                    ->placeholder('VPS Server')
                     ->searchable(),
+                TextColumn::make('region')
+                    ->label('Region')
+                    ->badge()
+                    ->color('gray')
+                    ->formatStateUsing(fn ($state) => strtoupper($state ?? 'EU')),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'active' => 'success',
+                        'contabo_ok' => 'info',
+                        'provisioning', 'pending' => 'warning',
+                        'suspended' => 'danger',
+                        'terminated', 'cancelled' => 'gray',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending' => 'Pending (Unpaid)',
+                        'provisioning' => 'Provisioning',
+                        'contabo_ok' => 'Provisioning', // Show as provisioning to customer until delivered
+                        'active' => 'Active',
+                        'suspended' => 'Suspended',
+                        'terminated' => 'Terminated',
+                        'cancelled' => 'Cancelled',
+                        default => ucfirst($state),
+                    }),
                 TextColumn::make('next_due_date')
+                    ->label('Next Due Date')
                     ->date()
                     ->sortable(),
-                TextColumn::make('billing_cycle')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                ViewAction::make()
+                    ->label('Manage VPS')
+                    ->icon('heroicon-o-computer-desktop')
+                    ->color('primary')
+                    ->button(),
             ]);
     }
 }

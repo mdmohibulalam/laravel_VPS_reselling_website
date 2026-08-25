@@ -2,11 +2,23 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use App\Mail\ServiceDeliveredMail;
+use App\Models\Order;
+use App\Models\Service;
+use App\Services\Provisioning\ProvisioningServiceInterface;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class OrdersTable
 {
@@ -14,60 +26,65 @@ class OrdersTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('order_number')
-                    ->searchable(),
+                    ->label('Order #')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold'),
+                TextColumn::make('user.name')
+                    ->label('Customer')
+                    ->searchable()
+                    ->description(fn (Order $record) => $record->user->email ?? ''),
+                TextColumn::make('invoice.invoice_number')
+                    ->label('Invoice #')
+                    ->searchable()
+                    ->placeholder('N/A')
+                    ->sortable(),
+                TextColumn::make('services.package.name')
+                    ->label('Package')
+                    ->badge()
+                    ->color('primary'),
+                TextColumn::make('services.ip_address')
+                    ->label('Server IP')
+                    ->placeholder('Pending Provisioning')
+                    ->copyable()
+                    ->copyMessage('IP copied to clipboard'),
                 TextColumn::make('total_amount')
-                    ->numeric()
+                    ->label('Total')
+                    ->money('USD')
                     ->sortable(),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'active' => 'success',
+                        'contabo_ok' => 'info',
+                        'provision' => 'warning',
+                        'pending' => 'gray',
+                        'failed', 'cancelled' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending' => 'Pending (Unpaid)',
+                        'provision' => 'Provisioning (Paid)',
+                        'contabo_ok' => 'Contabo OK',
+                        'active' => 'Active / Delivered',
+                        'failed' => 'Provisioning Failed',
+                        'cancelled' => 'Cancelled',
+                        default => ucfirst($state),
+                    }),
                 TextColumn::make('created_at')
+                    ->label('Placed At')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
-                \Filament\Actions\Action::make('approve_provision')
-                    ->label('Approve & Provision')
-                    ->icon('heroicon-m-check-circle')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->visible(fn (\App\Models\Order $record) => $record->status === 'pending_approval')
-                    ->action(function (\App\Models\Order $record) {
-                        $record->update(['status' => 'provisioning']);
-                        
-                        // Dispatch jobs for each service attached to the order
-                        $services = \App\Models\Service::where('order_id', $record->id)->get();
-                        foreach ($services as $service) {
-                            \App\Jobs\ProvisioningJob::dispatch($service->id, 'create', [
-                                'api_payload' => [
-                                    // Generate payload for Contabo API from the package info
-                                    // Normally you'd build this from the package's contabo_product_id
-                                ]
-                            ]);
-                        }
-                        
-                        \Filament\Notifications\Notification::make()
-                            ->title('Order Approved & Provisioning Started')
-                            ->success()
-                            ->send();
-                    }),
+                ViewAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

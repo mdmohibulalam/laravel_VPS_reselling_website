@@ -32,7 +32,7 @@ class InvoiceForm
                     ->required()
                     ->numeric(),
                 Select::make('status')
-                    ->options(['unpaid' => 'Unpaid', 'paid' => 'Paid', 'refunded' => 'Refunded', 'cancelled' => 'Cancelled'])
+                    ->options(['pending' => 'Pending (Unpaid)', 'paid' => 'Paid', 'refunded' => 'Refunded', 'cancelled' => 'Cancelled'])
                     ->required(),
                 TextInput::make('stripe_payment_intent_id'),
                 DatePicker::make('due_date'),
