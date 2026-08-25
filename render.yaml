@@ -7,7 +7,7 @@ services:
     dockerCommand: /usr/local/bin/start
     envVars:
       - key: APP_KEY
-        generateValue: true
+        value: "base64:JRxkRng5kuYlFlfibw9k5WDAvkbZIb/+istB8KUO8IE="
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
