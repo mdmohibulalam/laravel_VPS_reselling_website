@@ -28,8 +28,21 @@
             : (!empty($specs['bandwidth']) ? $specs['bandwidth'] : '1 Gbps Unmetered');
 
         $baseMonthly = (float) $package->price_monthly;
-        $annualMonthly = round($baseMonthly * 0.80, 2); // 20% off
-        $biennialMonthly = round($baseMonthly * 0.70, 2); // 30% off
+        $annualMonthly = !empty($package->price_annually) ? round(((float)$package->price_annually)/12, 2) : round($baseMonthly * 0.85, 2); // 15% off
+        if ($annualMonthly <= 0 && $baseMonthly > 0) $annualMonthly = round($baseMonthly * 0.85, 2);
+
+        $biennialMonthly = !empty($package->price_biennially) ? round(((float)$package->price_biennially)/24, 2) : round($baseMonthly * 0.80, 2); // 20% off
+        if ($biennialMonthly <= 0 && $baseMonthly > 0) $biennialMonthly = round($baseMonthly * 0.80, 2);
+
+        // Pre-selected cycle passed from Homepage / Plans page or default to 24 months
+        $currentCycle = request('cycle', request('billing_cycle', $selectedCycle ?? old('billing_cycle', 'biennially')));
+        if (in_array($currentCycle, ['1month', 'monthly', 'month'])) {
+            $currentCycle = 'monthly';
+        } elseif (in_array($currentCycle, ['12months', 'annual', 'annually', '1year', 'year'])) {
+            $currentCycle = 'annually';
+        } else {
+            $currentCycle = 'biennially';
+        }
     @endphp
 
     <div class="py-10 md:py-16 bg-slate-50/70 min-h-[90vh]">
@@ -80,14 +93,14 @@
                                     <span class="w-7 h-7 rounded-full bg-[#673DE6] text-white font-bold text-xs flex items-center justify-center shadow-md shadow-[#673DE6]/30">1</span>
                                     <h2 class="text-lg font-bold text-slate-900">Choose Billing Period</h2>
                                 </div>
-                                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Save up to 30%</span>
+                                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Save up to 20%</span>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                                 
                                 <!-- 1 Month -->
                                 <label class="cursor-pointer relative">
-                                    <input type="radio" name="billing_cycle" value="monthly" class="peer sr-only" {{ old('billing_cycle', 'annually') === 'monthly' ? 'checked' : '' }} onchange="updateCalculations()">
+                                    <input type="radio" name="billing_cycle" value="monthly" class="peer sr-only" {{ $currentCycle === 'monthly' ? 'checked' : '' }} onchange="updateCalculations()">
                                     <div class="h-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 peer-checked:shadow-soft-md transition-all flex flex-col justify-between text-center group">
                                         <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1 Month</div>
                                         <div class="my-2">
@@ -98,13 +111,13 @@
                                     </div>
                                 </label>
 
-                                <!-- 12 Months (POPULAR - SAVE 20%) -->
+                                <!-- 12 Months (SAVE 15%) -->
                                 <label class="cursor-pointer relative">
-                                    <input type="radio" name="billing_cycle" value="annually" class="peer sr-only" {{ old('billing_cycle', 'annually') === 'annually' ? 'checked' : '' }} onchange="updateCalculations()">
+                                    <input type="radio" name="billing_cycle" value="annually" class="peer sr-only" {{ $currentCycle === 'annually' ? 'checked' : '' }} onchange="updateCalculations()">
                                     <div class="h-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 peer-checked:shadow-soft-md transition-all flex flex-col justify-between text-center relative group">
                                         <!-- Top Badge -->
-                                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#673DE6] text-white text-[10px] font-extrabold uppercase tracking-wider py-0.5 px-2.5 rounded-full shadow-sm">
-                                            Save 20%
+                                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#673DE6] text-white text-[10px] font-extrabold uppercase tracking-wider py-0.5 px-2.5 rounded-full shadow-sm whitespace-nowrap">
+                                            Save 15%
                                         </div>
                                         <div class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-1 pt-1">12 Months</div>
                                         <div class="my-2">
@@ -115,13 +128,13 @@
                                     </div>
                                 </label>
 
-                                <!-- 24 Months (SAVE 30%) -->
+                                <!-- 24 Months (SAVE 20%) -->
                                 <label class="cursor-pointer relative">
-                                    <input type="radio" name="billing_cycle" value="biennially" class="peer sr-only" {{ old('billing_cycle') === 'biennially' ? 'checked' : '' }} onchange="updateCalculations()">
+                                    <input type="radio" name="billing_cycle" value="biennially" class="peer sr-only" {{ $currentCycle === 'biennially' ? 'checked' : '' }} onchange="updateCalculations()">
                                     <div class="h-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 peer-checked:shadow-soft-md transition-all flex flex-col justify-between text-center relative group">
                                         <!-- Top Badge -->
-                                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider py-0.5 px-2.5 rounded-full shadow-sm">
-                                            Save 30%
+                                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider py-0.5 px-2.5 rounded-full shadow-sm whitespace-nowrap">
+                                            Save 20%
                                         </div>
                                         <div class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1 pt-1">24 Months</div>
                                         <div class="my-2">
@@ -215,46 +228,97 @@
                                 </div>
                             </div>
 
-                            <!-- Datacenter Region Location Picker -->
+                            <!-- Datacenter Region Location Picker with Visual Flags -->
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
                                     Datacenter Region
                                 </label>
                                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                                     
+                                    <!-- US East (New York) -->
                                     <label class="cursor-pointer">
                                         <input type="radio" name="datacenter" value="US East (New York)" class="peer sr-only" {{ old('datacenter', 'US East (New York)') === 'US East (New York)' ? 'checked' : '' }} onchange="updateLocationDisplay(this.value)">
-                                        <div class="p-3 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center">
-                                            <div class="text-lg mb-1">🇺🇸</div>
-                                            <div class="text-xs font-bold text-slate-900">US East</div>
-                                            <div class="text-[10px] text-emerald-600 font-mono font-semibold">9 ms</div>
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center flex flex-col items-center justify-between h-full group">
+                                            <div class="w-10 h-7 rounded-md overflow-hidden shadow-sm border border-slate-200/80 mb-2 flex items-center justify-center bg-white shrink-0 group-hover:scale-105 transition-transform">
+                                                <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                    <g fill-rule="evenodd">
+                                                        <path fill="#bd3d44" d="M0 0h640v480H0z"/>
+                                                        <path stroke="#fff" stroke-width="37" d="M0 55.4h640M0 129.2h640M0 203h640M0 277h640M0 350.8h640M0 424.6h640"/>
+                                                        <path fill="#192f5d" d="M0 0h296v258.5H0z"/>
+                                                        <g fill="#fff">
+                                                            <circle cx="28" cy="20" r="7"/><circle cx="70" cy="20" r="7"/><circle cx="112" cy="20" r="7"/><circle cx="154" cy="20" r="7"/><circle cx="196" cy="20" r="7"/><circle cx="238" cy="20" r="7"/><circle cx="280" cy="20" r="7"/>
+                                                            <circle cx="49" cy="45" r="7"/><circle cx="91" cy="45" r="7"/><circle cx="133" cy="45" r="7"/><circle cx="175" cy="45" r="7"/><circle cx="217" cy="45" r="7"/><circle cx="259" cy="45" r="7"/>
+                                                            <circle cx="28" cy="70" r="7"/><circle cx="70" cy="70" r="7"/><circle cx="112" cy="70" r="7"/><circle cx="154" cy="70" r="7"/><circle cx="196" cy="70" r="7"/><circle cx="238" cy="70" r="7"/><circle cx="280" cy="70" r="7"/>
+                                                            <circle cx="49" cy="95" r="7"/><circle cx="91" cy="95" r="7"/><circle cx="133" cy="95" r="7"/><circle cx="175" cy="95" r="7"/><circle cx="217" cy="95" r="7"/><circle cx="259" cy="95" r="7"/>
+                                                            <circle cx="28" cy="120" r="7"/><circle cx="70" cy="120" r="7"/><circle cx="112" cy="120" r="7"/><circle cx="154" cy="120" r="7"/><circle cx="196" cy="120" r="7"/><circle cx="238" cy="120" r="7"/><circle cx="280" cy="120" r="7"/>
+                                                            <circle cx="49" cy="145" r="7"/><circle cx="91" cy="145" r="7"/><circle cx="133" cy="145" r="7"/><circle cx="175" cy="145" r="7"/><circle cx="217" cy="145" r="7"/><circle cx="259" cy="145" r="7"/>
+                                                            <circle cx="28" cy="170" r="7"/><circle cx="70" cy="170" r="7"/><circle cx="112" cy="170" r="7"/><circle cx="154" cy="170" r="7"/><circle cx="196" cy="170" r="7"/><circle cx="238" cy="170" r="7"/><circle cx="280" cy="170" r="7"/>
+                                                            <circle cx="49" cy="195" r="7"/><circle cx="91" cy="195" r="7"/><circle cx="133" cy="195" r="7"/><circle cx="175" cy="195" r="7"/><circle cx="217" cy="195" r="7"/><circle cx="259" cy="195" r="7"/>
+                                                            <circle cx="28" cy="220" r="7"/><circle cx="70" cy="220" r="7"/><circle cx="112" cy="220" r="7"/><circle cx="154" cy="220" r="7"/><circle cx="196" cy="220" r="7"/><circle cx="238" cy="220" r="7"/><circle cx="280" cy="220" r="7"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div class="text-xs font-bold text-slate-900 leading-tight">US East</div>
+                                            <div class="text-[10px] text-slate-500 mb-1.5">New York, US</div>
+                                            <div class="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 font-mono font-bold px-2 py-0.5 rounded-full">9 ms</div>
                                         </div>
                                     </label>
 
+                                    <!-- EU Central (Frankfurt) -->
                                     <label class="cursor-pointer">
                                         <input type="radio" name="datacenter" value="EU Central (Frankfurt)" class="peer sr-only" {{ old('datacenter') === 'EU Central (Frankfurt)' ? 'checked' : '' }} onchange="updateLocationDisplay(this.value)">
-                                        <div class="p-3 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center">
-                                            <div class="text-lg mb-1">🇩🇪</div>
-                                            <div class="text-xs font-bold text-slate-900">EU Central</div>
-                                            <div class="text-[10px] text-emerald-600 font-mono font-semibold">12 ms</div>
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center flex flex-col items-center justify-between h-full group">
+                                            <div class="w-10 h-7 rounded-md overflow-hidden shadow-sm border border-slate-200/80 mb-2 flex items-center justify-center bg-white shrink-0 group-hover:scale-105 transition-transform">
+                                                <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                    <path fill="#ffce00" d="M0 320h640v160H0z"/>
+                                                    <path fill="#000" d="M0 0h640v160H0z"/>
+                                                    <path fill="#d00" d="M0 160h640v160H0z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="text-xs font-bold text-slate-900 leading-tight">EU Central</div>
+                                            <div class="text-[10px] text-slate-500 mb-1.5">Frankfurt, DE</div>
+                                            <div class="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 font-mono font-bold px-2 py-0.5 rounded-full">12 ms</div>
                                         </div>
                                     </label>
 
+                                    <!-- UK London -->
                                     <label class="cursor-pointer">
                                         <input type="radio" name="datacenter" value="UK (London)" class="peer sr-only" {{ old('datacenter') === 'UK (London)' ? 'checked' : '' }} onchange="updateLocationDisplay(this.value)">
-                                        <div class="p-3 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center">
-                                            <div class="text-lg mb-1">🇬🇧</div>
-                                            <div class="text-xs font-bold text-slate-900">UK London</div>
-                                            <div class="text-[10px] text-emerald-600 font-mono font-semibold">14 ms</div>
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center flex flex-col items-center justify-between h-full group">
+                                            <div class="w-10 h-7 rounded-md overflow-hidden shadow-sm border border-slate-200/80 mb-2 flex items-center justify-center bg-white shrink-0 group-hover:scale-105 transition-transform">
+                                                <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                    <path fill="#012169" d="M0 0h640v480H0z"/>
+                                                    <path fill="#fff" d="m75 0 245 180L565 0h75v60L400 240l240 180v60h-75L320 300 75 480H0v-60l240-180L0 60V0z"/>
+                                                    <path fill="#c8102e" d="m425 240 215 160v40L370 240zm140-240L320 180 75 0h490zm-565 40 215 160H60L0 40zm0 400 215-160h55L0 440z"/>
+                                                    <path fill="#fff" d="M260 0h120v480H260zM0 180h640v120H0z"/>
+                                                    <path fill="#c8102e" d="M280 0h80v480H280zM0 200h640v80H0z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="text-xs font-bold text-slate-900 leading-tight">UK London</div>
+                                            <div class="text-[10px] text-slate-500 mb-1.5">London, GB</div>
+                                            <div class="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 font-mono font-bold px-2 py-0.5 rounded-full">14 ms</div>
                                         </div>
                                     </label>
 
+                                    <!-- Singapore -->
                                     <label class="cursor-pointer">
                                         <input type="radio" name="datacenter" value="Asia (Singapore)" class="peer sr-only" {{ old('datacenter') === 'Asia (Singapore)' ? 'checked' : '' }} onchange="updateLocationDisplay(this.value)">
-                                        <div class="p-3 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center">
-                                            <div class="text-lg mb-1">🇸🇬</div>
-                                            <div class="text-xs font-bold text-slate-900">Singapore</div>
-                                            <div class="text-[10px] text-emerald-600 font-mono font-semibold">38 ms</div>
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center flex flex-col items-center justify-between h-full group">
+                                            <div class="w-10 h-7 rounded-md overflow-hidden shadow-sm border border-slate-200/80 mb-2 flex items-center justify-center bg-white shrink-0 group-hover:scale-105 transition-transform">
+                                                <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                    <path fill="#fff" d="M0 240h640v240H0z"/>
+                                                    <path fill="#ed2939" d="M0 0h640v240H0z"/>
+                                                    <path fill="#fff" d="M120 40a80 80 0 1 0 0 160 80 80 0 0 0 0-160z"/>
+                                                    <path fill="#ed2939" d="M140 40a80 80 0 1 0 0 160 80 80 0 0 0 0-160z"/>
+                                                    <g fill="#fff">
+                                                        <circle cx="160" cy="80" r="10"/><circle cx="190" cy="100" r="10"/><circle cx="180" cy="135" r="10"/><circle cx="140" cy="135" r="10"/><circle cx="130" cy="100" r="10"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div class="text-xs font-bold text-slate-900 leading-tight">Singapore</div>
+                                            <div class="text-[10px] text-slate-500 mb-1.5">APAC Hub, SG</div>
+                                            <div class="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 font-mono font-bold px-2 py-0.5 rounded-full">38 ms</div>
                                         </div>
                                     </label>
 
@@ -597,17 +661,17 @@
         }
 
         function updateCalculations() {
-            const selectedCycle = document.querySelector('input[name="billing_cycle"]:checked')?.value || 'annually';
+            const selectedCycle = document.querySelector('input[name="billing_cycle"]:checked')?.value || 'biennially';
             
-            if (selectedCycle === 'monthly') {
+            if (selectedCycle === 'monthly' || selectedCycle === '1month') {
                 currentMonths = 1;
                 currentDiscountPercent = 0;
-            } else if (selectedCycle === 'annually') {
+            } else if (selectedCycle === 'annually' || selectedCycle === '12months') {
                 currentMonths = 12;
-                currentDiscountPercent = 20;
-            } else if (selectedCycle === 'biennially') {
+                currentDiscountPercent = 15; // 15% savings
+            } else {
                 currentMonths = 24;
-                currentDiscountPercent = 30;
+                currentDiscountPercent = 20; // 20% savings
             }
 
             const rawBase = baseMonthly * currentMonths;

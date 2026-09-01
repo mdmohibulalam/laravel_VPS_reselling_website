@@ -83,30 +83,22 @@
                         ← Back to Plans
                     </a>
                 @else
-                    <!-- Action Pill: Deploy VPS -->
-                    <a href="{{ url('/plans') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.08] hover:bg-white/[0.16] border border-white/20 text-xs font-bold text-white transition-all hover:scale-105 shadow-md">
-                        <span class="text-sm">✨</span>
-                        <span>Deploy VPS</span>
-                    </a>
-
                     <!-- Language & Currency Pill -->
                     <div class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-white/[0.08] text-xs font-semibold text-slate-300 cursor-pointer transition-colors">
                         <span>🇺🇸</span>
                         <span>EN</span>
                     </div>
 
-                    <!-- User Account Icon / Login -->
+                    <!-- User Account / Single Auth Action -->
                     @auth
-                        <a href="{{ url('/customer') }}" class="inline-flex items-center gap-2 text-xs font-bold text-white px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all">
+                        <a href="{{ url('/customer') }}" class="btn-shimmer inline-flex items-center gap-2 text-xs font-bold text-white px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 shadow-md transition-all">
                             <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                            <span class="hidden sm:inline">Client Area</span>
+                            <span>Client Area</span>
                         </a>
                     @else
-                        <a href="{{ url('/customer/login') }}" class="p-2.5 rounded-xl hover:bg-white/10 text-slate-300 hover:text-white transition-colors focus:outline-none" title="Log in to customer portal">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        </a>
-                        <a href="{{ url('/customer/register') }}" class="hidden sm:inline-flex text-xs font-bold text-white px-3.5 py-2 rounded-xl border border-white/20 hover:bg-white/10 transition-all">
-                            Register
+                        <a href="{{ url('/customer/login') }}" class="btn-shimmer inline-flex items-center gap-2 text-xs font-bold text-white px-4 py-2.5 rounded-xl bg-[#673DE6] hover:bg-[#5428D8] shadow-lg shadow-[#673DE6]/25 hover:scale-105 active:scale-95 transition-all">
+                            <svg class="w-4 h-4 text-purple-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            <span>Login / Register</span>
                         </a>
                     @endauth
 
@@ -143,10 +135,9 @@
                 @auth
                     <a href="{{ url('/customer') }}" class="w-full text-center text-xs font-semibold text-white py-2.5 rounded-lg border border-white/20 bg-white/10">Client Area</a>
                 @else
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="{{ url('/customer/login') }}" class="w-full text-center text-xs font-semibold text-slate-200 py-2.5 rounded-lg border border-white/15 bg-white/5">Login</a>
-                        <a href="{{ url('/customer/register') }}" class="w-full text-center text-xs font-semibold text-white py-2.5 rounded-lg border border-white/20 bg-white/10">Register</a>
-                    </div>
+                    <a href="{{ url('/customer/login') }}" class="btn-shimmer w-full text-center text-xs font-bold text-white py-2.5 rounded-lg bg-[#673DE6] hover:bg-[#5428D8] shadow-md">
+                        Login / Register
+                    </a>
                 @endauth
                 <a href="{{ url('/plans') }}" class="btn-shimmer w-full text-center bg-white text-[#120024] text-xs font-extrabold py-2.5 rounded-lg shadow-lg">Deploy VPS Instantly</a>
             </div>

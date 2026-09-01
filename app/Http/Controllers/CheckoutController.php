@@ -16,9 +16,18 @@ use Stripe\StripeClient;
 
 class CheckoutController extends Controller
 {
-    public function show(Package $package)
+    public function show(Request $request, Package $package)
     {
-        return view('checkout', compact('package'));
+        $selectedCycle = $request->query('cycle', $request->query('billing_cycle', 'biennially'));
+        if (in_array($selectedCycle, ['1month', 'monthly', 'month'])) {
+            $selectedCycle = 'monthly';
+        } elseif (in_array($selectedCycle, ['12months', 'annual', 'annually', '1year', 'year'])) {
+            $selectedCycle = 'annually';
+        } else {
+            $selectedCycle = 'biennially';
+        }
+
+        return view('checkout', compact('package', 'selectedCycle'));
     }
 
     public function process(Request $request, Package $package)
@@ -66,7 +75,7 @@ class CheckoutController extends Controller
 
         // 2. Validate Checkout Form Details
         $request->validate([
-            'billing_cycle' => 'required|in:monthly,annually,biennially',
+            'billing_cycle' => 'required|string|in:monthly,annually,biennially,1month,12months,24months',
             'os' => 'nullable|string|max:100',
             'datacenter' => 'nullable|string|max:100',
             'hostname' => 'nullable|string|max:255',
@@ -76,18 +85,22 @@ class CheckoutController extends Controller
             'coupon_code' => 'nullable|string|max:50',
         ]);
 
-        // 3. Calculate Pricing & Discounts
+        // 3. Calculate Pricing & Discounts (1 Month = 0%, 12 Months = 15%, 24 Months = 20%)
         $monthlyPrice = (float) $package->price_monthly;
-        $cycle = $request->input('billing_cycle', 'monthly');
-        $months = 1;
-        $cycleDiscountPercent = 0;
-
-        if ($cycle === 'annually') {
+        $rawCycle = $request->input('billing_cycle', 'biennially');
+        
+        if (in_array($rawCycle, ['1month', 'monthly', 'month'])) {
+            $cycle = 'monthly';
+            $months = 1;
+            $cycleDiscountPercent = 0;
+        } elseif (in_array($rawCycle, ['12months', 'annual', 'annually', '1year', 'year'])) {
+            $cycle = 'annually';
             $months = 12;
-            $cycleDiscountPercent = 20; // 20% savings
-        } elseif ($cycle === 'biennially') {
+            $cycleDiscountPercent = 15; // 15% savings for 12 months
+        } else {
+            $cycle = 'biennially';
             $months = 24;
-            $cycleDiscountPercent = 30; // 30% savings
+            $cycleDiscountPercent = 20; // 20% savings for 24 months
         }
 
         $baseTotal = $monthlyPrice * $months;

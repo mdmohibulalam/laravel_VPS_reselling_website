@@ -185,8 +185,53 @@
     </section>
 
 
-    <!-- SECTION 2: BRANDS YOU TRUST / HARDWARE PARTNERS SECTION -->
-    <section id="hardware" class="py-16 md:py-24 bg-slate-50 border-b border-slate-200/80">
+    <!-- SECTION 2: PRICING TABLE (3-Column VPS Tiers) -->
+    <section id="pricing" class="py-16 md:py-24 bg-white">
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+            
+            <!-- Section Header & Billing Switcher -->
+            <div class="reveal-init text-center max-w-3xl mx-auto mb-14">
+                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
+                    Transparent Cloud Pricing
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+                    Affordable VPS Hosting Plans Built to Scale.
+                </h2>
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
+                    Choose the right amount of compute, memory, and high-speed storage for your application. No hidden contracts. Cancel anytime.
+                </p>
+
+            </div>
+
+            <!-- Dynamic Unified Pricing Matrix (Switcher, Cards & Reactivity Encapsulated) -->
+            <x-pricing-matrix />
+
+            <!-- Explore More Plans Link & Supported OS Platforms -->
+            <div class="reveal-init mt-12 text-center">
+                <a href="{{ url('/plans') }}" class="inline-flex items-center gap-2 text-sm font-bold text-[#673DE6] hover:text-[#5428D8] transition-all py-2 px-4 rounded-xl hover:bg-purple-50 group">
+                    <span>Explore All Cloud VPS & Windows RDP Configurations</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+            <!-- Underneath the Table: Supported OS Platforms -->
+            <div class="reveal-init mt-14 pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-center gap-3 text-center">
+                <span class="text-sm font-medium text-slate-600">Supported operating systems with 1-click install:</span>
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Ubuntu</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Debian</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Rocky Linux</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">AlmaLinux</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Windows Server</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- SECTION 3: BRANDS YOU TRUST / HARDWARE PARTNERS SECTION -->
+    <section id="hardware" class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/80">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             
             <!-- Section Header -->
@@ -265,396 +310,8 @@
     </section>
 
 
-    <!-- SECTION 3: PRICING TABLE (3-Column VPS Tiers) -->
-    <section id="pricing" class="py-16 md:py-24 bg-white">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-            
-            <!-- Section Header -->
-            <div class="reveal-init text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
-                    Transparent Cloud Pricing
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Affordable VPS Hosting Plans Built to Scale.
-                </h2>
-                <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                    Choose the right amount of compute, memory, and high-speed storage for your application. No hidden contracts. Cancel anytime.
-                </p>
-            </div>
-
-            <!-- Dynamic 4-Column Pricing Grid -->
-            @php
-                $packages = \App\Models\Package::where('is_active', true)->orderBy('price_monthly')->take(4)->get();
-            @endphp
-
-            @if($packages->count() > 0)
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-                    @foreach($packages as $package)
-                        @php
-                            $specs = is_string($package->specs) ? json_decode($package->specs, true) : (is_array($package->specs) ? $package->specs : []);
-                            // Set 2nd or 3rd card as the colorful recommended card
-                            $isRecommended = ($packages->count() == 4) ? ($loop->iteration == 3) : ($loop->iteration == 2 || $loop->count == 1);
-                            $delayClass = 'delay-' . ($loop->iteration * 100);
-                            
-                            $coresText = !empty($specs['cores']) 
-                                ? (str_contains(strtolower((string)$specs['cores']), 'core') || str_contains(strtolower((string)$specs['cores']), 'vcpu') 
-                                    ? $specs['cores'] 
-                                    : $specs['cores'] . ' vCPU ' . ($specs['cores'] == 1 ? 'Core' : 'Cores'))
-                                : '1 vCPU Core';
-
-                            $ramText = !empty($specs['memory']) 
-                                ? (str_contains(strtolower((string)$specs['memory']), 'ram') || str_contains(strtolower((string)$specs['memory']), 'ddr') 
-                                    ? $specs['memory'] 
-                                    : $specs['memory'] . ' DDR5 RAM')
-                                : '2 GB DDR5 RAM';
-
-                            $storageText = !empty($specs['storage']) 
-                                ? (str_contains(strtolower((string)$specs['storage']), 'nvme') || str_contains(strtolower((string)$specs['storage']), 'ssd') || str_contains(strtolower((string)$specs['storage']), 'storage') 
-                                    ? $specs['storage'] 
-                                    : $specs['storage'] . ' Gen4 NVMe')
-                                : '40 GB Gen4 NVMe';
-
-                            $portText = !empty($specs['port']) 
-                                ? $specs['port'] 
-                                : (!empty($specs['bandwidth']) ? $specs['bandwidth'] : '1 Gbps Port');
-
-                            $defaultDesc = $isRecommended 
-                                ? 'Optimized for production databases, high-traffic websites, and API backends.'
-                                : ($loop->first ? 'Ideal for lightweight applications and personal projects.' : 'Built for heavy compute workloads and corporate deployments.');
-                        @endphp
-
-                        @if($isRecommended)
-                            <!-- COLORFUL RECOMMENDED CARD (Cosmic Violet Gradient) -->
-                            <div class="reveal-init {{ $delayClass }} relative rounded-3xl p-7 bg-gradient-to-b from-[#1E003E] via-[#14002B] to-[#25004A] border-2 border-[#673DE6] shadow-2xl shadow-purple-950/60 ring-2 ring-purple-500/30 flex flex-col justify-between md:-translate-y-3 transition-all duration-200 text-white group hover:shadow-purple-900/80">
-                                
-                                <!-- Internal Ambient Violet Glow Container -->
-                                <div class="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
-                                    <div class="absolute -top-12 -right-12 w-44 h-44 bg-purple-500/25 rounded-full blur-2xl animate-pulse-glow"></div>
-                                </div>
-
-                                <!-- Recommended Floating Pill Badge (High-Contrast & Fully Visible) -->
-                                <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#673DE6] text-white text-[11px] font-extrabold uppercase tracking-wider py-1 px-4 rounded-full shadow-lg shadow-purple-950/80 border border-purple-300/40 flex items-center gap-1.5 whitespace-nowrap z-20">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    <span>Recommended</span>
-                                </div>
-
-                                <div class="relative z-10">
-                                    <div class="mb-6 pt-2">
-                                        <h3 class="text-2xl font-bold text-white mb-2">{{ $package->name }}</h3>
-                                        <p class="text-xs text-purple-200 min-h-[36px] leading-relaxed font-normal">
-                                            {{ $package->description ?: $defaultDesc }}
-                                        </p>
-                                    </div>
-
-                                    <div class="flex items-baseline gap-1.5 pb-6 mb-6 border-b border-white/10">
-                                        <span class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">${{ number_format($package->price_monthly, 2) }}</span>
-                                        <span class="text-sm font-medium text-purple-300">/mo</span>
-                                    </div>
-
-                                    <!-- Technical Specs Micro-List -->
-                                    <div class="space-y-3.5 mb-8">
-                                        <div class="text-xs font-bold uppercase tracking-wider text-purple-300">Included Specifications</div>
-                                        <ul class="space-y-3 text-sm text-slate-100 font-medium">
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $coresText }}</strong></span>
-                                            </li>
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $ramText }}</strong></span>
-                                            </li>
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $storageText }}</strong></span>
-                                            </li>
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $portText }}</strong></span>
-                                            </li>
-                                            @if(strtolower($package->category) === 'rdp')
-                                                <li class="flex items-center gap-3 text-purple-200 font-semibold">
-                                                    <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                    <span>Windows Server (RDP)</span>
-                                                </li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <a href="{{ route('checkout.show', $package->id) }}" class="btn-shimmer w-full text-center bg-[#673DE6] hover:bg-[#5428D8] text-white font-bold py-3.5 rounded-xl shadow-xl shadow-[#673DE6]/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-                                    Deploy {{ $package->name }}
-                                </a>
-                            </div>
-                        @else
-                            <!-- STANDARD CLEAN SAAS WHITE CARD -->
-                            <div class="reveal-init {{ $delayClass }} card-interactive bg-white rounded-3xl p-7 border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 flex flex-col justify-between">
-                                <div>
-                                    <div class="mb-6">
-                                        <h3 class="text-2xl font-bold text-slate-900 mb-2">{{ $package->name }}</h3>
-                                        <p class="text-xs text-slate-600 min-h-[36px] leading-relaxed">
-                                            {{ $package->description ?: $defaultDesc }}
-                                        </p>
-                                    </div>
-
-                                    <div class="flex items-baseline gap-1.5 pb-6 mb-6 border-b border-slate-100">
-                                        <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">${{ number_format($package->price_monthly, 2) }}</span>
-                                        <span class="text-sm font-medium text-slate-500">/mo</span>
-                                    </div>
-
-                                    <!-- Technical Specs Micro-List -->
-                                    <div class="space-y-3.5 mb-8">
-                                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Included Specifications</div>
-                                        <ul class="space-y-3 text-sm text-slate-700 font-medium">
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $coresText }}</strong></span>
-                                            </li>
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $ramText }}</strong></span>
-                                            </li>
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $storageText }}</strong></span>
-                                            </li>
-                                            <li class="flex items-center gap-3">
-                                                <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                <span><strong>{{ $portText }}</strong></span>
-                                            </li>
-                                            @if(strtolower($package->category) === 'rdp')
-                                                <li class="flex items-center gap-3 text-purple-900 font-semibold">
-                                                    <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                    <span>Windows Server (RDP)</span>
-                                                </li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <a href="{{ route('checkout.show', $package->id) }}" class="btn-shimmer w-full text-center bg-white hover:bg-slate-50 text-slate-800 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-soft-sm font-semibold py-3.5 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-                                    Deploy {{ $package->name }}
-                                </a>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            @else
-                <!-- Fallback 4-Tier Grid if database is empty -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-                    
-                    <!-- Fallback Card 1: Starter VPS -->
-                    <div class="reveal-init delay-100 card-interactive bg-white rounded-3xl p-7 border border-slate-200 shadow-soft-sm hover:shadow-soft-md flex flex-col justify-between">
-                        <div>
-                            <div class="mb-6">
-                                <h3 class="text-2xl font-bold text-slate-900 mb-2">Starter VPS</h3>
-                                <p class="text-xs text-slate-600 min-h-[36px] leading-relaxed">
-                                    Ideal for lightweight apps, personal blogs, and staging environments.
-                                </p>
-                            </div>
-
-                            <div class="flex items-baseline gap-1.5 pb-6 mb-6 border-b border-slate-100">
-                                <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">$4.99</span>
-                                <span class="text-sm font-medium text-slate-500">/mo</span>
-                            </div>
-
-                            <div class="space-y-3.5 mb-8">
-                                <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Included Specifications</div>
-                                <ul class="space-y-3 text-sm text-slate-700 font-medium">
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>1 vCPU</strong> Core</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>2 GB</strong> DDR5 RAM</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>40 GB</strong> Gen4 NVMe</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>1 Gbps</strong> Port</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <a href="{{ url('/plans') }}" class="btn-shimmer w-full text-center bg-white hover:bg-slate-50 text-slate-800 hover:text-slate-900 border border-slate-200 hover:border-slate-300 font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-soft-sm">
-                            Deploy Starter
-                        </a>
-                    </div>
-
-                    <!-- Fallback Card 2: Professional VPS -->
-                    <div class="reveal-init delay-200 card-interactive bg-white rounded-3xl p-7 border border-slate-200 shadow-soft-sm hover:shadow-soft-md flex flex-col justify-between">
-                        <div>
-                            <div class="mb-6">
-                                <h3 class="text-2xl font-bold text-slate-900 mb-2">Professional VPS</h3>
-                                <p class="text-xs text-slate-600 min-h-[36px] leading-relaxed">
-                                    Great for growing web applications and client production sites.
-                                </p>
-                            </div>
-
-                            <div class="flex items-baseline gap-1.5 pb-6 mb-6 border-b border-slate-100">
-                                <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">$12.99</span>
-                                <span class="text-sm font-medium text-slate-500">/mo</span>
-                            </div>
-
-                            <div class="space-y-3.5 mb-8">
-                                <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Included Specifications</div>
-                                <ul class="space-y-3 text-sm text-slate-700 font-medium">
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>2 vCPU</strong> Cores</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>4 GB</strong> DDR5 RAM</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>80 GB</strong> Gen4 NVMe</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>1 Gbps</strong> Port</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <a href="{{ url('/plans') }}" class="btn-shimmer w-full text-center bg-white hover:bg-slate-50 text-slate-800 hover:text-slate-900 border border-slate-200 hover:border-slate-300 font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-soft-sm">
-                            Deploy Pro
-                        </a>
-                    </div>
-
-                    <!-- Fallback Card 3: Business Cloud VPS (COLORFUL & RECOMMENDED) -->
-                    <div class="reveal-init delay-300 relative rounded-3xl p-7 bg-gradient-to-b from-[#1E003E] via-[#14002B] to-[#25004A] border-2 border-[#673DE6] shadow-2xl shadow-purple-950/60 ring-2 ring-purple-500/30 flex flex-col justify-between md:-translate-y-3 transition-all duration-200 text-white group hover:shadow-purple-900/80">
-                        
-                        <!-- Internal Ambient Violet Glow Container -->
-                        <div class="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
-                            <div class="absolute -top-12 -right-12 w-44 h-44 bg-purple-500/25 rounded-full blur-2xl animate-pulse-glow"></div>
-                        </div>
-
-                        <!-- Recommended Floating Pill Badge (High-Contrast & Fully Visible) -->
-                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#673DE6] text-white text-[11px] font-extrabold uppercase tracking-wider py-1 px-4 rounded-full shadow-lg shadow-purple-950/80 border border-purple-300/40 flex items-center gap-1.5 whitespace-nowrap z-20">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span>Recommended</span>
-                        </div>
-
-                        <div class="relative z-10">
-                            <div class="mb-6 pt-2">
-                                <h3 class="text-2xl font-bold text-white mb-2">Business VPS</h3>
-                                <p class="text-xs text-purple-200 min-h-[36px] leading-relaxed font-normal">
-                                    Optimized for production databases, high-traffic APIs, and active backends.
-                                </p>
-                            </div>
-
-                            <div class="flex items-baseline gap-1.5 pb-6 mb-6 border-b border-white/10">
-                                <span class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">$24.99</span>
-                                <span class="text-sm font-medium text-purple-300">/mo</span>
-                            </div>
-
-                            <div class="space-y-3.5 mb-8">
-                                <div class="text-xs font-bold uppercase tracking-wider text-purple-300">Included Specifications</div>
-                                <ul class="space-y-3 text-sm text-slate-100 font-medium">
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>4 vCPU</strong> Cores</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>8 GB</strong> DDR5 RAM</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>160 GB</strong> Gen4 NVMe</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>2 Gbps</strong> Port</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <a href="{{ url('/plans') }}" class="btn-shimmer w-full text-center bg-[#673DE6] hover:bg-[#5428D8] text-white font-bold py-3.5 rounded-xl shadow-xl shadow-[#673DE6]/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-                            Deploy Business
-                        </a>
-                    </div>
-
-                    <!-- Fallback Card 4: Enterprise VPS -->
-                    <div class="reveal-init delay-400 card-interactive bg-white rounded-3xl p-7 border border-slate-200 shadow-soft-sm hover:shadow-soft-md flex flex-col justify-between">
-                        <div>
-                            <div class="mb-6">
-                                <h3 class="text-2xl font-bold text-slate-900 mb-2">Enterprise VPS</h3>
-                                <p class="text-xs text-slate-600 min-h-[36px] leading-relaxed">
-                                    Heavy compute workloads, high-volume trading, and corporate systems.
-                                </p>
-                            </div>
-
-                            <div class="flex items-baseline gap-1.5 pb-6 mb-6 border-b border-slate-100">
-                                <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">$49.99</span>
-                                <span class="text-sm font-medium text-slate-500">/mo</span>
-                            </div>
-
-                            <div class="space-y-3.5 mb-8">
-                                <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Included Specifications</div>
-                                <ul class="space-y-3 text-sm text-slate-700 font-medium">
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>8 vCPU</strong> Cores</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>16 GB</strong> DDR5 RAM</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>320 GB</strong> Gen4 NVMe</span>
-                                    </li>
-                                    <li class="flex items-center gap-3">
-                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        <span><strong>10 Gbps</strong> Port</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <a href="{{ url('/plans') }}" class="btn-shimmer w-full text-center bg-white hover:bg-slate-50 text-slate-800 hover:text-slate-900 border border-slate-200 hover:border-slate-300 font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-soft-sm">
-                            Deploy Enterprise
-                        </a>
-                    </div>
-
-                </div>
-            @endif
-
-            <!-- Explore More Plans Link & Supported OS Platforms -->
-            <div class="reveal-init mt-12 text-center">
-                <a href="{{ url('/plans') }}" class="inline-flex items-center gap-2 text-sm font-bold text-[#673DE6] hover:text-[#5428D8] transition-all py-2 px-4 rounded-xl hover:bg-purple-50 group">
-                    <span>Explore All Cloud VPS & Windows RDP Configurations</span>
-                    <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
-            </div>
-
-            <!-- Underneath the Table: Supported OS Platforms -->
-            <div class="reveal-init mt-14 pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-center gap-3 text-center">
-                <span class="text-sm font-medium text-slate-600">Supported operating systems with 1-click install:</span>
-                <div class="flex flex-wrap items-center justify-center gap-2">
-                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Ubuntu</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Debian</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Rocky Linux</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">AlmaLinux</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 transition-colors">Windows Server</span>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
     <!-- SECTION 4: WHY CHOOSE US SECTION -->
-    <section id="features" class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/80">
+    <section id="features" class="py-16 md:py-24 bg-white">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             
             <!-- Section Header -->
@@ -967,7 +624,6 @@
                 </div>
 
             </div>
-
         </div>
     </section>
 

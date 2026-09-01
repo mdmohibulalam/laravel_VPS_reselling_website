@@ -67,11 +67,11 @@ This document establishes the mandatory design system rules and visual identity 
 
 ## 6. Mandatory Section Structure (Landing Page Standard)
 1. **Hero Section**: Centered grand stage layout with top search capsule, 2-line H1 headline, pure white primary CTA, 4-card interactive preview deck, and Trustpilot rating strip.
-2. **Hardware Partners**: Minimalist gray-scaled logo text cards (`AMD EPYC™`, `Intel® Xeon® Scalable`, `Samsung® Gen4 Enterprise NVMe`, `KVM Architecture`).
-3. **Pricing Matrix**: 3-tier cards with high-contrast spec micro-lists, `#673DE6` highlights, and 1-click OS badges underneath.
+2. **Pricing Matrix**: Positioned directly below the hero section. Dynamic 4-tier cards using `<x-pricing-card>` with real-time billing switcher (`pt-6 sm:pt-8` on grid).
+3. **Hardware Partners**: "Enterprise Hardware You Can Trust." Minimalist gray-scaled logo text cards (`AMD EPYC™`, `Intel® Xeon® Scalable`, `Samsung® Gen4 Enterprise NVMe`, `KVM Architecture`).
 4. **Why Choose Us**: 3-pillar feature grid (99.99% Uptime with ping indicator, Enterprise DDoS, 24/7 Expert Support).
 5. **Customer Reviews**: 3-column developer testimonial masonry grid with 5-star graphics, italic quotes, and bold names.
-6. **Technical FAQ**: Clean `#F8FAFC` background with smooth interactive expanding accordions.
+6. **Technical FAQ**: Clean `#FFFFFF` or `#F8FAFC` background with smooth interactive expanding accordions.
 7. **Final Conversion CTA**: Striking Cosmic Violet card (`#1A0038` to `#220044`) with ambient purple/fuchsia glows, pure white headline, live setup capsule pill, and high-contrast white "Get Started Instantly" button.
 
 ---
@@ -86,10 +86,38 @@ This document establishes the mandatory design system rules and visual identity 
       headerVariant="hero|solid|minimal"
       robots="index, follow|noindex, nofollow">
   ```
-* **Header Variants (`<x-header>`)**:
+* **Header Standards (`<x-header>`)**:
   - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll (used on homepage).
   - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-20 sm:pt-22`) for inner pages (`/plans`, knowledgebase, legal).
   - `headerVariant="minimal"`: Distraction-free header with logo & SSL security badge for `/checkout` and auth pages.
+  - **Auth Button Standard**: Single unified **`[ 👤 Login / Register ]`** button (`bg-[#673DE6] hover:bg-[#5428D8] text-white px-4 py-2.5 rounded-xl shadow-lg shadow-[#673DE6]/25`) for guests; **`[ 👤 Client Area ]`** for logged-in clients. Never include redundant "Deploy VPS" pills in the header.
+* **Unified Pricing Matrix Component (`<x-pricing-matrix>`)**:
+  - Always use `<x-pricing-matrix :packages="$packages" />` on any page displaying pricing tiers.
+  - Encapsulates the entire pricing table system into a single reusable component:
+    1. The 3-option billing cycle switcher (`1 Month`, `12 Months`, `24 Months`)
+    2. The 4-column responsive grid looping over `<x-pricing-card>`
+    3. The self-contained reactive JavaScript controller (`setMatrixBillingCycle`)
+  - **Single Point of Maintenance**: Modifying billing cycles, discounts, button styles, or cards in `<x-pricing-matrix>` or `<x-pricing-card>` automatically updates every page across the entire website without needing to edit individual views.
+* **Reusable Pricing Card Component (`<x-pricing-card>`)**:
+  - Always use `<x-pricing-card :package="$package" :isPopular="$isPopular" :delayClass="$delayClass" badgeText="Most Popular" />` inside pricing loops.
+  - **Badge Unclipped Rule**: Outer card container must **NEVER** have `overflow-hidden` (otherwise `-top-3.5` badges get chopped off). Ambient glows are strictly restricted inside an inner `<div class="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">`.
+  - **Grid Headroom Rule**: Pricing grids must always include `pt-6 sm:pt-8` so elevated `-translate-y-3` cards and top badges have ample breathing room.
+* **3-Option Billing Cycle Standard (`1 Month`, `12 Months`, `24 Months`)**:
+  - All pricing tables and catalogs must provide the unified 3-option switcher:
+    - **1 Month**: Standard rate (`data-1month`).
+    - **12 Months (1 Year)**: 15% discount applied (`data-12months`), badge: "Renews every 12 months (15% off applied)".
+    - **24 Months (2 Years)**: 20% discount applied (`data-24months`), badge: "Renews every 24 months (20% off applied)".
+  - Switcher Container: `inline-flex items-center p-1.5 rounded-2xl bg-slate-200/80 border border-slate-300/80 shadow-inner flex-wrap justify-center gap-1`.
+  - Active Switcher Button: `bg-[#673DE6] text-white shadow-md shadow-[#673DE6]/25 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold`.
+* **Checkout Flow & Dynamic Billing Cycle Propagation**:
+  - The "Choose Plan" buttons dynamically update their query parameter (`?cycle=monthly`, `?cycle=annually`, `?cycle=biennially`) when users interact with the billing switcher.
+  - The Checkout page (`/checkout/{package}`) automatically pre-selects and checks the exact billing period the user chose.
+  - The Datacenter Region selection cards must feature high-fidelity vector SVG country flags (e.g. 🇺🇸 US, 🇩🇪 DE, 🇬🇧 UK, 🇸🇬 SG) with region names, city codes, and active ping latency badges.
+* **Floating Capsule Sub-Menu (Hostinger Pattern)**:
+  - Sticky sub-menus must use a centered floating dark pill capsule (`sticky top-20 z-30 py-3 flex justify-center pointer-events-none` with inner `pointer-events-auto rounded-full bg-[#16002C]/90 backdrop-blur-xl border border-white/15 shadow-2xl shadow-purple-950/70`).
+  - Active item: Solid white rounded pill with dark text (`bg-white text-[#120024] font-bold px-5 py-2 rounded-full shadow-md`).
+  - Inactive items: Muted slate text (`text-slate-300 hover:text-white hover:bg-white/10 px-4 py-2 rounded-full`).
+  - Scrollspy: Include auto-updating scrollspy to highlight the active section pill dynamically.
 * **Modular Components**:
   - `<x-seo-meta>`: Handles OpenGraph, Twitter Cards, Canonical URLs, CSRF meta tokens, and global `Organization` / `WebSite` JSON-LD schemas.
   - `<x-analytics>`: Safe Google Analytics (GA4) / Tag Manager tracking.
@@ -136,5 +164,5 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
   - Must use `animate-fade-in-up` with staggered inline styles (`style="animation-delay: 150ms;"`, `style="animation-delay: 250ms;"`).
 
 ---
-*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, and component architecture standards.*
+*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, and `<x-pricing-card>` rules.*
 
