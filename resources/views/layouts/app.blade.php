@@ -73,11 +73,103 @@
                         'soft-lg': '0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04)',
                         'soft-xl': '0 20px 30px -6px rgba(15, 23, 42, 0.1), 0 8px 12px -4px rgba(15, 23, 42, 0.06)',
                         'accent': '0 10px 25px -3px rgba(103, 61, 230, 0.3), 0 4px 6px -4px rgba(103, 61, 230, 0.2)',
+                    },
+                    animation: {
+                        'float-slow': 'floatSlow 8s ease-in-out infinite',
+                        'float-reverse': 'floatReverse 9s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
+                        'shimmer': 'shimmer 2.5s infinite',
+                    },
+                    keyframes: {
+                        floatSlow: {
+                            '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+                            '50%': { transform: 'translateY(-14px) scale(1.03)' },
+                        },
+                        floatReverse: {
+                            '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+                            '50%': { transform: 'translateY(14px) scale(0.97)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(1.08)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(200%)' },
+                        }
                     }
                 }
             }
         }
     </script>
+
+    <!-- Global Rich Animation & Transition Styles -->
+    <style>
+        /* Smooth Entrance Keyframes */
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in-up {
+            animation: pageFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Scroll-Reveal Base & Stagger Classes */
+        .reveal-init {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal-visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* Button Light Shimmer Effect */
+        .btn-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.75s ease;
+            pointer-events: none;
+        }
+        .btn-shimmer:hover::after {
+            transform: translateX(100%);
+        }
+
+        /* Interactive Card Elevation & Glow Transition */
+        .card-interactive {
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+        }
+        .card-interactive:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Smooth FAQ Accordion Expansion */
+        details summary {
+            transition: color 0.2s ease;
+        }
+        details[open] summary svg {
+            transform: rotate(180deg);
+        }
+    </style>
 
     <!-- Page-Specific Styles Stack -->
     @stack('styles')
@@ -102,9 +194,10 @@
         <x-footer />
     @endif
 
-    <!-- Global Navigation Scroll Controller & Mobile Menu Interaction -->
+    <!-- Global Navigation Scroll Controller & Scroll-Reveal IntersectionObserver -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. Navigation Frosted Glass Transition
             const header = document.getElementById('main-nav-header');
             const glassHighlight = document.getElementById('header-glass-highlight');
 
@@ -129,7 +222,7 @@
                 }
             }
 
-            // Mobile Menu Toggle
+            // 2. Mobile Menu Toggle
             const menuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const openIcon = document.getElementById('menu-icon-open');
@@ -142,13 +235,36 @@
                     if (closeIcon) closeIcon.classList.toggle('hidden');
                 });
 
-                // Close drawer on link click
                 mobileMenu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         mobileMenu.classList.add('hidden');
                         if (openIcon) openIcon.classList.remove('hidden');
                         if (closeIcon) closeIcon.classList.add('hidden');
                     });
+                });
+            }
+
+            // 3. High-Performance GPU Scroll Reveal Observer
+            if ('IntersectionObserver' in window) {
+                const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('reveal-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.12,
+                    rootMargin: '0px 0px -40px 0px'
+                });
+
+                document.querySelectorAll('.reveal-init').forEach(el => {
+                    revealObserver.observe(el);
+                });
+            } else {
+                // Fallback for older browsers
+                document.querySelectorAll('.reveal-init').forEach(el => {
+                    el.classList.add('reveal-visible');
                 });
             }
         });

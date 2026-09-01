@@ -1,12 +1,12 @@
-# VortexCloud Frontend Design System & UI Guidelines (`agent.md`)
+# VortexCloud Frontend Design System & UI Guidelines (`AGENTS.md`)
 
 This document establishes the mandatory design system rules and visual identity for all frontend development in this project. All future UI components, pages, forms, and views MUST adhere strictly to these guidelines.
 
 ---
 
-## 1. Design System Identity: "Tech Minimalist" / "SaaS Clean"
-* **Philosophy**: Clean, modern, high-performance light-mode B2B interface.
-* **Aesthetics**: Pure white and soft gray layered surfaces, generous whitespace, structural clarity defined by thin light-slate borders and subtle drop shadows rather than harsh dark dividing lines.
+## 1. Design System Identity: "Cosmic Violet & Clean SaaS"
+* **Philosophy**: High-impact modern cloud infrastructure aesthetic combining deep cosmic dark stage accents with an ultra-clean, high-performance light-mode B2B interface.
+* **Aesthetics**: Pure white and soft slate layered surfaces, generous whitespace, structural clarity defined by thin light-slate borders, cosmic violet highlights, and electric royal purple conversion triggers.
 * **Component Feel**: Premium, enterprise-grade, fast-loading, highly accessible, and responsive across mobile, tablet, and desktop viewports.
 
 ---
@@ -19,16 +19,16 @@ This document establishes the mandatory design system rules and visual identity 
 * **Dividers & Structural Borders (`#E2E8F0` / `border-slate-200` & `#F1F5F9` / `border-slate-100`)**: Thin, crisp 1px structural borders defining card boundaries and containers.
 
 ### 30% Secondary Color (Structure, Typography & Visual Anchors)
+* **Deep Cosmic Obsidian Base (`#120024` / `#16042E`)**: Dark hero section canvas, floating glass header backdrop, mega dropdown containers, and footer base.
 * **Deep Slate Navy (`#0F172A` / `text-slate-900`)**: Main headlines (H1, H2, H3), plan tier titles, pricing values, and strong emphasis text.
 * **Slate Grey (`#475569` / `text-slate-600`)**: High-contrast, easily readable body copy, subheadlines, descriptions, and technical specifications.
 * **Muted Slate (`#64748B` / `text-slate-500`)**: Captions, timestamps, secondary labels, and inactive icon strokes.
-* **Dark Contrast Accent (`#020617` / `#0F172A`)**: Mock code terminals, preview console boxes, and code snippet backgrounds.
 
 ### 10% Accent Color (Action Items & High-Energy Focus)
-* **Primary Accent Purple/Indigo (`#6366F1` / `bg-indigo-600`, `text-indigo-600`)**: Applied strictly to primary Call-to-Action (CTA) buttons, highlighted keywords, active tabs, and focus rings.
-* **Hover State Accent Indigo (`#4F46E5` / `bg-indigo-700`)**: Smooth hover transitions for interactive buttons.
-* **Accent Glow / Shadow (`rgba(99, 102, 241, 0.25)` / `shadow-indigo-500/25`)**: Subtle colored elevation glow behind primary action triggers.
-* **Status Success Green (`#10B981` / `emerald-500`)**: Operational indicators, live network ping dots, and feature checkmarks.
+* **Electric Royal Purple (`#673DE6` / `bg-[#673DE6]`, `text-[#673DE6]`)**: Applied strictly to primary Call-to-Action (CTA) buttons, highlighted keywords, active tabs, most popular plan cards, and focus rings.
+* **Hover State Accent Violet (`#5428D8` / `hover:bg-[#5428D8]`)**: Smooth hover transitions for interactive buttons.
+* **Accent Glow / Shadow (`rgba(103, 61, 230, 0.25)` / `shadow-[#673DE6]/25`)**: Luminous colored elevation glow behind primary action triggers.
+* **Status Success Emerald (`#10B981` / `emerald-500`)**: Operational indicators, live network ping dots, and feature checkmarks.
 
 ---
 
@@ -41,16 +41,16 @@ This document establishes the mandatory design system rules and visual identity 
 ---
 
 ## 4. Spacing & Container Rules
-* **Section Containers**: `py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto` to provide spacious, enterprise-grade breathing room.
-* **Grid Structures**: Balanced 3-column matrices (`grid grid-cols-1 md:grid-cols-3 gap-8`) with responsive collapsing for mobile.
+* **Section Containers**: `w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16` to provide spacious, enterprise-grade breathing room on wide screens.
+* **Grid Structures**: Balanced matrices (`grid grid-cols-1 md:grid-cols-3 gap-8` or `grid-cols-4`) with responsive collapsing for mobile.
 * **Card Padding**: Generous internal spacing (`p-6 sm:p-8 rounded-2xl` or `rounded-3xl`).
 
 ---
 
 ## 5. Interactive Components & Micro-Interactions
-* **Primary Buttons**:
+* **Primary CTA Buttons**:
   ```html
-  class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center justify-center gap-2"
+  class="bg-[#673DE6] hover:bg-[#5428D8] text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-[#673DE6]/25 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center justify-center gap-2"
   ```
 * **Secondary / Outline Buttons**:
   ```html
@@ -58,21 +58,82 @@ This document establishes the mandatory design system rules and visual identity 
   ```
 * **Featured / Most Popular Pricing Card**:
   - Elevated shadow (`shadow-xl shadow-slate-200/80`)
-  - Subtle top accent border (`border-t-2 border-indigo-600` or `border-indigo-600`)
-  - Absolute pill badge (`bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full`)
+  - Subtle top accent border (`border-t-2 border-[#673DE6]` or `border-[#673DE6]`)
+  - Absolute pill badge (`bg-purple-50 text-[#673DE6] border border-purple-200 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full`)
 * **Uptime Pulse Indicator**:
   - Relative container with a steady green dot inside an `animate-ping` ping ring (`h-2.5 w-2.5 rounded-full bg-emerald-500`).
 
 ---
 
 ## 6. Mandatory Section Structure (Landing Page Standard)
-1. **Hero Section**: Asymmetrical desktop split layout, H1 headline with purple accent highlight, primary CTA + outline secondary button, 60-second activation trust badge, and an interactive cloud terminal/spec preview box.
+1. **Hero Section**: Centered grand stage layout with top search capsule, 2-line H1 headline, pure white primary CTA, 4-card interactive preview deck, and Trustpilot rating strip.
 2. **Hardware Partners**: Minimalist gray-scaled logo text cards (`AMD EPYC™`, `Intel® Xeon® Scalable`, `Samsung® Gen4 Enterprise NVMe`, `KVM Architecture`).
-3. **Pricing Matrix**: 3-tier cards (Starter $4.99, Professional $14.99 Most Popular, Enterprise $29.99) with high-contrast spec micro-lists and 1-click OS badges underneath.
+3. **Pricing Matrix**: 3-tier cards with high-contrast spec micro-lists, `#673DE6` highlights, and 1-click OS badges underneath.
 4. **Why Choose Us**: 3-pillar feature grid (99.99% Uptime with ping indicator, Enterprise DDoS, 24/7 Expert Support).
 5. **Customer Reviews**: 3-column developer testimonial masonry grid with 5-star graphics, italic quotes, and bold names.
 6. **Technical FAQ**: Clean `#F8FAFC` background with smooth interactive expanding accordions.
-7. **Final Conversion CTA**: Striking light-mode card with centered typography and prominent "Get Started Instantly" button.
+7. **Final Conversion CTA**: Striking Cosmic Violet card (`#1A0038` to `#220044`) with ambient purple/fuchsia glows, pure white headline, live setup capsule pill, and high-contrast white "Get Started Instantly" button.
 
 ---
-*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, color ratios, and typography standards.*
+
+## 7. Component Architecture & SEO Engine Standards
+* **Master Layout (`<x-app-layout>`)**: All frontend views must extend `<x-app-layout>` and declare their page-specific parameters:
+  ```blade
+  <x-app-layout 
+      title="Page Title" 
+      description="Compelling meta description under 160 characters." 
+      keywords="targeted, keywords"
+      headerVariant="hero|solid|minimal"
+      robots="index, follow|noindex, nofollow">
+  ```
+* **Header Variants (`<x-header>`)**:
+  - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll (used on homepage).
+  - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-20 sm:pt-22`) for inner pages (`/plans`, knowledgebase, legal).
+  - `headerVariant="minimal"`: Distraction-free header with logo & SSL security badge for `/checkout` and auth pages.
+* **Modular Components**:
+  - `<x-seo-meta>`: Handles OpenGraph, Twitter Cards, Canonical URLs, CSRF meta tokens, and global `Organization` / `WebSite` JSON-LD schemas.
+  - `<x-analytics>`: Safe Google Analytics (GA4) / Tag Manager tracking.
+  - `<x-flash-messages>`: Floating dismissible toast notifications for `session('success')` and `session('error')`.
+  - `<x-footer>`: 5-column B2B footer with operational 99.99% uptime status.
+* **Page-Specific Schemas (`<x-slot:schema>`)**:
+  - Use `<x-slot:schema>` for rich search snippets (`Product` / `AggregateOffer` for pricing catalogs, `FAQPage` for FAQ accordions).
+
+---
+
+## 8. Mandatory Animation & Micro-Interaction Standards
+Every newly added page, section, card grid, or interactive component **MUST AUTOMATICALLY** include these animation tokens without requiring additional user prompting:
+
+### 1. Scroll-Reveal System (All Sections & Cards)
+* **Section Headers & Single Containers**:
+  - Must include `reveal-init` class (e.g. `<div class="reveal-init text-center mb-16">...</div>`).
+* **Grid Items & Cards (Staggered Entrance)**:
+  - Must include `reveal-init delay-100`, `reveal-init delay-200`, `reveal-init delay-300`, `reveal-init delay-400` across sequential columns/cards for a staggered cascade effect.
+
+### 2. Interactive Card Dynamics (`card-interactive`)
+* **Standard Cards**:
+  - Must include `card-interactive` class:
+    ```html
+    class="reveal-init delay-100 card-interactive bg-white rounded-3xl p-7 border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 transition-all duration-300 group"
+    ```
+  - Child icons/badges should use `group-hover:scale-110 group-hover:text-[#673DE6] transition-all duration-300`.
+
+### 3. CTA & Button Shimmer (`btn-shimmer`)
+* **All Primary Buttons & Conversion Triggers**:
+  - Must include `btn-shimmer`:
+    ```html
+    class="btn-shimmer bg-[#673DE6] hover:bg-[#5428D8] text-white font-bold py-3.5 px-6 rounded-xl shadow-xl shadow-[#673DE6]/25 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+    ```
+
+### 4. Ambient Stage Lighting (Hero & Dark Sections)
+* **Floating Ambient Light Blobs**:
+  - Dark containers must feature animated background glows:
+    - Blob 1: `animate-float-slow`
+    - Blob 2: `animate-float-reverse`
+    - Blob 3: `animate-pulse-glow`
+
+### 5. Page Opening Hero Elements
+* **Initial Viewport Elements**:
+  - Must use `animate-fade-in-up` with staggered inline styles (`style="animation-delay: 150ms;"`, `style="animation-delay: 250ms;"`).
+
+---
+*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, and component architecture standards.*

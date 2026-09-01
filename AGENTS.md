@@ -99,4 +99,42 @@ This document establishes the mandatory design system rules and visual identity 
   - Use `<x-slot:schema>` for rich search snippets (`Product` / `AggregateOffer` for pricing catalogs, `FAQPage` for FAQ accordions).
 
 ---
-*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, color ratios, and component architecture standards.*
+
+## 8. Mandatory Animation & Micro-Interaction Standards
+Every newly added page, section, card grid, or interactive component **MUST AUTOMATICALLY** include these animation tokens without requiring additional user prompting:
+
+### 1. Scroll-Reveal System (All Sections & Cards)
+* **Section Headers & Single Containers**:
+  - Must include `reveal-init` class (e.g. `<div class="reveal-init text-center mb-16">...</div>`).
+* **Grid Items & Cards (Staggered Entrance)**:
+  - Must include `reveal-init delay-100`, `reveal-init delay-200`, `reveal-init delay-300`, `reveal-init delay-400` across sequential columns/cards for a staggered cascade effect.
+
+### 2. Interactive Card Dynamics (`card-interactive`)
+* **Standard Cards**:
+  - Must include `card-interactive` class:
+    ```html
+    class="reveal-init delay-100 card-interactive bg-white rounded-3xl p-7 border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 transition-all duration-300 group"
+    ```
+  - Child icons/badges should use `group-hover:scale-110 group-hover:text-[#673DE6] transition-all duration-300`.
+
+### 3. CTA & Button Shimmer (`btn-shimmer`)
+* **All Primary Buttons & Conversion Triggers**:
+  - Must include `btn-shimmer`:
+    ```html
+    class="btn-shimmer bg-[#673DE6] hover:bg-[#5428D8] text-white font-bold py-3.5 px-6 rounded-xl shadow-xl shadow-[#673DE6]/25 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+    ```
+
+### 4. Ambient Stage Lighting (Hero & Dark Sections)
+* **Floating Ambient Light Blobs**:
+  - Dark containers must feature animated background glows:
+    - Blob 1: `animate-float-slow`
+    - Blob 2: `animate-float-reverse`
+    - Blob 3: `animate-pulse-glow`
+
+### 5. Page Opening Hero Elements
+* **Initial Viewport Elements**:
+  - Must use `animate-fade-in-up` with staggered inline styles (`style="animation-delay: 150ms;"`, `style="animation-delay: 250ms;"`).
+
+---
+*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, and component architecture standards.*
+
