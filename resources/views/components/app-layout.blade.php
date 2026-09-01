@@ -59,13 +59,13 @@
 </head>
 <body class="bg-white text-slate-600 font-sans antialiased selection:bg-indigo-500 selection:text-white flex flex-col min-h-screen">
 
-    <!-- SaaS Clean Sticky Header -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <!-- Hostinger-Style Dark Glassmorphic Sticky Header -->
+    <header class="sticky top-0 z-50 bg-[#0F0D2E]/90 backdrop-blur-md border-b border-white/10 transition-all">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             <div class="flex items-center justify-between h-20">
                 <!-- Brand Logo -->
                 <a href="/" class="flex items-center gap-3 group focus:outline-none">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-200">
                         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
                             <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
@@ -75,37 +75,37 @@
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="font-bold text-xl text-slate-900 tracking-tight leading-none group-hover:text-indigo-600 transition-colors">VortexCloud</span>
-                        <span class="text-[11px] font-medium text-slate-500 uppercase tracking-wider mt-0.5">Enterprise Cloud VPS</span>
+                        <span class="font-bold text-xl text-white tracking-tight leading-none group-hover:text-indigo-300 transition-colors">VortexCloud</span>
+                        <span class="text-[11px] font-medium text-indigo-200/70 uppercase tracking-wider mt-0.5">Enterprise Cloud VPS</span>
                     </div>
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav class="hidden lg:flex items-center space-x-1 text-sm font-medium text-slate-600">
-                    <a href="{{ url('/') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors {{ request()->is('/') ? 'text-indigo-600 font-semibold bg-indigo-50/50' : '' }}">Home</a>
-                    <a href="{{ url('/plans') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors {{ request()->is('plans*') ? 'text-indigo-600 font-semibold bg-indigo-50/50' : '' }}">VPS & RDP</a>
-                    <a href="{{ url('/#features') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors">Features</a>
-                    <a href="{{ url('/#hardware') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors">Hardware</a>
-                    <a href="{{ url('/#reviews') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors">Reviews</a>
-                    <a href="{{ url('/#faq') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors">FAQ</a>
-                    <a href="{{ url('/customer/support-tickets') }}" class="px-3 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-50 transition-colors">Support</a>
+                <nav class="hidden lg:flex items-center space-x-1 text-sm font-medium text-slate-200">
+                    <a href="{{ url('/') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors {{ request()->is('/') ? 'text-white font-semibold bg-white/15' : '' }}">Home</a>
+                    <a href="{{ url('/plans') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors {{ request()->is('plans*') ? 'text-white font-semibold bg-white/15' : '' }}">VPS & RDP</a>
+                    <a href="{{ url('/#features') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors">Features</a>
+                    <a href="{{ url('/#hardware') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors">Hardware</a>
+                    <a href="{{ url('/#reviews') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors">Reviews</a>
+                    <a href="{{ url('/#faq') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors">FAQ</a>
+                    <a href="{{ url('/customer/support-tickets') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors">Support</a>
                 </nav>
 
                 <!-- Action Buttons -->
                 <div class="hidden md:flex items-center space-x-3">
                     @auth
-                        <a href="{{ url('/customer') }}" class="text-sm font-semibold text-slate-700 hover:text-slate-900 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 border border-slate-200 transition-all">
+                        <a href="{{ url('/customer') }}" class="text-sm font-semibold text-white hover:text-white px-4 py-2.5 rounded-xl hover:bg-white/15 border border-white/20 transition-all bg-white/5">
                             Client Area
                         </a>
                     @else
-                        <a href="{{ url('/customer/login') }}" class="text-sm font-semibold text-slate-700 hover:text-slate-900 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 border border-slate-200 transition-all">
+                        <a href="{{ url('/customer/login') }}" class="text-sm font-semibold text-slate-200 hover:text-white px-4 py-2.5 rounded-xl hover:bg-white/10 border border-white/15 transition-all">
                             Login
                         </a>
-                        <a href="{{ url('/customer/register') }}" class="text-sm font-semibold text-slate-700 hover:text-slate-900 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 border border-slate-200 transition-all">
+                        <a href="{{ url('/customer/register') }}" class="text-sm font-semibold text-white px-4 py-2.5 rounded-xl hover:bg-white/15 border border-white/20 transition-all bg-white/10">
                             Register
                         </a>
                     @endauth
-                    <a href="{{ url('/plans') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4.5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center gap-2">
+                    <a href="{{ url('/plans') }}" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/30 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center gap-2">
                         <span>Deploy VPS</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
@@ -115,7 +115,7 @@
 
                 <!-- Mobile Menu Button -->
                 <div class="flex items-center lg:hidden">
-                    <button type="button" id="mobile-menu-btn" class="p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 focus:outline-none" aria-label="Toggle Navigation Menu">
+                    <button type="button" id="mobile-menu-btn" class="p-2.5 rounded-xl text-slate-200 hover:text-white hover:bg-white/10 border border-white/20 focus:outline-none" aria-label="Toggle Navigation Menu">
                         <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
@@ -128,26 +128,26 @@
         </div>
 
         <!-- Mobile Navigation Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-3">
-            <div class="flex flex-col space-y-1 text-base font-medium text-slate-700">
-                <a href="{{ url('/') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900 {{ request()->is('/') ? 'text-indigo-600 font-semibold bg-indigo-50/50' : '' }}">Home</a>
-                <a href="{{ url('/plans') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900 {{ request()->is('plans*') ? 'text-indigo-600 font-semibold bg-indigo-50/50' : '' }}">VPS & RDP Packages</a>
-                <a href="{{ url('/#features') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900">Features</a>
-                <a href="{{ url('/#hardware') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900">Enterprise Hardware</a>
-                <a href="{{ url('/#reviews') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900">Customer Reviews</a>
-                <a href="{{ url('/#faq') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900">FAQ</a>
-                <a href="{{ url('/customer/support-tickets') }}" class="px-3 py-2 rounded-lg hover:bg-slate-50 hover:text-slate-900">Support Desk</a>
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-[#0F0D2E] px-4 pt-3 pb-6 space-y-3 text-slate-200">
+            <div class="flex flex-col space-y-1 text-base font-medium">
+                <a href="{{ url('/') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white {{ request()->is('/') ? 'text-indigo-400 font-semibold bg-white/10' : '' }}">Home</a>
+                <a href="{{ url('/plans') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white {{ request()->is('plans*') ? 'text-indigo-400 font-semibold bg-white/10' : '' }}">VPS & RDP Packages</a>
+                <a href="{{ url('/#features') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white">Features</a>
+                <a href="{{ url('/#hardware') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white">Enterprise Hardware</a>
+                <a href="{{ url('/#reviews') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white">Customer Reviews</a>
+                <a href="{{ url('/#faq') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white">FAQ</a>
+                <a href="{{ url('/customer/support-tickets') }}" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-white">Support Desk</a>
             </div>
-            <div class="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            <div class="pt-3 border-t border-white/10 flex flex-col gap-2">
                 @auth
-                    <a href="{{ url('/customer') }}" class="w-full text-center text-sm font-semibold text-slate-700 py-3 rounded-xl border border-slate-200 bg-slate-50">Client Area</a>
+                    <a href="{{ url('/customer') }}" class="w-full text-center text-sm font-semibold text-white py-3 rounded-xl border border-white/20 bg-white/10">Client Area</a>
                 @else
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="{{ url('/customer/login') }}" class="w-full text-center text-sm font-semibold text-slate-700 py-3 rounded-xl border border-slate-200 bg-slate-50">Login</a>
-                        <a href="{{ url('/customer/register') }}" class="w-full text-center text-sm font-semibold text-slate-700 py-3 rounded-xl border border-slate-200 bg-slate-50">Register</a>
+                        <a href="{{ url('/customer/login') }}" class="w-full text-center text-sm font-semibold text-slate-200 py-3 rounded-xl border border-white/15 bg-white/5">Login</a>
+                        <a href="{{ url('/customer/register') }}" class="w-full text-center text-sm font-semibold text-white py-3 rounded-xl border border-white/20 bg-white/10">Register</a>
                     </div>
                 @endauth
-                <a href="{{ url('/plans') }}" class="w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-3 rounded-xl shadow-md">Deploy VPS Now</a>
+                <a href="{{ url('/plans') }}" class="w-full text-center bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-bold py-3 rounded-xl shadow-lg">Deploy VPS Now</a>
             </div>
         </div>
     </header>

@@ -1,45 +1,75 @@
 <x-app-layout>
 
-    <!-- SECTION 1: HERO SECTION -->
-    <section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 bg-white border-b border-slate-100">
-        <!-- Subtle Background Glow -->
-        <div class="absolute top-0 right-1/4 -z-10 w-[500px] h-[500px] bg-indigo-50/60 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute top-1/3 left-10 -z-10 w-96 h-96 bg-slate-50 rounded-full blur-2xl pointer-events-none"></div>
+    <!-- SECTION 1: HOSTINGER-STYLE RICH COLORED HERO SECTION -->
+    <section class="relative overflow-hidden pt-12 pb-24 md:pt-20 md:pb-32 bg-gradient-to-b from-[#0F0D2E] via-[#1A1448] to-[#241350] text-white border-b border-indigo-950/60">
+        
+        <!-- Ambient Glowing Radial Mesh & Tech Grids -->
+        <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-purple-600/30 via-indigo-600/30 to-blue-600/25 blur-3xl pointer-events-none rounded-full"></div>
+        <div class="absolute top-1/4 -right-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-10 -left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 xl:gap-16 items-center">
                 
                 <!-- Hero Left: Text & Actions -->
                 <div class="lg:col-span-6 xl:col-span-6 space-y-8 text-center lg:text-left">
                     
-                    <!-- Breadcrumb / Announcement Tag -->
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 shadow-soft-sm">
-                        <span class="inline-block w-2 h-2 rounded-full bg-indigo-600"></span>
+                    <!-- Announcement Pill Badge -->
+                    <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-indigo-200 shadow-sm">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span>Gen4 NVMe Cloud Infrastructure</span>
-                        <span class="text-slate-300">•</span>
-                        <span class="text-indigo-600 font-medium">v3.4 Platform Live</span>
+                        <span class="text-white/30">•</span>
+                        <span class="text-white font-bold">v3.4 Platform Live</span>
                     </div>
 
                     <!-- Main H1 Headline -->
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
-                        Lightning-Fast <span class="text-indigo-600">NVMe VPS Hosting</span> for Developers.
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white tracking-tight leading-[1.08]">
+                        Lightning-Fast <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-300 to-indigo-200">NVMe VPS Hosting</span> for Developers.
                     </h1>
 
                     <!-- Subheadline -->
-                    <p class="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal">
+                    <p class="text-lg sm:text-xl text-indigo-100/90 leading-relaxed font-normal">
                         Deploy high-performance virtual private servers in seconds. Enjoy dedicated resources, root access, and unmetered gigabit bandwidth on premium enterprise hardware.
                     </p>
 
+                    <!-- Hostinger-Style Feature Bullet Checkpoint Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-sm font-medium text-indigo-100">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span>Dedicated AMD EPYC™ 9654 Cores</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span>Enterprise DDoS Traffic Scrubbing</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span>Full Root & SSH Console Access</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span>99.99% Uptime Guarantee SLA</span>
+                        </div>
+                    </div>
+
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#pricing" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center justify-center gap-3 text-base">
+                        <a href="#pricing" class="w-full sm:w-auto bg-white hover:bg-slate-100 text-[#0F0D2E] font-extrabold px-8 py-4 rounded-xl shadow-2xl shadow-black/40 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center justify-center gap-3 text-base">
                             <span>Deploy Server Now</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
                         </a>
-                        <a href="#hardware" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 font-semibold px-8 py-4 rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2 text-base shadow-soft-sm">
-                            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="#hardware" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 backdrop-blur-md px-8 py-4 rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2 text-base shadow-sm">
+                            <svg class="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                             </svg>
                             <span>View Benchmarks</span>
@@ -47,8 +77,8 @@
                     </div>
 
                     <!-- Trust Badge -->
-                    <div class="pt-2">
-                        <div class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 shadow-soft-sm">
+                    <div class="pt-1">
+                        <div class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-white shadow-sm">
                             <span class="text-base leading-none">🚀</span>
                             <span><strong>Instant Activation:</strong> Your server is online and ready to deploy in under 60 seconds.</span>
                         </div>
@@ -59,68 +89,68 @@
                 <div class="lg:col-span-6 xl:col-span-6 relative">
                     <div class="relative mx-auto max-w-lg lg:max-w-none flex items-center justify-center">
                         
-                        <!-- Ambient Radial Backlight Glow -->
-                        <div class="absolute -top-10 -right-10 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
-                        <div class="absolute -bottom-10 -left-10 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 1s;"></div>
+                        <!-- Ambient Backlight Glow Behind Artwork -->
+                        <div class="absolute -top-10 -right-10 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+                        <div class="absolute -bottom-10 -left-10 w-96 h-96 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 1s;"></div>
                         
-                        <!-- Floating Glass Badge 1 (Top Left) -->
-                        <div class="absolute -top-3 -left-3 sm:-top-5 sm:-left-5 z-20 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-soft-xl flex items-center gap-3 animate-bounce" style="animation-duration: 4s;">
-                            <div class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                        <!-- Floating Frosted Glass Badge 1 (Top Left) -->
+                        <div class="absolute -top-3 -left-3 sm:-top-5 sm:-left-5 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce text-white" style="animation-duration: 4s;">
+                            <div class="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0">
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-bold text-slate-900 leading-tight">AMD EPYC™ 9654</div>
-                                <div class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                <div class="text-[11px] font-bold text-white leading-tight">AMD EPYC™ 9654</div>
+                                <div class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                                     <span>3.70 GHz Dedicated</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Floating Glass Badge 2 (Top Right) -->
-                        <div class="absolute -top-3 -right-3 sm:-top-5 sm:-right-4 z-20 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-soft-xl flex items-center gap-3 animate-bounce" style="animation-duration: 4.5s; animation-delay: 0.5s;">
-                            <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                        <!-- Floating Frosted Glass Badge 2 (Top Right) -->
+                        <div class="absolute -top-3 -right-3 sm:-top-5 sm:-right-4 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce text-white" style="animation-duration: 4.5s; animation-delay: 0.5s;">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shrink-0">
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-bold text-slate-900 leading-tight">7,200 MB/s NVMe</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Gen4 RAID-10</div>
+                                <div class="text-[11px] font-bold text-white leading-tight">7,200 MB/s NVMe</div>
+                                <div class="text-[10px] text-indigo-200 font-medium">Gen4 RAID-10</div>
                             </div>
                         </div>
 
-                        <!-- Floating Glass Badge 3 (Bottom Left) -->
-                        <div class="absolute -bottom-4 -left-3 sm:-bottom-5 sm:-left-4 z-20 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-soft-xl flex items-center gap-3 animate-bounce" style="animation-duration: 5s; animation-delay: 1s;">
-                            <div class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                        <!-- Floating Frosted Glass Badge 3 (Bottom Left) -->
+                        <div class="absolute -bottom-4 -left-3 sm:-bottom-5 sm:-left-4 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce text-white" style="animation-duration: 5s; animation-delay: 1s;">
+                            <div class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-bold text-slate-900 leading-tight">2.4 Tbps Anti-DDoS</div>
-                                <div class="text-[10px] text-emerald-600 font-semibold">100% Traffic Scrubbed</div>
+                                <div class="text-[11px] font-bold text-white leading-tight">2.4 Tbps Anti-DDoS</div>
+                                <div class="text-[10px] text-emerald-400 font-semibold">100% Traffic Scrubbed</div>
                             </div>
                         </div>
 
-                        <!-- Floating Glass Badge 4 (Bottom Right) -->
-                        <div class="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-2 z-20 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-soft-xl flex items-center gap-2.5 animate-bounce" style="animation-duration: 4.8s; animation-delay: 1.5s;">
+                        <!-- Floating Frosted Glass Badge 4 (Bottom Right) -->
+                        <div class="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-2 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-2.5 animate-bounce text-white" style="animation-duration: 4.8s; animation-delay: 1.5s;">
                             <div class="flex items-center gap-1.5">
                                 <span class="relative flex h-2.5 w-2.5">
                                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
                                 </span>
-                                <span class="text-[11px] font-bold text-slate-900 font-mono">11.4 ms Latency</span>
+                                <span class="text-[11px] font-bold text-white font-mono">11.4 ms Latency</span>
                             </div>
                         </div>
 
-                        <!-- Main 3D Illustration Container with Smooth Floating Animation -->
-                        <div class="relative w-full rounded-3xl overflow-hidden bg-gradient-to-b from-white to-slate-50/50 p-2.5 sm:p-3.5 border border-slate-200/90 shadow-soft-xl group transition-transform duration-500 hover:scale-[1.02]">
+                        <!-- Main 3D Illustration Container with Glassmorphism Border -->
+                        <div class="relative w-full rounded-3xl overflow-hidden bg-white/10 backdrop-blur-xl p-2.5 sm:p-3.5 border border-white/20 shadow-2xl group transition-transform duration-500 hover:scale-[1.02]">
                             <img 
                                 src="{{ asset('images/hero-cloud-server.jpg') }}" 
                                 alt="High-Performance Enterprise Cloud VPS Infrastructure" 
-                                class="w-full h-auto object-cover rounded-2xl shadow-inner transition-transform duration-700 group-hover:scale-105"
+                                class="w-full h-auto object-cover rounded-2xl shadow-2xl transition-transform duration-700 group-hover:scale-105"
                                 loading="eager"
                             />
                             
-                            <!-- Subtle Glass Gradient Overlay -->
-                            <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-slate-950/10 via-transparent to-transparent pointer-events-none"></div>
+                            <!-- Ambient Glass Gradient Overlay -->
+                            <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
                         </div>
 
                     </div>
