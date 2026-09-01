@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -40,7 +40,7 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Install Node dependencies and build Tailwind/Vite assets
 RUN npm install && npm run build

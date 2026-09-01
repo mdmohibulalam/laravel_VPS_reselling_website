@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Discover packages & upgrade filament components
+php artisan package:discover --ansi
+php artisan filament:upgrade
+
 # Cache configurations for production speed
 php artisan config:cache
 php artisan route:cache
