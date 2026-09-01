@@ -440,11 +440,11 @@
                 <div>
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Compute & VPS</h3>
                     <ul class="space-y-2.5 text-sm text-slate-600">
-                        <li><a href="#pricing" class="hover:text-indigo-600 transition-colors">Starter NVMe VPS</a></li>
-                        <li><a href="#pricing" class="hover:text-indigo-600 transition-colors">Professional VPS</a></li>
-                        <li><a href="#pricing" class="hover:text-indigo-600 transition-colors">Enterprise VPS</a></li>
-                        <li><a href="#pricing" class="hover:text-indigo-600 transition-colors">Windows RDP Servers</a></li>
-                        <li><a href="#pricing" class="hover:text-indigo-600 transition-colors">Custom Reseller Tiers</a></li>
+                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Starter NVMe VPS</a></li>
+                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Professional VPS</a></li>
+                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Enterprise VPS</a></li>
+                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Windows RDP Servers</a></li>
+                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Custom Reseller Tiers</a></li>
                     </ul>
                 </div>
 
@@ -452,11 +452,11 @@
                 <div>
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Infrastructure</h3>
                     <ul class="space-y-2.5 text-sm text-slate-600">
-                        <li><a href="#hardware" class="hover:text-indigo-600 transition-colors">AMD EPYC™ Nodes</a></li>
-                        <li><a href="#hardware" class="hover:text-indigo-600 transition-colors">Samsung® Gen4 NVMe</a></li>
-                        <li><a href="#features" class="hover:text-indigo-600 transition-colors">DDoS Scrubbing Core</a></li>
-                        <li><a href="#features" class="hover:text-indigo-600 transition-colors">Global Tier-1 Network</a></li>
-                        <li><a href="#hardware" class="hover:text-indigo-600 transition-colors">KVM Virtualization</a></li>
+                        <li><a href="#hardware" class="hover:text-[#673DE6] transition-colors">AMD EPYC™ Nodes</a></li>
+                        <li><a href="#hardware" class="hover:text-[#673DE6] transition-colors">Samsung® Gen4 NVMe</a></li>
+                        <li><a href="#features" class="hover:text-[#673DE6] transition-colors">DDoS Scrubbing Core</a></li>
+                        <li><a href="#features" class="hover:text-[#673DE6] transition-colors">Global Tier-1 Network</a></li>
+                        <li><a href="#hardware" class="hover:text-[#673DE6] transition-colors">KVM Virtualization</a></li>
                     </ul>
                 </div>
 
@@ -464,11 +464,11 @@
                 <div>
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Support & Portal</h3>
                     <ul class="space-y-2.5 text-sm text-slate-600">
-                        <li><a href="/customer/login" class="hover:text-indigo-600 transition-colors">Customer Portal</a></li>
-                        <li><a href="#faq" class="hover:text-indigo-600 transition-colors">Knowledge Base & FAQ</a></li>
-                        <li><a href="/customer" class="hover:text-indigo-600 transition-colors">24/7 Expert Ticket Desk</a></li>
-                        <li><a href="#" class="hover:text-indigo-600 transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-indigo-600 transition-colors">Privacy Policy</a></li>
+                        <li><a href="/customer/login" class="hover:text-[#673DE6] transition-colors">Customer Portal</a></li>
+                        <li><a href="#faq" class="hover:text-[#673DE6] transition-colors">Knowledge Base & FAQ</a></li>
+                        <li><a href="/customer" class="hover:text-[#673DE6] transition-colors">24/7 Expert Ticket Desk</a></li>
+                        <li><a href="#" class="hover:text-[#673DE6] transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-[#673DE6] transition-colors">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>

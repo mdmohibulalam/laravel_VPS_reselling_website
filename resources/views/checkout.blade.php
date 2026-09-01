@@ -1,8 +1,9 @@
 <x-app-layout>
     <div class="py-16 md:py-24 bg-white min-h-[85vh]">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+            <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3.5 py-1 rounded-full mb-3 border border-indigo-100">
+                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
                     Secure Checkout
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Complete Your VPS Order</h1>
@@ -16,7 +17,7 @@
                     <div class="bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-soft-sm sticky top-28">
                         <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
                             <h2 class="text-lg font-bold text-slate-900">Order Summary</h2>
-                            <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-100 text-indigo-700">1 Month</span>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-purple-100 text-[#673DE6]">1 Month</span>
                         </div>
 
                         <div class="mb-4">
@@ -85,22 +86,22 @@
                                 <div class="space-y-4 mb-6">
                                     <div>
                                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Full Name</label>
-                                        <input type="text" name="name" required placeholder="Jane Doe" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400">
+                                        <input type="text" name="name" required placeholder="Jane Doe" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Address</label>
-                                        <input type="email" name="email" required placeholder="jane@company.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400">
+                                        <input type="email" name="email" required placeholder="jane@company.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Account Password</label>
-                                        <input type="password" name="password" required minlength="8" placeholder="••••••••••••" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400">
+                                        <input type="password" name="password" required minlength="8" placeholder="••••••••••••" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
                                     </div>
                                 </div>
                             @endguest
                             
                             @auth
-                                <div class="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                                <div class="mb-6 p-4 bg-purple-50 border border-purple-100 rounded-2xl flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-[#673DE6] text-white flex items-center justify-center font-bold text-sm shrink-0">
                                         {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
                                     </div>
                                     <div>
@@ -118,7 +119,7 @@
                                 <div class="grid grid-cols-2 gap-3">
                                     <label class="cursor-pointer">
                                         <input type="radio" name="payment_type" value="stripe" class="peer sr-only" {{ old('payment_type', 'stripe') === 'stripe' ? 'checked' : '' }} onchange="togglePaymentMethod(this.value)">
-                                        <div class="bg-slate-50 border-2 border-slate-200 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 rounded-2xl p-4 text-center transition-all">
+                                        <div class="bg-slate-50 border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 rounded-2xl p-4 text-center transition-all">
                                             <span class="block text-slate-900 font-bold text-sm mb-0.5">Credit / Debit Card</span>
                                             <span class="text-xs text-slate-500">Instant via Stripe</span>
                                         </div>
@@ -126,7 +127,7 @@
                                     
                                     <label class="cursor-pointer">
                                         <input type="radio" name="payment_type" value="manual" class="peer sr-only" {{ old('payment_type') === 'manual' ? 'checked' : '' }} onchange="togglePaymentMethod(this.value)">
-                                        <div class="bg-slate-50 border-2 border-slate-200 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 rounded-2xl p-4 text-center transition-all">
+                                        <div class="bg-slate-50 border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 rounded-2xl p-4 text-center transition-all">
                                             <span class="block text-slate-900 font-bold text-sm mb-0.5">Manual Payment</span>
                                             <span class="text-xs text-slate-500">Crypto / Bank Transfer</span>
                                         </div>
@@ -148,7 +149,7 @@
                             
                             <input type="hidden" name="payment_method_id" id="payment_method_id">
                             
-                            <button type="submit" id="submit-button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5 transition-all duration-200 flex justify-center items-center gap-2 text-base">
+                            <button type="submit" id="submit-button" class="w-full bg-[#673DE6] hover:bg-[#5428D8] text-white font-bold py-4 rounded-xl shadow-lg shadow-[#673DE6]/25 hover:-translate-y-0.5 transition-all duration-200 flex justify-center items-center gap-2 text-base">
                                 <span id="button-text">{{ old('payment_type', 'stripe') === 'stripe' ? 'Pay $' . number_format($package->price_monthly, 2) . ' & Deploy Server' : 'Place Order (Pay Later)' }}</span>
                                 <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -158,7 +159,6 @@
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

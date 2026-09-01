@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="py-16 md:py-24 bg-white">
-        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3.5 py-1 rounded-full mb-3 border border-indigo-100">
+                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
                     High-Performance Packages
                 </div>
                 <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">VPS & Cloud Server Plans</h1>
@@ -20,9 +20,9 @@
                             $specs = is_string($package->specs) ? json_decode($package->specs, true) : $package->specs; 
                             $isPopular = $loop->iteration == 2 || $loop->count == 1;
                         @endphp
-                        <div class="bg-white rounded-3xl p-8 border {{ $isPopular ? 'border-t-2 border-t-indigo-600 border-x border-b border-slate-200 shadow-soft-xl ring-1 ring-indigo-500/20 md:-translate-y-2' : 'border-slate-200 shadow-soft-md hover:shadow-soft-lg' }} flex flex-col justify-between relative transition-all duration-200">
+                        <div class="bg-white rounded-3xl p-8 border {{ $isPopular ? 'border-t-2 border-t-[#673DE6] border-x border-b border-slate-200 shadow-soft-xl ring-1 ring-[#673DE6]/20 md:-translate-y-2' : 'border-slate-200 shadow-soft-md hover:shadow-soft-lg' }} flex flex-col justify-between relative transition-all duration-200">
                             @if($isPopular)
-                                <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[11px] font-bold uppercase tracking-wider py-1 px-4 rounded-full shadow-md shadow-indigo-500/30">
+                                <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#673DE6] text-white text-[11px] font-bold uppercase tracking-wider py-1 px-4 rounded-full shadow-md shadow-[#673DE6]/30">
                                     Most Popular
                                 </div>
                             @endif
@@ -44,30 +44,30 @@
                                     <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Included Hardware Specs</div>
                                     <ul class="space-y-3 text-sm text-slate-700 font-medium">
                                         <li class="flex items-center gap-3">
-                                            <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                            <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                                             <span><strong>{{ !empty($specs['cores']) ? (str_contains(strtolower($specs['cores']), 'core') || str_contains(strtolower($specs['cores']), 'vcpu') ? $specs['cores'] : $specs['cores'] . ' vCPU Cores') : '1 vCPU Core' }}</strong></span>
                                         </li>
                                         <li class="flex items-center gap-3">
-                                            <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                            <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                                             <span><strong>{{ !empty($specs['memory']) ? (str_contains(strtolower($specs['memory']), 'ram') ? $specs['memory'] : $specs['memory'] . ' RAM') : '2 GB DDR5 RAM' }}</strong></span>
                                         </li>
                                         <li class="flex items-center gap-3">
-                                            <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                            <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                                             <span><strong>{{ !empty($specs['storage']) ? (str_contains(strtolower($specs['storage']), 'storage') ? $specs['storage'] : $specs['storage'] . ' NVMe Storage') : '40 GB Gen4 NVMe' }}</strong></span>
                                         </li>
                                         <li class="flex items-center gap-3">
-                                            <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                            <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                                             <span>{{ strtolower($package->category) === 'rdp' ? 'Windows OS (RDP Edition)' : 'Linux OS (Ubuntu, Debian, Alma)' }}</span>
                                         </li>
                                         <li class="flex items-center gap-3">
-                                            <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                            <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                                             <span>Unmetered Gigabit Bandwidth</span>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             
-                            <a href="/checkout/{{ $package->id }}" class="block w-full text-center {{ $isPopular ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/25' : 'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 hover:border-slate-300 shadow-soft-sm' }} py-3.5 rounded-xl font-semibold transition-all duration-200 hover:-translate-y-0.5">
+                            <a href="/checkout/{{ $package->id }}" class="block w-full text-center {{ $isPopular ? 'bg-[#673DE6] hover:bg-[#5428D8] text-white shadow-lg shadow-[#673DE6]/25' : 'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 hover:border-slate-300 shadow-soft-sm' }} py-3.5 rounded-xl font-semibold transition-all duration-200 hover:-translate-y-0.5">
                                 Configure & Deploy
                             </a>
                         </div>
@@ -76,7 +76,7 @@
             @else
                 <div class="bg-slate-50 border border-slate-200 rounded-3xl p-12 text-center max-w-xl mx-auto">
                     <p class="text-slate-600 mb-6">No packages are currently listed. Please check back shortly or deploy directly from the homepage.</p>
-                    <a href="/" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md inline-block">Return to Homepage</a>
+                    <a href="/" class="bg-[#673DE6] hover:bg-[#5428D8] text-white font-semibold px-6 py-3 rounded-xl shadow-md inline-block">Return to Homepage</a>
                 </div>
             @endif
 
