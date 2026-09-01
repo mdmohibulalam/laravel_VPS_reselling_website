@@ -1,162 +1,146 @@
 <x-app-layout>
 
-    <!-- SECTION 1: HOSTINGER-STYLE RICH COLORED HERO SECTION -->
-    <section class="relative overflow-hidden pt-12 pb-24 md:pt-20 md:pb-32 bg-gradient-to-b from-[#0F0D2E] via-[#1A1448] to-[#241350] text-white border-b border-indigo-950/60">
+    <!-- SECTION 1: EXACT HOSTINGER-STYLE CENTERED HERO SECTION & INTERACTIVE SHOWCASE DECK -->
+    <section class="relative overflow-hidden pt-28 sm:pt-36 pb-20 md:pb-28 bg-[#120024] text-white">
         
-        <!-- Ambient Glowing Radial Mesh & Tech Grids -->
-        <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-purple-600/30 via-indigo-600/30 to-blue-600/25 blur-3xl pointer-events-none rounded-full"></div>
-        <div class="absolute top-1/4 -right-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-10 -left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- Ambient Cosmic Violet & Magenta Radial Glow (Hostinger Lighting) -->
+        <div class="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-gradient-to-br from-purple-600/40 to-fuchsia-600/30 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute top-10 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute -bottom-20 left-1/3 w-[800px] h-[300px] bg-purple-900/30 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 xl:gap-16 items-center">
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10 text-center">
+            
+            <!-- 1. Top Capsule Prompt / Search Pill (Hostinger Exact) -->
+            <div class="inline-flex items-center justify-between w-full max-w-xl px-4 py-2 rounded-full bg-white/[0.07] border border-white/20 backdrop-blur-xl shadow-lg mb-10 hover:border-white/30 transition-colors">
+                <span class="text-slate-300 text-xs sm:text-sm pl-2 font-normal truncate text-left">Have a configuration in mind? Find a VPS plan.</span>
+                <a href="#pricing" class="bg-white hover:bg-slate-100 text-[#120024] text-xs font-bold px-4 py-1.5 rounded-full transition-all shrink-0 ml-2 shadow-sm">
+                    Search
+                </a>
+            </div>
+
+            <!-- 2. Centered Grand Headline (Hostinger Exact 2-Line Format) -->
+            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-extrabold text-white tracking-tight leading-[1.06] max-w-4xl mx-auto">
+                Your server, online.<br>
+                Made easy.
+            </h1>
+
+            <!-- 3. Centered Subheadline -->
+            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mt-6 leading-relaxed font-normal">
+                One high-performance cloud platform, powered by AMD EPYC™ from the first deploy, with the tools to build, launch, manage, and scale your applications.
+            </p>
+
+            <!-- 4. Primary CTA & Trust Guarantee -->
+            <div class="mt-8 flex flex-col items-center justify-center gap-3">
+                <a href="#pricing" class="bg-white hover:bg-slate-100 text-[#120024] font-bold px-9 py-3.5 rounded-xl shadow-2xl transition-all duration-200 hover:scale-105 text-sm sm:text-base">
+                    Get started
+                </a>
+                <div class="flex items-center gap-2 text-slate-400 text-xs mt-1">
+                    <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>30-day money-back guarantee</span>
+                    <span class="text-white/30">•</span>
+                    <span>Instant 60-second activation</span>
+                </div>
+            </div>
+
+            <!-- 5. Horizontal 4-Tile Interactive Showcase Deck (Hostinger Exact Grid) -->
+            <div class="mt-14 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left max-w-[1440px] mx-auto">
                 
-                <!-- Hero Left: Text & Actions -->
-                <div class="lg:col-span-6 xl:col-span-6 space-y-8 text-center lg:text-left">
-                    
-                    <!-- Announcement Pill Badge -->
-                    <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-indigo-200 shadow-sm">
-                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span>Gen4 NVMe Cloud Infrastructure</span>
-                        <span class="text-white/30">•</span>
-                        <span class="text-white font-bold">v3.4 Platform Live</span>
+                <!-- Tile 1: Active Interactive Build / Prompt Card (Highlighted with Glowing Violet Border) -->
+                <div class="relative rounded-3xl p-5 bg-gradient-to-b from-[#220042] to-[#16002C] border-2 border-purple-500 shadow-2xl shadow-purple-600/30 flex flex-col justify-between h-64 overflow-hidden group">
+                    <div class="flex items-center justify-between">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-[11px] font-bold backdrop-blur-md border border-white/15">
+                            <span class="text-purple-300">✦</span> Build
+                        </span>
+                        <span class="text-[10px] font-mono text-purple-300 font-semibold">AMD EPYC™ 9654</span>
                     </div>
 
-                    <!-- Main H1 Headline -->
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white tracking-tight leading-[1.08]">
-                        Lightning-Fast <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-300 to-indigo-200">NVMe VPS Hosting</span> for Developers.
-                    </h1>
-
-                    <!-- Subheadline -->
-                    <p class="text-lg sm:text-xl text-indigo-100/90 leading-relaxed font-normal">
-                        Deploy high-performance virtual private servers in seconds. Enjoy dedicated resources, root access, and unmetered gigabit bandwidth on premium enterprise hardware.
-                    </p>
-
-                    <!-- Hostinger-Style Feature Bullet Checkpoint Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-sm font-medium text-indigo-100">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                            </div>
-                            <span>Dedicated AMD EPYC™ 9654 Cores</span>
+                    <!-- Visual Prompt Input Bar in Card -->
+                    <div class="space-y-2">
+                        <div class="w-full bg-white/10 backdrop-blur-md rounded-2xl p-2.5 border border-white/20 flex items-center justify-between shadow-inner">
+                            <span class="text-slate-200 text-xs font-medium pl-1">Deploy Ubuntu 24.04...</span>
+                            <a href="#pricing" class="w-7 h-7 rounded-xl bg-purple-600 hover:bg-purple-500 flex items-center justify-center text-white shrink-0 shadow-md">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </a>
                         </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                            </div>
-                            <span>Enterprise DDoS Traffic Scrubbing</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                            </div>
-                            <span>Full Root & SSH Console Access</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                            </div>
-                            <span>99.99% Uptime Guarantee SLA</span>
-                        </div>
-                    </div>
-
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#pricing" class="w-full sm:w-auto bg-white hover:bg-slate-100 text-[#0F0D2E] font-extrabold px-8 py-4 rounded-xl shadow-2xl shadow-black/40 hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center justify-center gap-3 text-base">
-                            <span>Deploy Server Now</span>
-                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </a>
-                        <a href="#hardware" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 backdrop-blur-md px-8 py-4 rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2 text-base shadow-sm">
-                            <svg class="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                            </svg>
-                            <span>View Benchmarks</span>
-                        </a>
-                    </div>
-
-                    <!-- Trust Badge -->
-                    <div class="pt-1">
-                        <div class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-white shadow-sm">
-                            <span class="text-base leading-none">🚀</span>
-                            <span><strong>Instant Activation:</strong> Your server is online and ready to deploy in under 60 seconds.</span>
+                        <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            <span>Dedicated root & SSH instant ready</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hero Right: 3D Isometric Enterprise Cloud Infrastructure Artwork & Animated Floating Badges -->
-                <div class="lg:col-span-6 xl:col-span-6 relative">
-                    <div class="relative mx-auto max-w-lg lg:max-w-none flex items-center justify-center">
-                        
-                        <!-- Ambient Backlight Glow Behind Artwork -->
-                        <div class="absolute -top-10 -right-10 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
-                        <div class="absolute -bottom-10 -left-10 w-96 h-96 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 1s;"></div>
-                        
-                        <!-- Floating Frosted Glass Badge 1 (Top Left) -->
-                        <div class="absolute -top-3 -left-3 sm:-top-5 sm:-left-5 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce text-white" style="animation-duration: 4s;">
-                            <div class="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
-                            </div>
-                            <div class="text-left">
-                                <div class="text-[11px] font-bold text-white leading-tight">AMD EPYC™ 9654</div>
-                                <div class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                    <span>3.70 GHz Dedicated</span>
-                                </div>
-                            </div>
+                <!-- Tile 2: Launch / Speed & Network Tile -->
+                <div class="rounded-3xl p-5 bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-xl flex flex-col justify-between h-64 transition-all hover:-translate-y-1 group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-lg">
+                            🌐
                         </div>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold">11.4 ms ping</span>
+                    </div>
+                    <div>
+                        <div class="text-xs text-purple-300 uppercase font-bold tracking-wider mb-1">Direct Tier-1 Fiber</div>
+                        <h4 class="text-lg font-bold text-white leading-tight">10 Gbps Unmetered</h4>
+                        <p class="text-xs text-slate-400 mt-1.5">14 global datacenter regions with low-latency routes.</p>
+                    </div>
+                </div>
 
-                        <!-- Floating Frosted Glass Badge 2 (Top Right) -->
-                        <div class="absolute -top-3 -right-3 sm:-top-5 sm:-right-4 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce text-white" style="animation-duration: 4.5s; animation-delay: 0.5s;">
-                            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shrink-0">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                            </div>
-                            <div class="text-left">
-                                <div class="text-[11px] font-bold text-white leading-tight">7,200 MB/s NVMe</div>
-                                <div class="text-[10px] text-indigo-200 font-medium">Gen4 RAID-10</div>
-                            </div>
+                <!-- Tile 3: Storage & Performance Tile -->
+                <div class="rounded-3xl p-5 bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-xl flex flex-col justify-between h-64 transition-all hover:-translate-y-1 group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-lg">
+                            ⚡
                         </div>
+                        <span class="px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold">Gen4 NVMe</span>
+                    </div>
+                    <div>
+                        <div class="text-xs text-indigo-300 uppercase font-bold tracking-wider mb-1">Samsung® Flash Array</div>
+                        <h4 class="text-lg font-bold text-white leading-tight">7,200 MB/s Read Speed</h4>
+                        <p class="text-xs text-slate-400 mt-1.5">PCIe 4.0 high-resiliency RAID-10 storage nodes.</p>
+                    </div>
+                </div>
 
-                        <!-- Floating Frosted Glass Badge 3 (Bottom Left) -->
-                        <div class="absolute -bottom-4 -left-3 sm:-bottom-5 sm:-left-4 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce text-white" style="animation-duration: 5s; animation-delay: 1s;">
-                            <div class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                            </div>
-                            <div class="text-left">
-                                <div class="text-[11px] font-bold text-white leading-tight">2.4 Tbps Anti-DDoS</div>
-                                <div class="text-[10px] text-emerald-400 font-semibold">100% Traffic Scrubbed</div>
-                            </div>
+                <!-- Tile 4: Live Cloud Assistant / Sysadmin Support Tile -->
+                <div class="rounded-3xl p-5 bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-xl flex flex-col justify-between h-64 transition-all hover:-translate-y-1 group">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold shadow-md">
+                            VC
                         </div>
-
-                        <!-- Floating Frosted Glass Badge 4 (Bottom Right) -->
-                        <div class="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-2 z-20 bg-slate-900/85 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-2.5 animate-bounce text-white" style="animation-duration: 4.8s; animation-delay: 1.5s;">
-                            <div class="flex items-center gap-1.5">
-                                <span class="relative flex h-2.5 w-2.5">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
-                                </span>
-                                <span class="text-[11px] font-bold text-white font-mono">11.4 ms Latency</span>
-                            </div>
+                        <div>
+                            <div class="text-xs font-bold text-white">Hello 👋</div>
+                            <div class="text-[10px] text-slate-400">How can I help you deploy?</div>
                         </div>
-
-                        <!-- Main 3D Illustration Container with Glassmorphism Border -->
-                        <div class="relative w-full rounded-3xl overflow-hidden bg-white/10 backdrop-blur-xl p-2.5 sm:p-3.5 border border-white/20 shadow-2xl group transition-transform duration-500 hover:scale-[1.02]">
-                            <img 
-                                src="{{ asset('images/hero-cloud-server.jpg') }}" 
-                                alt="High-Performance Enterprise Cloud VPS Infrastructure" 
-                                class="w-full h-auto object-cover rounded-2xl shadow-2xl transition-transform duration-700 group-hover:scale-105"
-                                loading="eager"
-                            />
-                            
-                            <!-- Ambient Glass Gradient Overlay -->
-                            <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
-                        </div>
-
+                    </div>
+                    <div class="space-y-1.5 pt-2">
+                        <a href="{{ url('/plans') }}" class="w-full text-left px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-200 flex items-center justify-between transition-colors">
+                            <span>↗ 1-Click Server Migration</span>
+                            <span class="text-slate-400 text-[10px]">Free</span>
+                        </a>
+                        <a href="{{ url('/plans') }}" class="w-full text-left px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-200 flex items-center justify-between transition-colors">
+                            <span>↗ Windows RDP Deploy</span>
+                            <span class="text-slate-400 text-[10px]">Admin</span>
+                        </a>
                     </div>
                 </div>
 
             </div>
+
+            <!-- 6. Trustpilot Rating Strip (Hostinger Exact Center Bottom Bar) -->
+            <div class="mt-14 sm:mt-16 flex items-center justify-center gap-3 text-xs sm:text-sm text-slate-300 font-medium">
+                <span class="font-bold text-white">Excellent</span>
+                <!-- 5 Trustpilot Green Stars -->
+                <div class="flex items-center gap-1">
+                    <span class="w-5 h-5 bg-[#00B67A] rounded flex items-center justify-center text-white text-xs font-bold">★</span>
+                    <span class="w-5 h-5 bg-[#00B67A] rounded flex items-center justify-center text-white text-xs font-bold">★</span>
+                    <span class="w-5 h-5 bg-[#00B67A] rounded flex items-center justify-center text-white text-xs font-bold">★</span>
+                    <span class="w-5 h-5 bg-[#00B67A] rounded flex items-center justify-center text-white text-xs font-bold">★</span>
+                    <span class="w-5 h-5 bg-[#00B67A] rounded flex items-center justify-center text-white text-xs font-bold">★</span>
+                </div>
+                <span><u>71,826 reviews</u> on</span>
+                <span class="font-bold text-white flex items-center gap-1">
+                    <span class="text-[#00B67A] font-extrabold text-base">★</span> Trustpilot
+                </span>
+            </div>
+
         </div>
     </section>
 
