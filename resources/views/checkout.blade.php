@@ -1,4 +1,9 @@
-<x-app-layout>
+<x-app-layout 
+    :title="'Checkout - ' . $package->name" 
+    description="Secure checkout and automated instant cloud VPS provisioning."
+    headerVariant="minimal"
+    robots="noindex, nofollow"
+>
     <div class="py-16 md:py-24 bg-white min-h-[85vh]">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             <div class="max-w-4xl mx-auto">

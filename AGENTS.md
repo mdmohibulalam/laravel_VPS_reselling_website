@@ -75,4 +75,28 @@ This document establishes the mandatory design system rules and visual identity 
 7. **Final Conversion CTA**: Striking Cosmic Violet card (`#1A0038` to `#220044`) with ambient purple/fuchsia glows, pure white headline, live setup capsule pill, and high-contrast white "Get Started Instantly" button.
 
 ---
-*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, color ratios, and typography standards.*
+
+## 7. Component Architecture & SEO Engine Standards
+* **Master Layout (`<x-app-layout>`)**: All frontend views must extend `<x-app-layout>` and declare their page-specific parameters:
+  ```blade
+  <x-app-layout 
+      title="Page Title" 
+      description="Compelling meta description under 160 characters." 
+      keywords="targeted, keywords"
+      headerVariant="hero|solid|minimal"
+      robots="index, follow|noindex, nofollow">
+  ```
+* **Header Variants (`<x-header>`)**:
+  - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll (used on homepage).
+  - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-20 sm:pt-22`) for inner pages (`/plans`, knowledgebase, legal).
+  - `headerVariant="minimal"`: Distraction-free header with logo & SSL security badge for `/checkout` and auth pages.
+* **Modular Components**:
+  - `<x-seo-meta>`: Handles OpenGraph, Twitter Cards, Canonical URLs, CSRF meta tokens, and global `Organization` / `WebSite` JSON-LD schemas.
+  - `<x-analytics>`: Safe Google Analytics (GA4) / Tag Manager tracking.
+  - `<x-flash-messages>`: Floating dismissible toast notifications for `session('success')` and `session('error')`.
+  - `<x-footer>`: 5-column B2B footer with operational 99.99% uptime status.
+* **Page-Specific Schemas (`<x-slot:schema>`)**:
+  - Use `<x-slot:schema>` for rich search snippets (`Product` / `AggregateOffer` for pricing catalogs, `FAQPage` for FAQ accordions).
+
+---
+*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, color ratios, and component architecture standards.*

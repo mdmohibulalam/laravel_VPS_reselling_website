@@ -1,4 +1,38 @@
-<x-app-layout>
+<x-app-layout 
+    title="VPS & Cloud Server Plans" 
+    description="Compare scalable NVMe VPS hosting plans powered by AMD EPYC processors, DDR5 memory, and high-speed RAID-10 storage starting at $4.99/mo."
+    keywords="vps plans, vps pricing, cheap vps hosting, linux vps server, windows server rdp, nvme cloud"
+    headerVariant="solid"
+>
+    <x-slot:schema>
+        <!-- Product & AggregateOffer Schema for Google Search Pricing Rich Snippets -->
+        <script type="application/ld+json">
+        {
+            "@@context": "https://schema.org/",
+            "@@type": "Product",
+            "name": "VortexCloud High-Frequency NVMe VPS Hosting",
+            "image": "{{ url('/images/og-cover.png') }}",
+            "description": "Enterprise cloud VPS hosting instances powered by AMD EPYC CPUs, Samsung Gen4 NVMe, and KVM virtualization.",
+            "brand": {
+                "@@type": "Brand",
+                "name": "VortexCloud"
+            },
+            "offers": {
+                "@@type": "AggregateOffer",
+                "priceCurrency": "USD",
+                "lowPrice": "4.99",
+                "highPrice": "29.99",
+                "offerCount": "3",
+                "availability": "https://schema.org/InStock",
+                "seller": {
+                    "@@type": "Organization",
+                    "name": "VortexCloud"
+                }
+            }
+        }
+        </script>
+    </x-slot:schema>
+
     <div class="py-16 md:py-24 bg-white">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             <div class="text-center max-w-3xl mx-auto mb-16">

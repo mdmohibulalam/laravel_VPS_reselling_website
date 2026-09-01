@@ -1,4 +1,44 @@
-<x-app-layout>
+<x-app-layout 
+    title="High-Speed Cloud VPS & NVMe Hosting"
+    description="Deploy high-performance NVMe cloud VPS instances starting at $4.99/mo with AMD EPYC processors, 99.99% uptime SLA, and 24/7 expert support."
+    keywords="vps hosting, cloud vps, nvme vps, amd epyc server, linux vps, windows rdp, kvm hosting, developer cloud"
+    headerVariant="hero"
+>
+    <x-slot:schema>
+        <!-- FAQPage Structured Data Schema for Google Search Rich Snippets -->
+        <script type="application/ld+json">
+        {
+            "@@context": "https://schema.org",
+            "@@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@@type": "Question",
+                    "name": "How long does it take to deploy a virtual private server?",
+                    "acceptedAnswer": {
+                        "@@type": "Answer",
+                        "text": "Deployment is completely automated. Once your payment is confirmed, your server dashboard configuration initiates, and your operating system spins up in under 60 seconds."
+                    }
+                },
+                {
+                    "@@type": "Question",
+                    "name": "Can I upgrade my VPS resources later without losing my data?",
+                    "acceptedAnswer": {
+                        "@@type": "Answer",
+                        "text": "Yes. You can instantly scale your CPU, RAM, and storage directly from your billing dashboard. The upgrade requires a simple automated reboot with zero data loss or structural configuration changes."
+                    }
+                },
+                {
+                    "@@type": "Question",
+                    "name": "What happens if I exceed my monthly bandwidth limit?",
+                    "acceptedAnswer": {
+                        "@@type": "Answer",
+                        "text": "We do not charge hidden overage fees. If you hit your monthly traffic cap, your network speed is gently throttled to 10Mbps until the next billing cycle, or you can instantly upgrade your bandwidth allotment via your account panel."
+                    }
+                }
+            ]
+        }
+        </script>
+    </x-slot:schema>
 
     <!-- SECTION 1: EXACT HOSTINGER-STYLE CENTERED HERO SECTION & INTERACTIVE SHOWCASE DECK -->
     <section class="relative overflow-hidden pt-28 sm:pt-36 pb-20 md:pb-28 bg-[#120024] text-white">

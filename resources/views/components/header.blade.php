@@ -1,95 +1,49 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lightning-Fast NVMe VPS Hosting for Developers. Deploy high-performance virtual private servers in seconds with dedicated resources, root access, and unmetered bandwidth.">
-    <title>{{ config('app.name', 'VortexCloud') }} - Lightning-Fast NVMe VPS Hosting for Developers</title>
-    
-    <!-- Google Fonts: Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles / Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#EEF2FF',
-                            100: '#E0E7FF',
-                            200: '#C7D2FE',
-                            300: '#A5B4FC',
-                            400: '#818CF8',
-                            500: '#6366F1', // Accent Purple/Indigo
-                            600: '#4F46E5', // Rich Indigo Hover
-                            700: '#4338CA',
-                            800: '#3730A3',
-                            900: '#312E81',
-                        },
-                        navy: {
-                            900: '#0F172A',
-                            800: '#1E293B',
-                            700: '#334155',
-                        },
-                        surface: {
-                            white: '#FFFFFF',
-                            alt: '#F8FAFC',
-                        }
-                    },
-                    boxShadow: {
-                        'soft-sm': '0 1px 2px 0 rgba(15, 23, 42, 0.05)',
-                        'soft-md': '0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04)',
-                        'soft-lg': '0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04)',
-                        'soft-xl': '0 20px 30px -6px rgba(15, 23, 42, 0.1), 0 8px 12px -4px rgba(15, 23, 42, 0.06)',
-                        'accent': '0 10px 25px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.2)',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-white text-slate-600 font-sans antialiased selection:bg-indigo-500 selection:text-white flex flex-col min-h-screen">
+@props([
+    'variant' => 'hero', // 'hero', 'solid', or 'minimal'
+])
 
-    <!-- Hostinger-Style Floating Glass Navigation Bar -->
-    <header 
-        id="main-nav-header" 
-        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out bg-transparent border-b border-transparent shadow-none"
-    >
-        <!-- Subtle Top Glass Highlight Line (Visible on Scroll) -->
-        <div id="header-glass-highlight" class="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/40 to-transparent opacity-0 transition-opacity duration-300"></div>
+@php
+    $isHero = $variant === 'hero';
+    $isMinimal = $variant === 'minimal';
+    $isSolid = $variant === 'solid' || $variant === 'inner';
+@endphp
 
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-            <!-- Standard Format Taller Height (84px - 88px) -->
-            <div class="flex items-center justify-between h-20 sm:h-22">
-                
-                <!-- Left: Brand Logo & Left-Aligned Navigation -->
-                <div class="flex items-center gap-8 lg:gap-12">
-                    <!-- Brand Logo -->
-                    <a href="/" class="flex items-center gap-3 group focus:outline-none shrink-0">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform duration-200">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                                <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                                <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                            </svg>
-                        </div>
-                        <span class="font-extrabold text-xl tracking-wider text-white uppercase group-hover:text-purple-300 transition-colors">VORTEXCLOUD</span>
-                    </a>
+<!-- Hostinger-Style Floating Glass Navigation Bar -->
+<header 
+    id="main-nav-header" 
+    data-variant="{{ $variant }}"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out {{ $isHero ? 'bg-transparent border-b border-transparent shadow-none' : 'backdrop-blur-2xl bg-[#0F0024]/90 border-b border-white/[0.12] shadow-2xl shadow-purple-950/40' }}"
+>
+    <!-- Subtle Top Glass Highlight Line -->
+    <div 
+        id="header-glass-highlight" 
+        class="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/40 to-transparent {{ $isHero ? 'opacity-0' : 'opacity-100' }} transition-opacity duration-300"
+    ></div>
 
+    <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+        <!-- Standard Format Taller Height (80px - 88px) -->
+        <div class="flex items-center justify-between h-20 sm:h-22">
+            
+            <!-- Left: Brand Logo & Navigation -->
+            <div class="flex items-center gap-8 lg:gap-12">
+                <!-- Brand Logo -->
+                <a href="/" class="flex items-center gap-3 group focus:outline-none shrink-0">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform duration-200">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-wider text-white uppercase group-hover:text-purple-300 transition-colors">VORTEXCLOUD</span>
+                </a>
+
+                @if(!$isMinimal)
                     <!-- Left-Aligned Navigation Links -->
                     <nav class="hidden lg:flex items-center space-x-1.5 text-sm font-medium text-slate-300">
                         <!-- 1. Pricing Direct Link -->
-                        <a href="{{ url('/plans') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors">
+                        <a href="{{ url('/plans') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors {{ request()->is('plans*') ? 'text-white bg-white/[0.10]' : '' }}">
                             Pricing
                         </a>
 
@@ -329,11 +283,22 @@
                         </div>
 
                     </nav>
-                </div>
+                @endif
+            </div>
 
-                <!-- Right: Action Center (Hostinger Exact Pills & Icons) -->
-                <div class="flex items-center space-x-3.5">
-                    
+            <!-- Right: Action Center -->
+            <div class="flex items-center space-x-3.5">
+                
+                @if($isMinimal)
+                    <!-- Minimal Checkout Security Indicator -->
+                    <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-xs font-semibold">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <span>256-Bit SSL Encrypted</span>
+                    </div>
+                    <a href="{{ url('/plans') }}" class="text-xs font-semibold text-slate-300 hover:text-white transition-colors">
+                        ← Back to Plans
+                    </a>
+                @else
                     <!-- Action Pill: Deploy VPS -->
                     <a href="{{ url('/plans') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.08] hover:bg-white/[0.16] border border-white/20 text-xs font-bold text-white transition-all hover:scale-105 shadow-md">
                         <span class="text-sm">✨</span>
@@ -372,12 +337,14 @@
                             </svg>
                         </button>
                     </div>
-
-                </div>
+                @endif
 
             </div>
-        </div>
 
+        </div>
+    </div>
+
+    @if(!$isMinimal)
         <!-- Mobile Navigation Menu Drawer -->
         <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-[#120024]/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 text-slate-200 shadow-2xl">
             <div class="flex flex-col space-y-1 text-sm font-medium">
@@ -400,138 +367,5 @@
                 <a href="{{ url('/plans') }}" class="w-full text-center bg-white text-[#120024] text-xs font-extrabold py-2.5 rounded-lg shadow-lg">Deploy VPS Instantly</a>
             </div>
         </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="flex-grow">
-        {{ $slot }}
-    </main>
-
-    <!-- SaaS Clean Light-Mode Footer -->
-    <footer class="bg-white border-t border-slate-200">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
-                <!-- Brand Summary & Uptime -->
-                <div class="md:col-span-2 space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                                <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                                <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                            </svg>
-                        </div>
-                        <span class="font-bold text-xl text-slate-900 tracking-tight">VortexCloud</span>
-                    </div>
-                    <p class="text-sm text-slate-600 max-w-sm leading-relaxed">
-                        High-performance B2B virtual private servers powered by AMD EPYC™, Intel® Xeon®, and enterprise Samsung® Gen4 NVMe arrays with instant automated provisioning.
-                    </p>
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
-                        <span class="relative flex h-2.5 w-2.5">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                        </span>
-                        <span>All Systems Operational (99.99% Uptime)</span>
-                    </div>
-                </div>
-
-                <!-- Products -->
-                <div>
-                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Compute & VPS</h3>
-                    <ul class="space-y-2.5 text-sm text-slate-600">
-                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Starter NVMe VPS</a></li>
-                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Professional VPS</a></li>
-                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Enterprise VPS</a></li>
-                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Windows RDP Servers</a></li>
-                        <li><a href="#pricing" class="hover:text-[#673DE6] transition-colors">Custom Reseller Tiers</a></li>
-                    </ul>
-                </div>
-
-                <!-- Infrastructure -->
-                <div>
-                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Infrastructure</h3>
-                    <ul class="space-y-2.5 text-sm text-slate-600">
-                        <li><a href="#hardware" class="hover:text-[#673DE6] transition-colors">AMD EPYC™ Nodes</a></li>
-                        <li><a href="#hardware" class="hover:text-[#673DE6] transition-colors">Samsung® Gen4 NVMe</a></li>
-                        <li><a href="#features" class="hover:text-[#673DE6] transition-colors">DDoS Scrubbing Core</a></li>
-                        <li><a href="#features" class="hover:text-[#673DE6] transition-colors">Global Tier-1 Network</a></li>
-                        <li><a href="#hardware" class="hover:text-[#673DE6] transition-colors">KVM Virtualization</a></li>
-                    </ul>
-                </div>
-
-                <!-- Support & Legal -->
-                <div>
-                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Support & Portal</h3>
-                    <ul class="space-y-2.5 text-sm text-slate-600">
-                        <li><a href="/customer/login" class="hover:text-[#673DE6] transition-colors">Customer Portal</a></li>
-                        <li><a href="#faq" class="hover:text-[#673DE6] transition-colors">Knowledge Base & FAQ</a></li>
-                        <li><a href="/customer" class="hover:text-[#673DE6] transition-colors">24/7 Expert Ticket Desk</a></li>
-                        <li><a href="#" class="hover:text-[#673DE6] transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-[#673DE6] transition-colors">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Bottom Bar -->
-            <div class="mt-12 pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-                <p>&copy; {{ date('Y') }} VortexCloud Technologies LLC. All rights reserved.</p>
-                <div class="flex items-center space-x-6">
-                    <span class="text-slate-400">SOC 2 Type II Certified Datacenters</span>
-                    <span class="text-slate-400">1 Gbps - 10 Gbps Unmetered Uplinks</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Header Scroll Controller & Mobile Menu Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const header = document.getElementById('main-nav-header');
-            const glassHighlight = document.getElementById('header-glass-highlight');
-
-            if (header) {
-                const checkGlassBarState = () => {
-                    // When scrolled down (> 50px), activate the frosted glass bar effect
-                    if (window.scrollY > 50) {
-                        header.classList.remove('bg-transparent', 'border-transparent', 'shadow-none');
-                        header.classList.add('backdrop-blur-2xl', 'bg-[#0F0024]/85', 'border-white/[0.12]', 'shadow-2xl', 'shadow-purple-950/40');
-                        if (glassHighlight) glassHighlight.classList.remove('opacity-0');
-                    } else {
-                        // In hero section / at top: Menu is visible, but the bar container is completely transparent
-                        header.classList.add('bg-transparent', 'border-transparent', 'shadow-none');
-                        header.classList.remove('backdrop-blur-2xl', 'bg-[#0F0024]/85', 'border-white/[0.12]', 'shadow-2xl', 'shadow-purple-950/40');
-                        if (glassHighlight) glassHighlight.classList.add('opacity-0');
-                    }
-                };
-
-                window.addEventListener('scroll', checkGlassBarState, { passive: true });
-                checkGlassBarState();
-            }
-
-            // Mobile Menu Toggle
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const openIcon = document.getElementById('menu-icon-open');
-            const closeIcon = document.getElementById('menu-icon-close');
-
-            if (menuBtn && mobileMenu) {
-                menuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                    openIcon.classList.toggle('hidden');
-                    closeIcon.classList.toggle('hidden');
-                });
-
-                // Close on link click
-                mobileMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        mobileMenu.classList.add('hidden');
-                        openIcon.classList.remove('hidden');
-                        closeIcon.classList.add('hidden');
-                    });
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+    @endif
+</header>
