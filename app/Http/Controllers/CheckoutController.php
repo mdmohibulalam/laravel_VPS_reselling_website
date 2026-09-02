@@ -27,7 +27,8 @@ class CheckoutController extends Controller
             $selectedCycle = 'biennially';
         }
 
-        return view('checkout', compact('package', 'selectedCycle'));
+        $addons = \App\Models\PackageAddon::global()->get()->groupBy('type');
+        return view('checkout', compact('package', 'selectedCycle', 'addons'));
     }
 
     public function process(Request $request, Package $package)
@@ -75,9 +76,12 @@ class CheckoutController extends Controller
 
         // 2. Validate Checkout Form Details
         $request->validate([
-            'billing_cycle' => 'required|string|in:monthly,annually,biennially,1month,12months,24months',
+            'billing_cycle' => 'required|string|in:monthly,quarterly,semi_annually,annually,biennially,1month,3months,6months,12months,24months',
             'os' => 'nullable|string|max:100',
             'datacenter' => 'nullable|string|max:100',
+            'storage_type' => 'nullable|string|max:50',
+            'auto_backup' => 'nullable|boolean',
+            'private_networking' => 'nullable|boolean',
             'hostname' => 'nullable|string|max:255',
             'root_password' => 'nullable|string|min:6',
             'payment_type' => 'required|in:stripe,manual',
@@ -85,13 +89,21 @@ class CheckoutController extends Controller
             'coupon_code' => 'nullable|string|max:50',
         ]);
 
-        // 3. Calculate Pricing & Discounts (1 Month = 0%, 12 Months = 15%, 24 Months = 20%)
+        // 3. Calculate Pricing & Discounts
         $monthlyPrice = (float) $package->price_monthly;
         $rawCycle = $request->input('billing_cycle', 'biennially');
         
         if (in_array($rawCycle, ['1month', 'monthly', 'month'])) {
             $cycle = 'monthly';
             $months = 1;
+            $cycleDiscountPercent = 0;
+        } elseif (in_array($rawCycle, ['3months', 'quarterly'])) {
+            $cycle = 'quarterly';
+            $months = 3;
+            $cycleDiscountPercent = 0;
+        } elseif (in_array($rawCycle, ['6months', 'semi_annually'])) {
+            $cycle = 'semi_annually';
+            $months = 6;
             $cycleDiscountPercent = 0;
         } elseif (in_array($rawCycle, ['12months', 'annual', 'annually', '1year', 'year'])) {
             $cycle = 'annually';
@@ -103,7 +115,24 @@ class CheckoutController extends Controller
             $cycleDiscountPercent = 20; // 20% savings for 24 months
         }
 
-        $baseTotal = $monthlyPrice * $months;
+        // Calculate Addons Cost dynamically from the database
+        $addonsMonthly = 0;
+        
+        $selectedAddonValues = [
+            $request->input('os'),
+            $request->input('datacenter'),
+            $request->input('storage_type'),
+            $request->boolean('auto_backup') ? '1' : null,
+            $request->boolean('private_networking') ? '1' : null,
+        ];
+        
+        $selectedAddons = \App\Models\PackageAddon::whereIn('value', array_filter($selectedAddonValues))->get();
+        foreach ($selectedAddons as $addon) {
+            $addonsMonthly += (float) $addon->price;
+        }
+
+        // Base total includes addons
+        $baseTotal = ($monthlyPrice + $addonsMonthly) * $months;
         $cycleDiscountAmount = ($baseTotal * $cycleDiscountPercent) / 100;
         $subtotalAfterCycle = $baseTotal - $cycleDiscountAmount;
 
@@ -183,6 +212,9 @@ class CheckoutController extends Controller
         $serverSpecsConfig = [
             'os' => $request->input('os', 'Ubuntu 24.04 LTS'),
             'datacenter' => $request->input('datacenter', 'US East (New York)'),
+            'storage_type' => $request->input('storage_type', '100GB'),
+            'auto_backup' => $request->boolean('auto_backup'),
+            'private_networking' => $request->boolean('private_networking'),
             'hostname' => $request->input('hostname', 'vps-' . strtolower(Str::random(6)) . '.vortexcloud.net'),
             'root_password' => $request->input('root_password') ? Hash::make($request->root_password) : null,
             'billing_period' => $cycle,

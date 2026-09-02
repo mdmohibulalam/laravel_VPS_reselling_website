@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PackageAddons\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class PackageAddonForm
@@ -12,11 +13,16 @@ class PackageAddonForm
     {
         return $schema
             ->components([
-                TextInput::make('package_id')
+                Toggle::make('is_global')
+                    ->required(),
+                Select::make('package_id')
+                    ->relationship('package', 'name'),
+                TextInput::make('type')
                     ->required()
-                    ->numeric(),
+                    ->default('feature'),
                 TextInput::make('name')
                     ->required(),
+                TextInput::make('value'),
                 TextInput::make('price')
                     ->required()
                     ->numeric()

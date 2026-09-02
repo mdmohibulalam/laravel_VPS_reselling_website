@@ -18,12 +18,12 @@ class PackageSeeder extends Seeder
                 'description' => 'Great value VPS for getting started.',
                 'category' => 'vps',
                 'specs' => [
-                    'Cores' => '4 vCPU Cores',
-                    'Memory' => '8 GB RAM',
-                    'Storage' => '100 GB SSD',
-                    'Snapshots' => '1 Snapshot',
-                    'Port Speeds' => '200 Mbit/s Port',
-                    'Traffic' => 'Unlimited Traffic*'
+                    'cores' => '4 vCPU Cores',
+                    'memory' => '8 GB RAM',
+                    'storage' => '100 GB SSD',
+                    'snapshots' => '1 Snapshot',
+                    'bandwidth' => '200 Mbit/s Port',
+                    'traffic' => 'Unlimited Traffic*'
                 ],
                 'price_monthly' => 6.60,
                 'price_quarterly' => 19.80,
@@ -37,12 +37,12 @@ class PackageSeeder extends Seeder
                 'description' => 'Balanced performance for growing sites.',
                 'category' => 'vps',
                 'specs' => [
-                    'Cores' => '6 vCPU Cores',
-                    'Memory' => '12 GB RAM',
-                    'Storage' => '200 GB SSD',
-                    'Snapshots' => '2 Snapshots',
-                    'Port Speeds' => '300 Mbit/s Port',
-                    'Traffic' => 'Unlimited Traffic*'
+                    'cores' => '6 vCPU Cores',
+                    'memory' => '12 GB RAM',
+                    'storage' => '200 GB SSD',
+                    'snapshots' => '2 Snapshots',
+                    'bandwidth' => '300 Mbit/s Port',
+                    'traffic' => 'Unlimited Traffic*'
                 ],
                 'price_monthly' => 9.00,
                 'price_quarterly' => 27.00,
@@ -56,12 +56,12 @@ class PackageSeeder extends Seeder
                 'description' => 'High performance for demanding applications.',
                 'category' => 'vps',
                 'specs' => [
-                    'Cores' => '8 vCPU Cores',
-                    'Memory' => '24 GB RAM',
-                    'Storage' => '300 GB SSD',
-                    'Snapshots' => '3 Snapshots',
-                    'Port Speeds' => '600 Mbit/s Port',
-                    'Traffic' => 'Unlimited Traffic*'
+                    'cores' => '8 vCPU Cores',
+                    'memory' => '24 GB RAM',
+                    'storage' => '300 GB SSD',
+                    'snapshots' => '3 Snapshots',
+                    'bandwidth' => '600 Mbit/s Port',
+                    'traffic' => 'Unlimited Traffic*'
                 ],
                 'price_monthly' => 16.80,
                 'price_quarterly' => 50.40,
@@ -75,12 +75,12 @@ class PackageSeeder extends Seeder
                 'description' => 'Enterprise-grade resources for professionals.',
                 'category' => 'vps',
                 'specs' => [
-                    'Cores' => '12 vCPU Cores',
-                    'Memory' => '48 GB RAM',
-                    'Storage' => '400 GB SSD',
-                    'Snapshots' => '3 Snapshots',
-                    'Port Speeds' => '800 Mbit/s Port',
-                    'Traffic' => 'Unlimited Traffic*'
+                    'cores' => '12 vCPU Cores',
+                    'memory' => '48 GB RAM',
+                    'storage' => '400 GB SSD',
+                    'snapshots' => '3 Snapshots',
+                    'bandwidth' => '800 Mbit/s Port',
+                    'traffic' => 'Unlimited Traffic*'
                 ],
                 'price_monthly' => 30.00,
                 'price_quarterly' => 90.00,
@@ -94,12 +94,12 @@ class PackageSeeder extends Seeder
                 'description' => 'Massive resources for large scale projects.',
                 'category' => 'vps',
                 'specs' => [
-                    'Cores' => '16 vCPU Cores',
-                    'Memory' => '64 GB RAM',
-                    'Storage' => '500 GB SSD',
-                    'Snapshots' => '3 Snapshots',
-                    'Port Speeds' => '1 Gbit/s Port',
-                    'Traffic' => 'Unlimited Traffic*'
+                    'cores' => '16 vCPU Cores',
+                    'memory' => '64 GB RAM',
+                    'storage' => '500 GB SSD',
+                    'snapshots' => '3 Snapshots',
+                    'bandwidth' => '1 Gbit/s Port',
+                    'traffic' => 'Unlimited Traffic*'
                 ],
                 'price_monthly' => 44.50,
                 'price_quarterly' => 133.50,
@@ -113,12 +113,12 @@ class PackageSeeder extends Seeder
                 'description' => 'Ultimate performance for extreme workloads.',
                 'category' => 'vps',
                 'specs' => [
-                    'Cores' => '18 vCPU Cores',
-                    'Memory' => '96 GB RAM',
-                    'Storage' => '600 GB SSD',
-                    'Snapshots' => '3 Snapshots',
-                    'Port Speeds' => '1 Gbit/s Port',
-                    'Traffic' => 'Unlimited Traffic*'
+                    'cores' => '18 vCPU Cores',
+                    'memory' => '96 GB RAM',
+                    'storage' => '600 GB SSD',
+                    'snapshots' => '3 Snapshots',
+                    'bandwidth' => '1 Gbit/s Port',
+                    'traffic' => 'Unlimited Traffic*'
                 ],
                 'price_monthly' => 58.80,
                 'price_quarterly' => 176.40,
