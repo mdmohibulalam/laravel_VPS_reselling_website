@@ -132,7 +132,7 @@
 
             <!-- Global Validation Alerts -->
             @if(isset($errors) && $errors->any())
-                <div class="max-w-6xl mx-auto mb-8 bg-rose-50 border border-rose-200 text-rose-800 p-5 rounded-2xl shadow-soft-sm">
+                <div class="w-full mb-8 bg-rose-50 border border-rose-200 text-rose-800 p-5 rounded-2xl shadow-soft-sm">
                     <div class="flex items-center gap-2.5 font-bold text-sm mb-2 text-rose-900">
                         <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         <span>Please correct the following before proceeding:</span>
@@ -149,10 +149,10 @@
                 @csrf
                 <input type="hidden" name="payment_method_id" id="payment_method_id">
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-start w-full">
                     
-                    <!-- LEFT COLUMN: Progressive Order Funnel Steps (7 Cols) -->
-                    <div class="lg:col-span-7 space-y-8">
+                    <!-- LEFT COLUMN: Progressive Order Funnel Steps (7-8 Cols) -->
+                    <div class="lg:col-span-7 xl:col-span-8 space-y-8">
                         
                         <!-- STEP 1: CHOOSE BILLING PERIOD (Hostinger / SaaS Standard) -->
                         <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-soft-sm">
@@ -256,7 +256,7 @@
                                 </div>
 
                                 <!-- 4-Family OS Cards Grid -->
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="os-family-cards-grid">
+                                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3" id="os-family-cards-grid">
                                     @foreach($osFamilies as $fKey => $family)
                                         @php
                                             $isFamilyActive = ($initialActiveFamily === $fKey);
@@ -265,60 +265,62 @@
                                         @endphp
                                         <div id="os-family-card-{{ $fKey }}"
                                              onclick="handleFamilyCardClick('{{ $fKey }}')"
-                                             class="os-family-card cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none {{ $isFamilyActive ? 'border-[#673DE6] bg-purple-50/50 shadow-sm shadow-purple-600/10' : 'border-slate-200 bg-white hover:border-purple-300 hover:shadow-soft-sm' }}">
+                                             class="os-family-card cursor-pointer p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none {{ $isFamilyActive ? 'border-[#673DE6] bg-purple-50/50 shadow-sm shadow-purple-600/10' : 'border-slate-200 bg-white hover:border-purple-300 hover:shadow-soft-sm' }}">
                                             
                                             <!-- Active Indicator Pin -->
-                                            <div id="os-family-badge-active-{{ $fKey }}" class="absolute -top-2.5 right-3.5 {{ $isFamilyActive ? 'flex' : 'hidden' }} items-center gap-1 bg-[#673DE6] text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">
+                                            <div id="os-family-badge-active-{{ $fKey }}" class="absolute -top-3 left-1/2 -translate-x-1/2 {{ $isFamilyActive ? 'flex' : 'hidden' }} items-center gap-1 bg-[#673DE6] text-white text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm whitespace-nowrap z-10">
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                                 <span>Selected</span>
                                             </div>
 
                                             <div>
-                                                <!-- Card Top Header -->
-                                                <div class="flex items-center justify-between gap-2 mb-3">
-                                                    <div class="flex items-center gap-2.5">
-                                                        <div class="w-9 h-9 rounded-xl bg-slate-100/90 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                                                            @if($fKey === 'ubuntu')
-                                                                <!-- Ubuntu Logo SVG -->
-                                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                                                                    <circle cx="12" cy="12" r="10" fill="#E95420"/>
-                                                                    <path d="M12 4.5a7.5 7.5 0 0 0-4.7 1.7l1.4 1.4A5.5 5.5 0 0 1 12 6.5a5.5 5.5 0 0 1 5.3 4H19.4A7.5 7.5 0 0 0 12 4.5zm-5.7 3.3a7.4 7.4 0 0 0-1.8 4.2h2a5.4 5.4 0 0 1 1.2-2.8L6.3 7.8zm11.4 4.2h-2a5.5 5.5 0 0 1-5.3 4 5.5 5.5 0 0 1-3.3-1.1l-1.4 1.4A7.5 7.5 0 0 0 12 19.5a7.5 7.5 0 0 0 7.4-7.5zM4.5 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm12.3-5.2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 13.4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="#FFFFFF"/>
-                                                                </svg>
-                                                            @elseif($fKey === 'debian')
-                                                                <!-- Debian Logo SVG -->
-                                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                                                                    <circle cx="12" cy="12" r="10" fill="#D70A53"/>
-                                                                    <path d="M11.8 5.2c3.5 0 6.3 2.7 6.4 6.1.1 2.9-1.8 5.4-4.6 6-2.4.5-4.7-.9-5.4-3.2-.6-2 .4-4 2.4-4.8 1.6-.6 3.4.1 4 1.7.5 1.3-.1 2.7-1.4 3.2-1 .4-2.1-.1-2.5-1.1-.3-.7.1-1.6.8-1.9.5-.2 1.1 0 1.3.5.2.4 0 .9-.4 1.1-.3.1-.7 0-.8-.3" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                </svg>
-                                                            @elseif($fKey === 'rhel')
-                                                                <!-- RHEL Variants (AlmaLinux / Rocky) Logo SVG -->
-                                                                <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none">
-                                                                    <path d="M24 4 L30 18 L24 24 L18 18 Z" fill="#9333EA"/>
-                                                                    <path d="M44 24 L30 30 L24 24 L30 18 Z" fill="#EAB308"/>
-                                                                    <path d="M24 44 L18 30 L24 24 L30 30 Z" fill="#10B981"/>
-                                                                    <path d="M4 24 L18 18 L24 24 L18 30 Z" fill="#0284C7"/>
-                                                                    <path d="M24 8 L27 15 L24 18 L21 15 Z" fill="#C084FC"/>
-                                                                    <path d="M40 24 L33 27 L30 24 L33 21 Z" fill="#FDE047"/>
-                                                                    <path d="M24 40 L21 33 L24 30 L27 33 Z" fill="#6EE7B7"/>
-                                                                    <path d="M8 24 L15 21 L18 24 L15 27 Z" fill="#38BDF8"/>
-                                                                </svg>
-                                                            @elseif($fKey === 'windows')
-                                                                <!-- Windows Server Logo SVG -->
-                                                                <svg class="w-6 h-6" viewBox="0 0 88 88" fill="none">
-                                                                    <path d="M0 12.4 L35.6 7.5 V42.1 H0 V12.4 Z" fill="#0078D7"/>
-                                                                    <path d="M39.8 6.9 L88 0 V42.1 H39.8 V6.9 Z" fill="#0078D7"/>
-                                                                    <path d="M0 45.9 H35.6 V80.5 L0 75.6 V45.9 Z" fill="#0078D7"/>
-                                                                    <path d="M39.8 45.9 H88 V88 L39.8 81.1 V45.9 Z" fill="#0078D7"/>
-                                                                </svg>
-                                                            @endif
-                                                        </div>
-                                                        <span class="text-sm font-extrabold text-slate-900 tracking-tight">{{ $family['name'] }}</span>
+                                                <!-- Card Top: Logo on Left, Price Tag on Right -->
+                                                <div class="flex items-start justify-between gap-1.5 mb-2">
+                                                    <div class="w-9 h-9 rounded-xl bg-slate-100/90 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                                        @if($fKey === 'ubuntu')
+                                                            <!-- Ubuntu Logo SVG -->
+                                                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                                                <circle cx="12" cy="12" r="10" fill="#E95420"/>
+                                                                <path d="M12 4.5a7.5 7.5 0 0 0-4.7 1.7l1.4 1.4A5.5 5.5 0 0 1 12 6.5a5.5 5.5 0 0 1 5.3 4H19.4A7.5 7.5 0 0 0 12 4.5zm-5.7 3.3a7.4 7.4 0 0 0-1.8 4.2h2a5.4 5.4 0 0 1 1.2-2.8L6.3 7.8zm11.4 4.2h-2a5.5 5.5 0 0 1-5.3 4 5.5 5.5 0 0 1-3.3-1.1l-1.4 1.4A7.5 7.5 0 0 0 12 19.5a7.5 7.5 0 0 0 7.4-7.5zM4.5 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm12.3-5.2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 13.4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="#FFFFFF"/>
+                                                            </svg>
+                                                        @elseif($fKey === 'debian')
+                                                            <!-- Debian Logo SVG -->
+                                                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                                                <circle cx="12" cy="12" r="10" fill="#D70A53"/>
+                                                                <path d="M11.8 5.2c3.5 0 6.3 2.7 6.4 6.1.1 2.9-1.8 5.4-4.6 6-2.4.5-4.7-.9-5.4-3.2-.6-2 .4-4 2.4-4.8 1.6-.6 3.4.1 4 1.7.5 1.3-.1 2.7-1.4 3.2-1 .4-2.1-.1-2.5-1.1-.3-.7.1-1.6.8-1.9.5-.2 1.1 0 1.3.5.2.4 0 .9-.4 1.1-.3.1-.7 0-.8-.3" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        @elseif($fKey === 'rhel')
+                                                            <!-- RHEL Variants (AlmaLinux / Rocky) Logo SVG -->
+                                                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none">
+                                                                <path d="M24 4 L30 18 L24 24 L18 18 Z" fill="#9333EA"/>
+                                                                <path d="M44 24 L30 30 L24 24 L30 18 Z" fill="#EAB308"/>
+                                                                <path d="M24 44 L18 30 L24 24 L30 30 Z" fill="#10B981"/>
+                                                                <path d="M4 24 L18 18 L24 24 L18 30 Z" fill="#0284C7"/>
+                                                                <path d="M24 8 L27 15 L24 18 L21 15 Z" fill="#C084FC"/>
+                                                                <path d="M40 24 L33 27 L30 24 L33 21 Z" fill="#FDE047"/>
+                                                                <path d="M24 40 L21 33 L24 30 L27 33 Z" fill="#6EE7B7"/>
+                                                                <path d="M8 24 L15 21 L18 24 L15 27 Z" fill="#38BDF8"/>
+                                                            </svg>
+                                                        @elseif($fKey === 'windows')
+                                                            <!-- Windows Server Logo SVG -->
+                                                            <svg class="w-6 h-6" viewBox="0 0 88 88" fill="none">
+                                                                <path d="M0 12.4 L35.6 7.5 V42.1 H0 V12.4 Z" fill="#0078D7"/>
+                                                                <path d="M39.8 6.9 L88 0 V42.1 H39.8 V6.9 Z" fill="#0078D7"/>
+                                                                <path d="M0 45.9 H35.6 V80.5 L0 75.6 V45.9 Z" fill="#0078D7"/>
+                                                                <path d="M39.8 45.9 H88 V88 L39.8 81.1 V45.9 Z" fill="#0078D7"/>
+                                                            </svg>
+                                                        @endif
                                                     </div>
 
                                                     <!-- Price Tag Badge -->
-                                                    <span id="os-family-price-tag-{{ $fKey }}" class="text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 {{ $hasPrice ? 'text-purple-700 bg-purple-100/70 border border-purple-200' : 'text-emerald-700 bg-emerald-50 border border-emerald-200' }}">
+                                                    <span id="os-family-price-tag-{{ $fKey }}" class="text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 whitespace-nowrap {{ $hasPrice ? 'text-purple-700 bg-purple-100/70 border border-purple-200' : 'text-emerald-700 bg-emerald-50 border border-emerald-200' }}">
                                                         {{ $hasPrice ? '+$' . number_format($familySelectedOS->price, 2) . '/mo' : 'Free' }}
                                                     </span>
+                                                </div>
+
+                                                <!-- OS Family Name -->
+                                                <div class="text-sm font-extrabold text-slate-900 tracking-tight leading-snug">
+                                                    {{ $family['name'] }}
                                                 </div>
 
                                                 <!-- Version Subtitle -->
@@ -327,12 +329,12 @@
                                                     <div id="os-family-version-text-{{ $fKey }}" class="text-xs font-bold text-slate-900 truncate mt-0.5">
                                                         {{ $familySelectedOS?->name ?? 'Select Version' }}
                                                     </div>
-                                                    <div class="text-[10px] text-slate-500 mt-0.5">{{ $family['badge'] }}</div>
+                                                    <div class="text-[10px] text-slate-500 mt-0.5 truncate">{{ $family['badge'] }}</div>
                                                 </div>
                                             </div>
 
                                             <!-- Bottom Change Edition Button Trigger -->
-                                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                                            <div class="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
                                                 <span class="text-[11px] text-slate-400 font-medium">Edition</span>
                                                 <span class="inline-flex items-center gap-1 font-bold text-[#673DE6] group-hover:text-[#5428D8] transition-colors">
                                                     <span>Change</span>
@@ -681,8 +683,8 @@
 
                     </div>
 
-                    <!-- RIGHT COLUMN: Real-Time Sticky Order Summary (5 Cols) -->
-                    <div class="lg:col-span-5 sticky top-28 space-y-5">
+                    <!-- RIGHT COLUMN: Real-Time Sticky Order Summary (4-5 Cols) -->
+                    <div class="lg:col-span-5 xl:col-span-4 sticky top-28 space-y-5">
                         
                         <div class="rounded-3xl bg-white border border-slate-200 shadow-soft-lg overflow-hidden">
                             
@@ -1054,10 +1056,10 @@
             if (cardPriceTag) {
                 if (item.price > 0) {
                     cardPriceTag.textContent = '+$' + item.price.toFixed(2) + '/mo';
-                    cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 text-purple-700 bg-purple-100/70 border border-purple-200';
+                    cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 whitespace-nowrap text-purple-700 bg-purple-100/70 border border-purple-200';
                 } else {
                     cardPriceTag.textContent = 'Free';
-                    cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 text-emerald-700 bg-emerald-50 border border-emerald-200';
+                    cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 whitespace-nowrap text-emerald-700 bg-emerald-50 border border-emerald-200';
                 }
             }
 

@@ -24,10 +24,24 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('package_addons', function (Blueprint $table) {
-            $table->dropColumn(['type', 'value', 'is_global']);
-            // Reverting package_id requires care if there are nulls. Usually not necessary in down() for this prototype.
-            $table->foreignId('package_id')->nullable(false)->change();
+        \Illuminate\Support\Facades\DB::table('package_addons')->whereNull('package_id')->delete();
+
+        $columnsToDrop = array_filter(['type', 'value', 'is_global'], function ($col) {
+            return Schema::hasColumn('package_addons', $col);
         });
+
+        if (!empty($columnsToDrop)) {
+            Schema::table('package_addons', function (Blueprint $table) use ($columnsToDrop) {
+                $table->dropColumn($columnsToDrop);
+            });
+        }
+
+        try {
+            Schema::table('package_addons', function (Blueprint $table) {
+                $table->foreignId('package_id')->nullable(false)->change();
+            });
+        } catch (\Throwable $e) {
+            // Reverting nullability can be skipped if table is about to be dropped or column already in target state
+        }
     }
 };
