@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Stripe\StripeClient;
 
+use App\Services\AddonResolverService;
+
 class CheckoutController extends Controller
 {
-    public function show(Request $request, Package $package)
+    public function show(Request $request, Package $package, AddonResolverService $resolver)
     {
         $selectedCycle = $request->query('cycle', $request->query('billing_cycle', 'biennially'));
         if (in_array($selectedCycle, ['1month', 'monthly', 'month'])) {
@@ -27,10 +29,11 @@ class CheckoutController extends Controller
             $selectedCycle = 'biennially';
         }
 
-        return view('checkout', compact('package', 'selectedCycle'));
+        $addons = $resolver->getResolvedAddonsForPackage($package);
+        return view('checkout', compact('package', 'selectedCycle', 'addons'));
     }
 
-    public function process(Request $request, Package $package)
+    public function process(Request $request, Package $package, AddonResolverService $resolver)
     {
         $authType = $request->input('auth_type', 'register');
         $user = Auth::user();
@@ -75,9 +78,12 @@ class CheckoutController extends Controller
 
         // 2. Validate Checkout Form Details
         $request->validate([
-            'billing_cycle' => 'required|string|in:monthly,annually,biennially,1month,12months,24months',
+            'billing_cycle' => 'required|string|in:monthly,quarterly,semi_annually,annually,biennially,1month,3months,6months,12months,24months',
             'os' => 'nullable|string|max:100',
             'datacenter' => 'nullable|string|max:100',
+            'storage_type' => 'nullable|string|max:50',
+            'auto_backup' => 'nullable|boolean',
+            'private_networking' => 'nullable|boolean',
             'hostname' => 'nullable|string|max:255',
             'root_password' => 'nullable|string|min:6',
             'payment_type' => 'required|in:stripe,manual',
@@ -85,13 +91,21 @@ class CheckoutController extends Controller
             'coupon_code' => 'nullable|string|max:50',
         ]);
 
-        // 3. Calculate Pricing & Discounts (1 Month = 0%, 12 Months = 15%, 24 Months = 20%)
+        // 3. Calculate Pricing & Discounts using the 2-Layer Addon Resolver
         $monthlyPrice = (float) $package->price_monthly;
         $rawCycle = $request->input('billing_cycle', 'biennially');
         
         if (in_array($rawCycle, ['1month', 'monthly', 'month'])) {
             $cycle = 'monthly';
             $months = 1;
+            $cycleDiscountPercent = 0;
+        } elseif (in_array($rawCycle, ['3months', 'quarterly'])) {
+            $cycle = 'quarterly';
+            $months = 3;
+            $cycleDiscountPercent = 0;
+        } elseif (in_array($rawCycle, ['6months', 'semi_annually'])) {
+            $cycle = 'semi_annually';
+            $months = 6;
             $cycleDiscountPercent = 0;
         } elseif (in_array($rawCycle, ['12months', 'annual', 'annually', '1year', 'year'])) {
             $cycle = 'annually';
@@ -103,7 +117,21 @@ class CheckoutController extends Controller
             $cycleDiscountPercent = 20; // 20% savings for 24 months
         }
 
-        $baseTotal = $monthlyPrice * $months;
+        // Calculate Addons Cost dynamically via 2-Layer Hierarchy
+        $selectedAddonValues = [
+            $request->input('os'),
+            $request->input('datacenter'),
+            $request->input('storage_type'),
+            $request->boolean('auto_backup') ? '1' : null,
+            $request->boolean('private_networking') ? '1' : null,
+        ];
+        
+        $addonsCalculation = $resolver->calculateAddonsTotal($package, $selectedAddonValues);
+        $addonsMonthly = $addonsCalculation['total_monthly'];
+        $selectedAddons = $addonsCalculation['addons'];
+
+        // Base total includes addons
+        $baseTotal = ($monthlyPrice + $addonsMonthly) * $months;
         $cycleDiscountAmount = ($baseTotal * $cycleDiscountPercent) / 100;
         $subtotalAfterCycle = $baseTotal - $cycleDiscountAmount;
 
@@ -179,15 +207,28 @@ class CheckoutController extends Controller
             'paid_at' => $request->payment_type === 'stripe' ? now() : null,
         ]);
 
-        // 7. Store Server Provisioning Data & Create Service
+        // 7. Store Server Provisioning Data, Specs Snapshot, and Create Service
+        $specsJson = is_string($package->specs) ? json_decode($package->specs, true) : (is_array($package->specs) ? $package->specs : []);
+        $selectedOS = $selectedAddons->firstWhere('type', 'os');
+        $selectedRegion = $selectedAddons->firstWhere('type', 'region');
+        $selectedStorage = $selectedAddons->firstWhere('type', 'storage');
+
         $serverSpecsConfig = [
-            'os' => $request->input('os', 'Ubuntu 24.04 LTS'),
-            'datacenter' => $request->input('datacenter', 'US East (New York)'),
+            'os' => $selectedOS ? $selectedOS->name : $request->input('os', 'Ubuntu 24.04 LTS'),
+            'os_api_identifier' => $selectedOS?->api_identifier,
+            'datacenter' => $selectedRegion ? $selectedRegion->name : $request->input('datacenter', 'US East (New York)'),
+            'region_api_identifier' => $selectedRegion?->api_identifier,
+            'storage_type' => $selectedStorage ? $selectedStorage->name : $request->input('storage_type', '100GB'),
+            'auto_backup' => $request->boolean('auto_backup'),
+            'private_networking' => $request->boolean('private_networking'),
             'hostname' => $request->input('hostname', 'vps-' . strtolower(Str::random(6)) . '.vortexcloud.net'),
             'root_password' => $request->input('root_password') ? Hash::make($request->root_password) : null,
             'billing_period' => $cycle,
             'coupon_applied' => $appliedCoupon ? $appliedCoupon->code : null,
         ];
+
+        // Store standard recurring renewal amount (per cycle)
+        $cycleRecurringAmount = round($subtotalAfterCycle, 2);
 
         Service::create([
             'user_id' => $user->id,
@@ -195,6 +236,24 @@ class CheckoutController extends Controller
             'package_id' => $package->id,
             'status' => $request->payment_type === 'stripe' ? 'awaiting_provisioning' : 'awaiting_provisioning',
             'billing_cycle' => $cycle,
+            'recurring_amount' => $cycleRecurringAmount,
+            'specs_snapshot' => [
+                'package_name' => $package->name,
+                'cores' => $specsJson['cores'] ?? 'N/A',
+                'memory' => $specsJson['memory'] ?? 'N/A',
+                'storage' => $selectedStorage ? $selectedStorage->name : ($specsJson['storage'] ?? 'N/A'),
+                'bandwidth' => $specsJson['bandwidth'] ?? ($specsJson['port'] ?? '1 Gbps'),
+                'os' => $selectedOS ? $selectedOS->name : 'Ubuntu 24.04 LTS',
+                'datacenter' => $selectedRegion ? $selectedRegion->name : 'US East (New York)',
+            ],
+            'active_addons' => $selectedAddons->map(fn($a) => [
+                'id' => $a->id,
+                'type' => $a->type,
+                'name' => $a->name,
+                'value' => $a->value,
+                'api_identifier' => $a->api_identifier,
+                'price' => (float) $a->price,
+            ])->toArray(),
             'next_due_date' => now()->addMonths($months),
             'encrypted_credentials' => json_encode($serverSpecsConfig),
         ]);

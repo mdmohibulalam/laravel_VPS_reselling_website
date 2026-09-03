@@ -17,6 +17,9 @@ class Service extends Model
     {
         return [
             'next_due_date' => 'date',
+            'recurring_amount' => 'decimal:2',
+            'specs_snapshot' => 'array',
+            'active_addons' => 'array',
         ];
     }
 

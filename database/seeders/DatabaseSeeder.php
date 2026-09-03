@@ -37,5 +37,11 @@ class DatabaseSeeder extends Seeder
 
             $admin->assignRole('super_admin');
         }
+
+        // Seed packages & addons
+        $this->call([
+            PackageSeeder::class,
+            PackageAddonSeeder::class,
+        ]);
     }
 }
