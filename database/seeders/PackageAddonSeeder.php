@@ -16,8 +16,10 @@ class PackageAddonSeeder extends Seeder
         // 1. LAYER 1: Global Base Addons (Default Catalog for all Packages)
         $globalAddons = [
             // Operating Systems (Contabo imageId mappings)
+            // Ubuntu Family
             [
                 'type' => 'os',
+                'category' => 'ubuntu',
                 'name' => 'Ubuntu 24.04 LTS',
                 'value' => 'ubuntu_24_04',
                 'api_identifier' => 'ubuntu-24.04-x86_64',
@@ -26,14 +28,65 @@ class PackageAddonSeeder extends Seeder
             ],
             [
                 'type' => 'os',
-                'name' => 'Debian 12',
-                'value' => 'debian_12',
-                'api_identifier' => 'debian-12-x86_64',
+                'category' => 'ubuntu',
+                'name' => 'Ubuntu 22.04 LTS',
+                'value' => 'ubuntu_22_04',
+                'api_identifier' => 'ubuntu-22.04-x86_64',
                 'price' => 0.00,
                 'sort_order' => 2,
             ],
             [
                 'type' => 'os',
+                'category' => 'ubuntu',
+                'name' => 'Ubuntu 20.04 LTS',
+                'value' => 'ubuntu_20_04',
+                'api_identifier' => 'ubuntu-20.04-x86_64',
+                'price' => 0.00,
+                'sort_order' => 3,
+            ],
+
+            // Debian Family
+            [
+                'type' => 'os',
+                'category' => 'debian',
+                'name' => 'Debian 12',
+                'value' => 'debian_12',
+                'api_identifier' => 'debian-12-x86_64',
+                'price' => 0.00,
+                'sort_order' => 1,
+            ],
+            [
+                'type' => 'os',
+                'category' => 'debian',
+                'name' => 'Debian 11',
+                'value' => 'debian_11',
+                'api_identifier' => 'debian-11-x86_64',
+                'price' => 0.00,
+                'sort_order' => 2,
+            ],
+
+            // RHEL Variants (AlmaLinux & Rocky Linux)
+            [
+                'type' => 'os',
+                'category' => 'rhel',
+                'name' => 'AlmaLinux 10',
+                'value' => 'almalinux_10',
+                'api_identifier' => 'almalinux-10-x86_64',
+                'price' => 0.00,
+                'sort_order' => 1,
+            ],
+            [
+                'type' => 'os',
+                'category' => 'rhel',
+                'name' => 'Rocky Linux 10',
+                'value' => 'rocky_10',
+                'api_identifier' => 'rocky-linux-10-x86_64',
+                'price' => 0.00,
+                'sort_order' => 2,
+            ],
+            [
+                'type' => 'os',
+                'category' => 'rhel',
                 'name' => 'AlmaLinux 9',
                 'value' => 'almalinux_9',
                 'api_identifier' => 'almalinux-9-x86_64',
@@ -42,19 +95,50 @@ class PackageAddonSeeder extends Seeder
             ],
             [
                 'type' => 'os',
+                'category' => 'rhel',
                 'name' => 'Rocky Linux 9',
                 'value' => 'rocky_9',
                 'api_identifier' => 'rocky-linux-9-x86_64',
                 'price' => 0.00,
                 'sort_order' => 4,
             ],
+
+            // Windows-Server (with Datacenter licensing)
             [
                 'type' => 'os',
-                'name' => 'Windows Server 2022',
+                'category' => 'windows',
+                'name' => 'Windows Server Datacenter 2025',
+                'value' => 'win_2025',
+                'api_identifier' => 'windows-2025-datacenter',
+                'price' => 17.00,
+                'sort_order' => 1,
+            ],
+            [
+                'type' => 'os',
+                'category' => 'windows',
+                'name' => 'Windows Server Datacenter 2022',
                 'value' => 'win_2022',
                 'api_identifier' => 'windows-2022-standard',
-                'price' => 7.00,
-                'sort_order' => 5,
+                'price' => 17.00,
+                'sort_order' => 2,
+            ],
+            [
+                'type' => 'os',
+                'category' => 'windows',
+                'name' => 'Windows Server Datacenter 2019',
+                'value' => 'win_2019',
+                'api_identifier' => 'windows-2019-datacenter',
+                'price' => 17.00,
+                'sort_order' => 3,
+            ],
+            [
+                'type' => 'os',
+                'category' => 'windows',
+                'name' => 'Windows Server Datacenter 2016',
+                'value' => 'win_2016',
+                'api_identifier' => 'windows-2016-datacenter',
+                'price' => 17.00,
+                'sort_order' => 4,
             ],
 
             // Datacenter Regions (Contabo region codes & latencies)
@@ -160,6 +244,7 @@ class PackageAddonSeeder extends Seeder
                     'value' => $addon['value'],
                 ],
                 [
+                    'category' => $addon['category'] ?? null,
                     'name' => $addon['name'],
                     'api_identifier' => $addon['api_identifier'],
                     'price' => $addon['price'],
@@ -173,7 +258,7 @@ class PackageAddonSeeder extends Seeder
         }
 
         // 2. LAYER 2: Package-Specific Overrides
-        // Example A: Cloud VPS 8 (ID: 3 or by name) has a custom Windows licensing price ($10.00 vs $7.00 global)
+        // Example A: Cloud VPS 8 (ID: 3 or by name) has a custom Windows licensing price
         $package8 = Package::where('name', 'Cloud VPS 8')->first() ?? Package::find(3);
         if ($package8) {
             PackageAddon::updateOrCreate(
@@ -183,13 +268,14 @@ class PackageAddonSeeder extends Seeder
                     'value' => 'win_2022',
                 ],
                 [
-                    'name' => 'Windows Server 2022 Standard',
+                    'category' => 'windows',
+                    'name' => 'Windows Server Datacenter 2022',
                     'api_identifier' => 'windows-2022-standard',
-                    'price' => 10.00, // Custom override price for VPS 8
+                    'price' => 17.00,
                     'is_global' => false,
                     'is_out_of_stock' => false,
                     'is_enabled' => true,
-                    'sort_order' => 5,
+                    'sort_order' => 2,
                     'billing_cycle' => 'monthly',
                 ]
             );

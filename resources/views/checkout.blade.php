@@ -52,6 +52,65 @@
         $storageAddons = $resolvedAddons->get('storage', collect());
         $backupAddon = $resolvedAddons->get('backup', collect())->firstWhere('value', '1');
         $networkAddon = $resolvedAddons->get('network', collect())->firstWhere('value', '1');
+
+        // Organize OS Addons by Distribution Family for Contabo-style selection
+        $osFamilyConfig = [
+            'ubuntu' => [
+                'id' => 'ubuntu',
+                'name' => 'Ubuntu',
+                'badge' => 'Enterprise Linux',
+                'desc' => 'Ubuntu is a free, open-source Linux-based operating system. It is renowned for user-friendliness, stability, and extensive community support, widely deployed on servers, desktops, and enterprise cloud environments.',
+            ],
+            'debian' => [
+                'id' => 'debian',
+                'name' => 'Debian',
+                'badge' => 'Rock-Solid Stability',
+                'desc' => 'Debian is a versatile, community-driven universal operating system recognized for its rock-solid reliability, security adherence, and extensive package repository.',
+            ],
+            'rhel' => [
+                'id' => 'rhel',
+                'name' => 'RHEL Variants',
+                'badge' => 'Enterprise Production',
+                'desc' => 'Enterprise-grade Linux distributions (AlmaLinux & Rocky Linux) built 1:1 compatible with Red Hat Enterprise Linux sources, engineered for enterprise workloads and cPanel compatibility.',
+            ],
+            'windows' => [
+                'id' => 'windows',
+                'name' => 'Windows-Server',
+                'badge' => 'Pre-activated with RDP',
+                'desc' => 'Official Microsoft Windows Server Datacenter edition with pre-activated license, graphical desktop interface, and full Administrator Remote Desktop (RDP) access.',
+            ],
+        ];
+
+        $osFamilies = [];
+        foreach ($osFamilyConfig as $fKey => $fData) {
+            $items = $osAddons->filter(fn($a) => $a->os_family === $fKey)->values();
+            if ($items->isNotEmpty()) {
+                $fData['items'] = $items;
+                $osFamilies[$fKey] = $fData;
+            }
+        }
+
+        $selectedOSVal = old('os', $osAddons->firstWhere('is_out_of_stock', false)?->value ?? $osAddons->first()?->value);
+        $currentSelectedOS = $osAddons->firstWhere('value', $selectedOSVal) ?? $osAddons->first();
+        $initialActiveFamily = $currentSelectedOS?->os_family ?? 'ubuntu';
+
+        $osFamilyDataForJs = [];
+        foreach ($osFamilies as $fKey => $fData) {
+            $osFamilyDataForJs[$fKey] = [
+                'id' => $fData['id'],
+                'name' => $fData['name'],
+                'desc' => $fData['desc'],
+                'badge' => $fData['badge'],
+                'items' => $fData['items']->map(function($item) {
+                    return [
+                        'value' => $item->value,
+                        'name' => $item->name,
+                        'price' => (float) $item->price,
+                        'is_out_of_stock' => (bool) $item->is_out_of_stock,
+                    ];
+                })->values()->all(),
+            ];
+        }
     @endphp
 
     <div class="py-10 md:py-16 bg-slate-50/70 min-h-[90vh]">
@@ -167,39 +226,120 @@
                                 <span class="text-xs text-slate-500 font-medium">1-Click Auto Deploy</span>
                             </div>
 
-                            <!-- 1. Operating System Selector -->
+                            <!-- 1. Operating System Selector (Contabo-Style Family Configurator) -->
                             <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
-                                    Select Operating System
-                                </label>
-                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    @php $firstSelectableOS = $osAddons->firstWhere('is_out_of_stock', false)?->value; @endphp
-                                    @foreach($osAddons as $index => $os)
-                                    <label class="{{ $os->is_out_of_stock ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer' }} {{ Str::contains(strtolower($os->name), 'windows') ? 'col-span-2 sm:col-span-2' : '' }}">
-                                        <input type="radio" name="os" value="{{ $os->value }}" data-price="{{ $os->price }}" class="addon-radio peer sr-only" {{ $os->is_out_of_stock ? 'disabled' : '' }} {{ old('os', $firstSelectableOS) === $os->value ? 'checked' : '' }} onchange="updateOSDisplay('{{ $os->name }}'); updateCalculations();">
-                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all flex items-center justify-between gap-3 h-full">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-base font-bold shrink-0">
-                                                    @if(Str::contains(strtolower($os->name), 'ubuntu')) 🐧
-                                                    @elseif(Str::contains(strtolower($os->name), 'debian')) 🍥
-                                                    @elseif(Str::contains(strtolower($os->name), 'almalinux')) 🛡️
-                                                    @elseif(Str::contains(strtolower($os->name), 'rocky')) 🦅
-                                                    @elseif(Str::contains(strtolower($os->name), 'windows')) 🪟
-                                                    @else 💿
-                                                    @endif
+                                <div class="flex items-center justify-between mb-3">
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                                        Select Operating System
+                                    </label>
+                                    <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        Click family card to customize version
+                                    </span>
+                                </div>
+
+                                <!-- Underlying hidden radios for exact OS version selection & form submission -->
+                                <div class="sr-only" aria-hidden="true">
+                                    @foreach($osAddons as $os)
+                                        <input type="radio" 
+                                               name="os" 
+                                               id="os_radio_{{ $os->value }}" 
+                                               value="{{ $os->value }}" 
+                                               data-price="{{ $os->price }}" 
+                                               data-name="{{ $os->name }}" 
+                                               data-family="{{ $os->os_family }}" 
+                                               class="addon-radio" 
+                                               {{ $os->is_out_of_stock ? 'disabled' : '' }} 
+                                               {{ $selectedOSVal === $os->value ? 'checked' : '' }}
+                                               onchange="updateOSDisplay('{{ $os->name }}'); updateCalculations();">
+                                    @endforeach
+                                </div>
+
+                                <!-- 4-Family OS Cards Grid -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="os-family-cards-grid">
+                                    @foreach($osFamilies as $fKey => $family)
+                                        @php
+                                            $isFamilyActive = ($initialActiveFamily === $fKey);
+                                            $familySelectedOS = $family['items']->firstWhere('value', $selectedOSVal) ?? $family['items']->first();
+                                            $hasPrice = $familySelectedOS && $familySelectedOS->price > 0;
+                                        @endphp
+                                        <div id="os-family-card-{{ $fKey }}"
+                                             onclick="handleFamilyCardClick('{{ $fKey }}')"
+                                             class="os-family-card cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none {{ $isFamilyActive ? 'border-[#673DE6] bg-purple-50/50 shadow-sm shadow-purple-600/10' : 'border-slate-200 bg-white hover:border-purple-300 hover:shadow-soft-sm' }}">
+                                            
+                                            <!-- Active Indicator Pin -->
+                                            <div id="os-family-badge-active-{{ $fKey }}" class="absolute -top-2.5 right-3.5 {{ $isFamilyActive ? 'flex' : 'hidden' }} items-center gap-1 bg-[#673DE6] text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                                <span>Selected</span>
+                                            </div>
+
+                                            <div>
+                                                <!-- Card Top Header -->
+                                                <div class="flex items-center justify-between gap-2 mb-3">
+                                                    <div class="flex items-center gap-2.5">
+                                                        <div class="w-9 h-9 rounded-xl bg-slate-100/90 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                                            @if($fKey === 'ubuntu')
+                                                                <!-- Ubuntu Logo SVG -->
+                                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                                                    <circle cx="12" cy="12" r="10" fill="#E95420"/>
+                                                                    <path d="M12 4.5a7.5 7.5 0 0 0-4.7 1.7l1.4 1.4A5.5 5.5 0 0 1 12 6.5a5.5 5.5 0 0 1 5.3 4H19.4A7.5 7.5 0 0 0 12 4.5zm-5.7 3.3a7.4 7.4 0 0 0-1.8 4.2h2a5.4 5.4 0 0 1 1.2-2.8L6.3 7.8zm11.4 4.2h-2a5.5 5.5 0 0 1-5.3 4 5.5 5.5 0 0 1-3.3-1.1l-1.4 1.4A7.5 7.5 0 0 0 12 19.5a7.5 7.5 0 0 0 7.4-7.5zM4.5 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm12.3-5.2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 13.4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="#FFFFFF"/>
+                                                                </svg>
+                                                            @elseif($fKey === 'debian')
+                                                                <!-- Debian Logo SVG -->
+                                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                                                    <circle cx="12" cy="12" r="10" fill="#D70A53"/>
+                                                                    <path d="M11.8 5.2c3.5 0 6.3 2.7 6.4 6.1.1 2.9-1.8 5.4-4.6 6-2.4.5-4.7-.9-5.4-3.2-.6-2 .4-4 2.4-4.8 1.6-.6 3.4.1 4 1.7.5 1.3-.1 2.7-1.4 3.2-1 .4-2.1-.1-2.5-1.1-.3-.7.1-1.6.8-1.9.5-.2 1.1 0 1.3.5.2.4 0 .9-.4 1.1-.3.1-.7 0-.8-.3" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                </svg>
+                                                            @elseif($fKey === 'rhel')
+                                                                <!-- RHEL Variants (AlmaLinux / Rocky) Logo SVG -->
+                                                                <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none">
+                                                                    <path d="M24 4 L30 18 L24 24 L18 18 Z" fill="#9333EA"/>
+                                                                    <path d="M44 24 L30 30 L24 24 L30 18 Z" fill="#EAB308"/>
+                                                                    <path d="M24 44 L18 30 L24 24 L30 30 Z" fill="#10B981"/>
+                                                                    <path d="M4 24 L18 18 L24 24 L18 30 Z" fill="#0284C7"/>
+                                                                    <path d="M24 8 L27 15 L24 18 L21 15 Z" fill="#C084FC"/>
+                                                                    <path d="M40 24 L33 27 L30 24 L33 21 Z" fill="#FDE047"/>
+                                                                    <path d="M24 40 L21 33 L24 30 L27 33 Z" fill="#6EE7B7"/>
+                                                                    <path d="M8 24 L15 21 L18 24 L15 27 Z" fill="#38BDF8"/>
+                                                                </svg>
+                                                            @elseif($fKey === 'windows')
+                                                                <!-- Windows Server Logo SVG -->
+                                                                <svg class="w-6 h-6" viewBox="0 0 88 88" fill="none">
+                                                                    <path d="M0 12.4 L35.6 7.5 V42.1 H0 V12.4 Z" fill="#0078D7"/>
+                                                                    <path d="M39.8 6.9 L88 0 V42.1 H39.8 V6.9 Z" fill="#0078D7"/>
+                                                                    <path d="M0 45.9 H35.6 V80.5 L0 75.6 V45.9 Z" fill="#0078D7"/>
+                                                                    <path d="M39.8 45.9 H88 V88 L39.8 81.1 V45.9 Z" fill="#0078D7"/>
+                                                                </svg>
+                                                            @endif
+                                                        </div>
+                                                        <span class="text-sm font-extrabold text-slate-900 tracking-tight">{{ $family['name'] }}</span>
+                                                    </div>
+
+                                                    <!-- Price Tag Badge -->
+                                                    <span id="os-family-price-tag-{{ $fKey }}" class="text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 {{ $hasPrice ? 'text-purple-700 bg-purple-100/70 border border-purple-200' : 'text-emerald-700 bg-emerald-50 border border-emerald-200' }}">
+                                                        {{ $hasPrice ? '+$' . number_format($familySelectedOS->price, 2) . '/mo' : 'Free' }}
+                                                    </span>
                                                 </div>
-                                                <div class="truncate">
-                                                    <div class="text-xs font-bold text-slate-900 truncate">{{ $os->name }}</div>
-                                                    <div class="text-[10px] text-slate-500">{{ Str::contains(strtolower($os->name), 'windows') ? 'Pre-activated with RDP' : 'Enterprise Linux Image' }}</div>
+
+                                                <!-- Version Subtitle -->
+                                                <div class="mt-2">
+                                                    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Version:</div>
+                                                    <div id="os-family-version-text-{{ $fKey }}" class="text-xs font-bold text-slate-900 truncate mt-0.5">
+                                                        {{ $familySelectedOS?->name ?? 'Select Version' }}
+                                                    </div>
+                                                    <div class="text-[10px] text-slate-500 mt-0.5">{{ $family['badge'] }}</div>
                                                 </div>
                                             </div>
-                                            @if($os->is_out_of_stock)
-                                                <span class="text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md shrink-0">Sold Out</span>
-                                            @elseif($os->price > 0)
-                                                <span class="text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md shrink-0">+${{ number_format($os->price, 2) }}/mo</span>
-                                            @endif
+
+                                            <!-- Bottom Change Edition Button Trigger -->
+                                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                                                <span class="text-[11px] text-slate-400 font-medium">Edition</span>
+                                                <span class="inline-flex items-center gap-1 font-bold text-[#673DE6] group-hover:text-[#5428D8] transition-colors">
+                                                    <span>Change</span>
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </label>
                                     @endforeach
                                 </div>
                             </div>
@@ -684,12 +824,281 @@
         </div>
     </div>
 
+    <!-- CONTABO-STYLE OS SELECTION POPUP MODAL -->
+    <div id="os-selection-modal" 
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm hidden transition-all duration-200"
+         onclick="closeOSModal()">
+        
+        <!-- Modal Card Container -->
+        <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg p-6 sm:p-8 relative transform transition-all select-none animate-fade-in-up"
+             onclick="event.stopPropagation()">
+            
+            <!-- Header: Logo + Family Title + Close Button -->
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-3.5">
+                    <div id="modal-os-logo" class="w-10 h-10 rounded-xl bg-slate-100/90 flex items-center justify-center shrink-0">
+                        <!-- Dynamic SVG injected via JS -->
+                    </div>
+                    <div>
+                        <h3 id="modal-os-title" class="text-xl font-extrabold text-slate-900 tracking-tight">Ubuntu</h3>
+                        <div id="modal-os-badge" class="text-[11px] font-semibold text-[#673DE6]">Enterprise Linux</div>
+                    </div>
+                </div>
+                <button type="button" 
+                        onclick="closeOSModal()" 
+                        class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Description Paragraph (matching Contabo screenshot) -->
+            <p id="modal-os-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed mt-2 mb-6">
+                Ubuntu is a free, open-source Linux-based operating system...
+            </p>
+
+            <!-- Version Selection Block -->
+            <div class="relative">
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Version</label>
+                
+                <!-- Custom Styled Select Trigger (Contabo style) -->
+                <button type="button"
+                        id="modal-dropdown-trigger"
+                        onclick="toggleOSDropdown()"
+                        class="w-full p-3.5 rounded-xl border-2 border-blue-500 bg-white flex items-center justify-between text-left cursor-pointer transition-all shadow-sm hover:border-blue-600 focus:outline-none">
+                    <span id="modal-trigger-name" class="font-bold text-slate-900 text-xs sm:text-sm truncate">
+                        Windows Server Datacenter 2025
+                    </span>
+                    <div class="flex items-center gap-2 shrink-0 ml-2">
+                        <span id="modal-trigger-pricing" class="text-xs text-slate-600 font-medium">
+                            17.00 $ / Month | 0.00 $ Setup fee
+                        </span>
+                        <svg id="modal-trigger-arrow" class="w-4 h-4 text-slate-700 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </button>
+
+                <!-- Dropdown Popover List (Options beneath trigger) -->
+                <div id="modal-dropdown-menu" 
+                     class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl z-30 max-h-60 overflow-y-auto divide-y divide-slate-100">
+                    <!-- Populated dynamically per family -->
+                </div>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between gap-3">
+                <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>1-Click automated provisioning</span>
+                </span>
+                <button type="button" 
+                        onclick="confirmAndCloseOSModal()" 
+                        class="btn-shimmer px-6 py-2.5 rounded-xl bg-[#673DE6] hover:bg-[#5428D8] text-white text-xs sm:text-sm font-bold shadow-md shadow-purple-600/20 transition-all">
+                    Select & Apply
+                </button>
+            </div>
+
+        </div>
+    </div>
+
     <!-- Stripe JS SDK & Real-Time Price/Auth Script -->
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         const baseMonthly = {{ $baseMonthly }};
         let currentDiscountPercent = 20; // default for 24 mo
         let currentMonths = 24;
+
+        // Contabo OS Modal & Family Logic
+        const osFamilyData = @json($osFamilyDataForJs);
+        let activeFamily = '{{ $initialActiveFamily }}';
+        const selectedOSByFamily = {};
+
+        Object.keys(osFamilyData).forEach(fKey => {
+            const fam = osFamilyData[fKey];
+            const currentMatch = fam.items.find(i => i.value === '{{ $selectedOSVal }}');
+            selectedOSByFamily[fKey] = currentMatch ? currentMatch.value : (fam.items[0] ? fam.items[0].value : '');
+        });
+
+        const osFamilySVGs = {
+            ubuntu: `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#E95420"/><path d="M12 4.5a7.5 7.5 0 0 0-4.7 1.7l1.4 1.4A5.5 5.5 0 0 1 12 6.5a5.5 5.5 0 0 1 5.3 4H19.4A7.5 7.5 0 0 0 12 4.5zm-5.7 3.3a7.4 7.4 0 0 0-1.8 4.2h2a5.4 5.4 0 0 1 1.2-2.8L6.3 7.8zm11.4 4.2h-2a5.5 5.5 0 0 1-5.3 4 5.5 5.5 0 0 1-3.3-1.1l-1.4 1.4A7.5 7.5 0 0 0 12 19.5a7.5 7.5 0 0 0 7.4-7.5zM4.5 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm12.3-5.2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 13.4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="#FFFFFF"/></svg>`,
+            debian: `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#D70A53"/><path d="M11.8 5.2c3.5 0 6.3 2.7 6.4 6.1.1 2.9-1.8 5.4-4.6 6-2.4.5-4.7-.9-5.4-3.2-.6-2 .4-4 2.4-4.8 1.6-.6 3.4.1 4 1.7.5 1.3-.1 2.7-1.4 3.2-1 .4-2.1-.1-2.5-1.1-.3-.7.1-1.6.8-1.9.5-.2 1.1 0 1.3.5.2.4 0 .9-.4 1.1-.3.1-.7 0-.8-.3" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            rhel: `<svg class="w-6 h-6" viewBox="0 0 48 48" fill="none"><path d="M24 4 L30 18 L24 24 L18 18 Z" fill="#9333EA"/><path d="M44 24 L30 30 L24 24 L30 18 Z" fill="#EAB308"/><path d="M24 44 L18 30 L24 24 L30 30 Z" fill="#10B981"/><path d="M4 24 L18 18 L24 24 L18 30 Z" fill="#0284C7"/><path d="M24 8 L27 15 L24 18 L21 15 Z" fill="#C084FC"/><path d="M40 24 L33 27 L30 24 L33 21 Z" fill="#FDE047"/><path d="M24 40 L21 33 L24 30 L27 33 Z" fill="#6EE7B7"/><path d="M8 24 L15 21 L18 24 L15 27 Z" fill="#38BDF8"/></svg>`,
+            windows: `<svg class="w-6 h-6" viewBox="0 0 88 88" fill="none"><path d="M0 12.4 L35.6 7.5 V42.1 H0 V12.4 Z" fill="#0078D7"/><path d="M39.8 6.9 L88 0 V42.1 H39.8 V6.9 Z" fill="#0078D7"/><path d="M0 45.9 H35.6 V80.5 L0 75.6 V45.9 Z" fill="#0078D7"/><path d="M39.8 45.9 H88 V88 L39.8 81.1 V45.9 Z" fill="#0078D7"/></svg>`
+        };
+
+        function handleFamilyCardClick(familyKey) {
+            const currentVal = selectedOSByFamily[familyKey];
+            if (currentVal) {
+                selectOSVersion(familyKey, currentVal);
+            }
+            openOSModal(familyKey);
+        }
+
+        function openOSModal(familyKey) {
+            activeFamily = familyKey;
+            const fam = osFamilyData[familyKey];
+            if (!fam) return;
+
+            document.getElementById('modal-os-title').textContent = fam.name;
+            document.getElementById('modal-os-badge').textContent = fam.badge;
+            document.getElementById('modal-os-desc').textContent = fam.desc;
+            document.getElementById('modal-os-logo').innerHTML = osFamilySVGs[familyKey] || '';
+
+            const currentVal = selectedOSByFamily[familyKey];
+            const currentItem = fam.items.find(i => i.value === currentVal) || fam.items[0];
+            if (currentItem) {
+                updateModalTriggerDisplay(familyKey, currentItem);
+            }
+
+            renderDropdownItems(familyKey);
+            closeOSDropdown();
+
+            const modal = document.getElementById('os-selection-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOSModal() {
+            const modal = document.getElementById('os-selection-modal');
+            if (modal) modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            closeOSDropdown();
+        }
+
+        function confirmAndCloseOSModal() {
+            closeOSModal();
+        }
+
+        function toggleOSDropdown() {
+            const menu = document.getElementById('modal-dropdown-menu');
+            const arrow = document.getElementById('modal-trigger-arrow');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                menu.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
+        function closeOSDropdown() {
+            const menu = document.getElementById('modal-dropdown-menu');
+            const arrow = document.getElementById('modal-trigger-arrow');
+            if (menu) menu.classList.add('hidden');
+            if (arrow) arrow.classList.remove('rotate-180');
+        }
+
+        function updateModalTriggerDisplay(familyKey, item) {
+            const nameEl = document.getElementById('modal-trigger-name');
+            const pricingEl = document.getElementById('modal-trigger-pricing');
+            if (nameEl) nameEl.textContent = item.name;
+            if (pricingEl) {
+                if (item.price > 0) {
+                    pricingEl.textContent = '$' + item.price.toFixed(2) + ' / Month | $0.00 Setup fee';
+                } else {
+                    pricingEl.textContent = '$0.00 Setup fee';
+                }
+            }
+        }
+
+        function renderDropdownItems(familyKey) {
+            const menu = document.getElementById('modal-dropdown-menu');
+            if (!menu) return;
+            const items = osFamilyData[familyKey]?.items || [];
+            const currentVal = selectedOSByFamily[familyKey];
+
+            let html = '';
+            items.forEach(item => {
+                const isSelected = (item.value === currentVal);
+                const nameClass = isSelected ? 'text-blue-600 font-extrabold' : 'text-slate-700 font-semibold group-hover:text-slate-900';
+                const priceStr = item.price > 0 ? ('$' + item.price.toFixed(2)) : 'Free';
+
+                html += `
+                    <div onclick="selectOSVersion('${familyKey}', '${item.value}')"
+                         class="px-4 py-3 cursor-pointer hover:bg-slate-50 flex items-center justify-between transition-colors group select-none ${isSelected ? 'bg-blue-50/40' : ''}">
+                        <div class="flex items-center gap-2">
+                            ${isSelected ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>' : ''}
+                            <span class="${nameClass} text-xs sm:text-sm">
+                                ${item.name}
+                            </span>
+                        </div>
+                        <span class="text-xs sm:text-sm font-bold ${item.price > 0 ? 'text-slate-900' : 'text-emerald-600'} shrink-0 ml-3">
+                            ${priceStr}
+                        </span>
+                    </div>
+                `;
+            });
+            menu.innerHTML = html;
+        }
+
+        function selectOSVersion(familyKey, osValue) {
+            selectedOSByFamily[familyKey] = osValue;
+            activeFamily = familyKey;
+
+            const fam = osFamilyData[familyKey];
+            if (!fam) return;
+            const item = fam.items.find(i => i.value === osValue);
+            if (!item) return;
+
+            // Check hidden radio
+            const radio = document.getElementById('os_radio_' + osValue);
+            if (radio) {
+                radio.checked = true;
+            }
+
+            // Update version text and price badge on the family card
+            const cardVersionText = document.getElementById('os-family-version-text-' + familyKey);
+            if (cardVersionText) cardVersionText.textContent = item.name;
+
+            const cardPriceTag = document.getElementById('os-family-price-tag-' + familyKey);
+            if (cardPriceTag) {
+                if (item.price > 0) {
+                    cardPriceTag.textContent = '+$' + item.price.toFixed(2) + '/mo';
+                    cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 text-purple-700 bg-purple-100/70 border border-purple-200';
+                } else {
+                    cardPriceTag.textContent = 'Free';
+                    cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 text-emerald-700 bg-emerald-50 border border-emerald-200';
+                }
+            }
+
+            // Update active family card styling
+            Object.keys(osFamilyData).forEach(fKey => {
+                const card = document.getElementById('os-family-card-' + fKey);
+                const badge = document.getElementById('os-family-badge-active-' + fKey);
+                if (fKey === familyKey) {
+                    if (card) {
+                        card.className = 'os-family-card cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none border-[#673DE6] bg-purple-50/50 shadow-sm shadow-purple-600/10';
+                    }
+                    if (badge) {
+                        badge.classList.remove('hidden');
+                        badge.classList.add('flex');
+                    }
+                } else {
+                    if (card) {
+                        card.className = 'os-family-card cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none border-slate-200 bg-white hover:border-purple-300 hover:shadow-soft-sm';
+                    }
+                    if (badge) {
+                        badge.classList.remove('flex');
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Update modal trigger display & re-render dropdown items
+            updateModalTriggerDisplay(familyKey, item);
+            renderDropdownItems(familyKey);
+            closeOSDropdown();
+
+            // Sync with order summary & calculations
+            updateOSDisplay(item.name);
+            updateCalculations();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeOSModal();
+            }
+        });
 
         function updateOSDisplay(val) {
             const el = document.getElementById('summary-os-display');

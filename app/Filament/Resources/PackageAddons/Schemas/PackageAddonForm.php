@@ -34,7 +34,7 @@ class PackageAddonForm
                     ->default(false)
                     ->required(),
                 Select::make('type')
-                    ->label('Addon Category')
+                    ->label('Addon Type')
                     ->options([
                         'os' => 'Operating System (OS)',
                         'region' => 'Datacenter Region',
@@ -44,6 +44,16 @@ class PackageAddonForm
                         'feature' => 'General Feature',
                     ])
                     ->required(),
+                Select::make('category')
+                    ->label('OS Family / Distribution')
+                    ->options([
+                        'ubuntu' => 'Ubuntu',
+                        'debian' => 'Debian',
+                        'rhel' => 'RHEL Variants (AlmaLinux / Rocky)',
+                        'windows' => 'Windows-Server',
+                    ])
+                    ->helperText('Grouping family used for Contabo-style popup modals')
+                    ->nullable(),
                 TextInput::make('name')
                     ->label('Display Name')
                     ->placeholder('e.g. Windows Server 2022, US East (New York)')

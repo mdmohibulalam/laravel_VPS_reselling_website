@@ -17,12 +17,15 @@ class PackageAddon extends Model
         'is_enabled',
         'sort_order',
         'type',
+        'category',
         'name',
         'value',
         'api_identifier',
         'price',
         'billing_cycle',
     ];
+
+    protected $appends = ['os_family'];
 
     protected function casts(): array
     {
@@ -58,5 +61,33 @@ class PackageAddon extends Model
     public function scopeInStock($query)
     {
         return $query->where('is_out_of_stock', false);
+    }
+
+    public function scopeByCategory($query, $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    public function getOsFamilyAttribute(): string
+    {
+        if (!empty($this->category)) {
+            return strtolower($this->category);
+        }
+
+        $needle = strtolower($this->name . ' ' . $this->value);
+        if (str_contains($needle, 'ubuntu')) {
+            return 'ubuntu';
+        }
+        if (str_contains($needle, 'debian')) {
+            return 'debian';
+        }
+        if (str_contains($needle, 'almalinux') || str_contains($needle, 'rocky') || str_contains($needle, 'centos') || str_contains($needle, 'rhel')) {
+            return 'rhel';
+        }
+        if (str_contains($needle, 'windows') || str_contains($needle, 'win')) {
+            return 'windows';
+        }
+
+        return 'other';
     }
 }
