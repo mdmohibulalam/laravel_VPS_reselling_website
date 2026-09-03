@@ -3,8 +3,12 @@
 namespace App\Filament\Customer\Resources\Services\Pages;
 
 use App\Filament\Customer\Resources\Services\ServiceResource;
+use App\Models\Invoice;
+use App\Models\Package;
 use App\Services\Provisioning\ProvisioningServiceInterface;
+use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -56,6 +60,102 @@ class ViewService extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('upgrade')
+                ->label('Upgrade Server')
+                ->icon('heroicon-o-arrow-trending-up')
+                ->color('primary')
+                ->modalHeading('Upgrade Virtual Server (Scale Resources)')
+                ->modalDescription('Scale your compute cores, RAM, and NVMe disk space. Downgrades are strictly disallowed to prevent disk filesystem corruption. Upgrades take effect immediately.')
+                ->modalSubmitActionLabel('Confirm & Generate Upgrade Invoice')
+                ->visible(fn () => in_array($this->record->status, ['active', 'contabo_ok', 'provisioned', 'awaiting_provisioning']))
+                ->form(function () {
+                    $currentPackage = $this->record->package;
+                    $currentPrice = (float) ($currentPackage->price_monthly ?? 0);
+                    
+                    // Enforce No-Downgrades Rule: Only show strictly higher tiers
+                    $higherPackages = Package::where('price_monthly', '>', $currentPrice)
+                        ->orderBy('price_monthly', 'asc')
+                        ->get()
+                        ->mapWithKeys(function ($pkg) use ($currentPrice) {
+                            $diff = (float) $pkg->price_monthly - $currentPrice;
+                            return [$pkg->id => "{$pkg->name} (\${$pkg->price_monthly}/mo - +$" . number_format($diff, 2) . "/mo)"];
+                        })
+                        ->toArray();
+
+                    if (empty($higherPackages)) {
+                        return [
+                            Placeholder::make('max_tier')
+                                ->label('Maximum Tier Reached')
+                                ->content('Your VPS is currently on our highest performance tier. Contact enterprise support for customized dedicated cluster nodes.'),
+                        ];
+                    }
+
+                    return [
+                        Select::make('target_package_id')
+                            ->label('Select Target Plan')
+                            ->options($higherPackages)
+                            ->required(),
+                    ];
+                })
+                ->action(function (array $data) {
+                    $targetPackage = Package::find($data['target_package_id'] ?? null);
+                    if (!$targetPackage) return;
+
+                    $currentPackage = $this->record->package;
+                    $currentPrice = (float) ($currentPackage->price_monthly ?? 0);
+                    $newPrice = (float) $targetPackage->price_monthly;
+
+                    if ($newPrice <= $currentPrice) {
+                        Notification::make()->title('Downgrades are strictly not allowed')->danger()->send();
+                        return;
+                    }
+
+                    // Calculate Prorated Math
+                    $nextDue = $this->record->next_due_date ? Carbon::parse($this->record->next_due_date) : now()->addMonth();
+                    $daysRemaining = max(1, now()->diffInDays($nextDue, false));
+                    $daysInCycle = 30; // standard month cycle
+                    $monthlyDiff = $newPrice - $currentPrice;
+                    $proratedDue = max(0.50, round(($monthlyDiff / $daysInCycle) * $daysRemaining, 2));
+
+                    // Generate Upgrade Invoice
+                    $invoice = Invoice::create([
+                        'user_id' => auth()->id(),
+                        'order_id' => $this->record->order_id,
+                        'invoice_number' => 'INV-UPG-' . strtoupper(Str::random(6)),
+                        'amount' => $proratedDue,
+                        'tax' => 0,
+                        'total' => $proratedDue,
+                        'status' => 'pending',
+                        'due_date' => now()->addDays(3),
+                    ]);
+
+                    // Adjust service recurring renewal rate
+                    $oldRecurring = (float) $this->record->recurring_amount;
+                    $newRecurring = $oldRecurring > 0 ? round($oldRecurring + $monthlyDiff, 2) : $newPrice;
+
+                    $specsJson = is_string($targetPackage->specs) ? json_decode($targetPackage->specs, true) : (is_array($targetPackage->specs) ? $targetPackage->specs : []);
+
+                    $this->record->update([
+                        'package_id' => $targetPackage->id,
+                        'recurring_amount' => $newRecurring,
+                        'specs_snapshot' => [
+                            'package_name' => $targetPackage->name,
+                            'cores' => $specsJson['cores'] ?? 'N/A',
+                            'memory' => $specsJson['memory'] ?? 'N/A',
+                            'storage' => $specsJson['storage'] ?? 'N/A',
+                            'bandwidth' => $specsJson['bandwidth'] ?? ($specsJson['port'] ?? '1 Gbps'),
+                            'os' => $this->record->specs_snapshot['os'] ?? 'Ubuntu 24.04 LTS',
+                            'datacenter' => $this->record->specs_snapshot['datacenter'] ?? 'US East (New York)',
+                        ],
+                    ]);
+
+                    Notification::make()
+                        ->title('Server Upgrade Registered!')
+                        ->body("Upgraded from {$currentPackage->name} to {$targetPackage->name}. Prorated invoice #{$invoice->invoice_number} (\${$proratedDue}) generated.")
+                        ->success()
+                        ->send();
+                }),
+
             Action::make('refresh_status')
                 ->label('Refresh Status')
                 ->icon('heroicon-o-arrow-path')

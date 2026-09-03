@@ -61,6 +61,10 @@ class ServicesTable
                         'cancelled' => 'Cancelled',
                         default => ucfirst($state),
                     }),
+                TextColumn::make('recurring_amount')
+                    ->label('Renewal Rate')
+                    ->money('USD')
+                    ->sortable(),
                 TextColumn::make('billing_cycle')
                     ->label('Cycle')
                     ->badge()
@@ -215,6 +219,30 @@ class ServicesTable
                     ->label('Actions')
                     ->icon('heroicon-m-ellipsis-vertical')
                     ->size('sm'),
+
+                Action::make('adjust_rate')
+                    ->label('Adjust Rate')
+                    ->icon('heroicon-o-currency-dollar')
+                    ->color('warning')
+                    ->modalHeading('Adjust Service Recurring Renewal Rate')
+                    ->modalDescription('Manually increase or decrease this client\'s recurring renewal fee for upcoming billing cycles.')
+                    ->form([
+                        TextInput::make('recurring_amount')
+                            ->label('New Recurring Renewal Amount ($)')
+                            ->prefix('$')
+                            ->numeric()
+                            ->default(fn (Service $record) => $record->recurring_amount)
+                            ->required(),
+                    ])
+                    ->action(function (Service $record, array $data) {
+                        $oldRate = $record->recurring_amount;
+                        $record->update(['recurring_amount' => $data['recurring_amount']]);
+                        Notification::make()
+                            ->title('Renewal Rate Adjusted')
+                            ->body("Service #{$record->id} rate changed from \${$oldRate} to \${$data['recurring_amount']}.")
+                            ->success()
+                            ->send();
+                    }),
 
                 EditAction::make(),
             ])

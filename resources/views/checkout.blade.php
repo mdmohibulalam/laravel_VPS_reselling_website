@@ -43,6 +43,15 @@
         } else {
             $currentCycle = 'biennially';
         }
+
+        // Addons collections from controller or DB fallback via 2-Layer AddonResolverService
+        $resolver = app(\App\Services\AddonResolverService::class);
+        $resolvedAddons = isset($addons) && $addons->isNotEmpty() ? $addons : $resolver->getResolvedAddonsForPackage($package);
+        $osAddons = $resolvedAddons->get('os', collect());
+        $regionAddons = $resolvedAddons->get('region', collect());
+        $storageAddons = $resolvedAddons->get('storage', collect());
+        $backupAddon = $resolvedAddons->get('backup', collect())->firstWhere('value', '1');
+        $networkAddon = $resolvedAddons->get('network', collect())->firstWhere('value', '1');
     @endphp
 
     <div class="py-10 md:py-16 bg-slate-50/70 min-h-[90vh]">
@@ -86,7 +95,7 @@
                     <!-- LEFT COLUMN: Progressive Order Funnel Steps (7 Cols) -->
                     <div class="lg:col-span-7 space-y-8">
                         
-                        <!-- STEP 1: CHOOSE BILLING PERIOD (Hostinger Style) -->
+                        <!-- STEP 1: CHOOSE BILLING PERIOD (Hostinger / SaaS Standard) -->
                         <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-soft-sm">
                             <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
                                 <div class="flex items-center gap-3">
@@ -96,7 +105,7 @@
                                 <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Save up to 20%</span>
                             </div>
 
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                                 
                                 <!-- 1 Month -->
                                 <label class="cursor-pointer relative">
@@ -105,35 +114,9 @@
                                         <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1 Month</div>
                                         <div class="my-2">
                                             <span class="text-2xl font-extrabold text-slate-900">${{ number_format($baseMonthly, 2) }}</span>
-                                            <span class="text-xs text-slate-500 block">/mo</span>
+                                            <span class="text-xs text-slate-500 block">/month</span>
                                         </div>
-                                        <div class="text-[11px] text-slate-500">Standard rate</div>
-                                    </div>
-                                </label>
-
-                                                                <!-- 3 Months -->
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" name="billing_cycle" value="quarterly" class="peer sr-only" {{ $currentCycle === 'quarterly' ? 'checked' : '' }} onchange="updateCalculations()">
-                                    <div class="h-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 peer-checked:shadow-soft-md transition-all flex flex-col justify-between text-center group">
-                                        <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">3 Months</div>
-                                        <div class="my-2">
-                                            <span class="text-2xl font-extrabold text-slate-900">${{ number_format($baseMonthly, 2) }}</span>
-                                            <span class="text-xs text-slate-500 block">/mo</span>
-                                        </div>
-                                        <div class="text-[11px] text-slate-500">Quarterly rate</div>
-                                    </div>
-                                </label>
-
-                                <!-- 6 Months -->
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" name="billing_cycle" value="semi_annually" class="peer sr-only" {{ $currentCycle === 'semi_annually' ? 'checked' : '' }} onchange="updateCalculations()">
-                                    <div class="h-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 peer-checked:shadow-soft-md transition-all flex flex-col justify-between text-center group">
-                                        <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">6 Months</div>
-                                        <div class="my-2">
-                                            <span class="text-2xl font-extrabold text-slate-900">${{ number_format($baseMonthly, 2) }}</span>
-                                            <span class="text-xs text-slate-500 block">/mo</span>
-                                        </div>
-                                        <div class="text-[11px] text-slate-500">Semi-Annual rate</div>
+                                        <div class="text-[11px] text-slate-500">Standard monthly rate</div>
                                     </div>
                                 </label>
 
@@ -148,24 +131,24 @@
                                         <div class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-1 pt-1">12 Months</div>
                                         <div class="my-2">
                                             <span class="text-2xl font-extrabold text-[#673DE6]">${{ number_format($annualMonthly, 2) }}</span>
-                                            <span class="text-xs text-slate-500 block">/mo</span>
+                                            <span class="text-xs text-slate-500 block">/month</span>
                                         </div>
                                         <div class="text-[11px] font-semibold text-emerald-600">Billed annually</div>
                                     </div>
                                 </label>
 
-                                <!-- 24 Months (SAVE 20%) -->
+                                <!-- 24 Months (SAVE 20% - RECOMMENDED) -->
                                 <label class="cursor-pointer relative">
                                     <input type="radio" name="billing_cycle" value="biennially" class="peer sr-only" {{ $currentCycle === 'biennially' ? 'checked' : '' }} onchange="updateCalculations()">
                                     <div class="h-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 peer-checked:shadow-soft-md transition-all flex flex-col justify-between text-center relative group">
                                         <!-- Top Badge -->
                                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider py-0.5 px-2.5 rounded-full shadow-sm whitespace-nowrap">
-                                            Save 20%
+                                            Save 20% • Best Value
                                         </div>
                                         <div class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1 pt-1">24 Months</div>
                                         <div class="my-2">
                                             <span class="text-2xl font-extrabold text-slate-900">${{ number_format($biennialMonthly, 2) }}</span>
-                                            <span class="text-xs text-slate-500 block">/mo</span>
+                                            <span class="text-xs text-slate-500 block">/month</span>
                                         </div>
                                         <div class="text-[11px] font-semibold text-emerald-600">Billed 2 years</div>
                                     </div>
@@ -184,17 +167,17 @@
                                 <span class="text-xs text-slate-500 font-medium">1-Click Auto Deploy</span>
                             </div>
 
-                            <!-- Operating System Selector -->
+                            <!-- 1. Operating System Selector -->
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
                                     Select Operating System
                                 </label>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    @php $osList = $addons->get('os', collect()); @endphp
-                                    @foreach($osList as $index => $os)
-                                    <label class="cursor-pointer {{ Str::contains(strtolower($os->name), 'windows') ? 'col-span-2 sm:col-span-2' : '' }}">
-                                        <input type="radio" name="os" value="{{ $os->value }}" data-price="{{ $os->price }}" class="addon-radio peer sr-only" {{ old('os', $index === 0 ? $os->value : '') === $os->value ? 'checked' : '' }} onchange="updateOSDisplay('{{ $os->name }}'); updateCalculations();">
-                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all flex items-center justify-between gap-3">
+                                    @php $firstSelectableOS = $osAddons->firstWhere('is_out_of_stock', false)?->value; @endphp
+                                    @foreach($osAddons as $index => $os)
+                                    <label class="{{ $os->is_out_of_stock ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer' }} {{ Str::contains(strtolower($os->name), 'windows') ? 'col-span-2 sm:col-span-2' : '' }}">
+                                        <input type="radio" name="os" value="{{ $os->value }}" data-price="{{ $os->price }}" class="addon-radio peer sr-only" {{ $os->is_out_of_stock ? 'disabled' : '' }} {{ old('os', $firstSelectableOS) === $os->value ? 'checked' : '' }} onchange="updateOSDisplay('{{ $os->name }}'); updateCalculations();">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all flex items-center justify-between gap-3 h-full">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-base font-bold shrink-0">
                                                     @if(Str::contains(strtolower($os->name), 'ubuntu')) 🐧
@@ -207,11 +190,13 @@
                                                 </div>
                                                 <div class="truncate">
                                                     <div class="text-xs font-bold text-slate-900 truncate">{{ $os->name }}</div>
-                                                    <div class="text-[10px] text-slate-500">Premium Image</div>
+                                                    <div class="text-[10px] text-slate-500">{{ Str::contains(strtolower($os->name), 'windows') ? 'Pre-activated with RDP' : 'Enterprise Linux Image' }}</div>
                                                 </div>
                                             </div>
-                                            @if($os->price > 0)
-                                                <span class="text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md">+${{ number_format($os->price, 2) }}/mo</span>
+                                            @if($os->is_out_of_stock)
+                                                <span class="text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md shrink-0">Sold Out</span>
+                                            @elseif($os->price > 0)
+                                                <span class="text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md shrink-0">+${{ number_format($os->price, 2) }}/mo</span>
                                             @endif
                                         </div>
                                     </label>
@@ -219,13 +204,426 @@
                                 </div>
                             </div>
 
-                            r justify-between text-sm">
+                            <!-- 2. Datacenter Region Location Picker with Vector Flags -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
+                                    Select Datacenter Region
+                                </label>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                    @php
+                                        $regionMeta = [
+                                            'us_east' => ['city' => 'New York, US', 'latency' => '9 ms', 'flag' => 'us'],
+                                            'us_west' => ['city' => 'Seattle, US', 'latency' => '11 ms', 'flag' => 'us'],
+                                            'eu_central' => ['city' => 'Frankfurt, DE', 'latency' => '12 ms', 'flag' => 'de'],
+                                            'uk_london' => ['city' => 'London, GB', 'latency' => '14 ms', 'flag' => 'uk'],
+                                            'asia_singapore' => ['city' => 'APAC Hub, SG', 'latency' => '38 ms', 'flag' => 'sg'],
+                                            'au_sydney' => ['city' => 'Sydney, AU', 'latency' => '42 ms', 'flag' => 'au'],
+                                        ];
+                                    @endphp
+
+                                    @php $firstSelectableRegion = $regionAddons->firstWhere('is_out_of_stock', false)?->value; @endphp
+                                    @foreach($regionAddons as $index => $region)
+                                    @php
+                                        $meta = $regionMeta[$region->value] ?? ['city' => 'Global DC', 'latency' => '15 ms', 'flag' => 'global'];
+                                    @endphp
+                                    <label class="{{ $region->is_out_of_stock ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer' }}">
+                                        <input type="radio" name="datacenter" value="{{ $region->value }}" data-price="{{ $region->price }}" class="addon-radio peer sr-only" {{ $region->is_out_of_stock ? 'disabled' : '' }} {{ old('datacenter', $firstSelectableRegion) === $region->value ? 'checked' : '' }} onchange="updateLocationDisplay('{{ $region->name }}'); updateCalculations();">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all text-center flex flex-col items-center justify-between h-full group">
+                                            <div class="w-10 h-7 rounded-md overflow-hidden shadow-sm border border-slate-200/80 mb-2 flex items-center justify-center bg-white shrink-0 group-hover:scale-105 transition-transform">
+                                                @if($meta['flag'] === 'us')
+                                                    <!-- USA Flag -->
+                                                    <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                        <g fill-rule="evenodd">
+                                                            <path fill="#bd3d44" d="M0 0h640v480H0z"/>
+                                                            <path stroke="#fff" stroke-width="37" d="M0 55.4h640M0 129.2h640M0 203h640M0 277h640M0 350.8h640M0 424.6h640"/>
+                                                            <path fill="#192f5d" d="M0 0h296v258.5H0z"/>
+                                                            <g fill="#fff">
+                                                                <circle cx="28" cy="20" r="7"/><circle cx="70" cy="20" r="7"/><circle cx="112" cy="20" r="7"/><circle cx="154" cy="20" r="7"/><circle cx="196" cy="20" r="7"/><circle cx="238" cy="20" r="7"/><circle cx="280" cy="20" r="7"/>
+                                                                <circle cx="49" cy="45" r="7"/><circle cx="91" cy="45" r="7"/><circle cx="133" cy="45" r="7"/><circle cx="175" cy="45" r="7"/><circle cx="217" cy="45" r="7"/><circle cx="259" cy="45" r="7"/>
+                                                                <circle cx="28" cy="70" r="7"/><circle cx="70" cy="70" r="7"/><circle cx="112" cy="70" r="7"/><circle cx="154" cy="70" r="7"/><circle cx="196" cy="70" r="7"/><circle cx="238" cy="70" r="7"/><circle cx="280" cy="70" r="7"/>
+                                                                <circle cx="49" cy="95" r="7"/><circle cx="91" cy="95" r="7"/><circle cx="133" cy="95" r="7"/><circle cx="175" cy="95" r="7"/><circle cx="217" cy="95" r="7"/><circle cx="259" cy="95" r="7"/>
+                                                                <circle cx="28" cy="120" r="7"/><circle cx="70" cy="120" r="7"/><circle cx="112" cy="120" r="7"/><circle cx="154" cy="120" r="7"/><circle cx="196" cy="120" r="7"/><circle cx="238" cy="120" r="7"/><circle cx="280" cy="120" r="7"/>
+                                                                <circle cx="49" cy="145" r="7"/><circle cx="91" cy="145" r="7"/><circle cx="133" cy="145" r="7"/><circle cx="175" cy="145" r="7"/><circle cx="217" cy="145" r="7"/><circle cx="259" cy="145" r="7"/>
+                                                                <circle cx="28" cy="170" r="7"/><circle cx="70" cy="170" r="7"/><circle cx="112" cy="170" r="7"/><circle cx="154" cy="170" r="7"/><circle cx="196" cy="170" r="7"/><circle cx="238" cy="170" r="7"/><circle cx="280" cy="170" r="7"/>
+                                                                <circle cx="49" cy="195" r="7"/><circle cx="91" cy="195" r="7"/><circle cx="133" cy="195" r="7"/><circle cx="175" cy="195" r="7"/><circle cx="217" cy="195" r="7"/><circle cx="259" cy="195" r="7"/>
+                                                                <circle cx="28" cy="220" r="7"/><circle cx="70" cy="220" r="7"/><circle cx="112" cy="220" r="7"/><circle cx="154" cy="220" r="7"/><circle cx="196" cy="220" r="7"/><circle cx="238" cy="220" r="7"/><circle cx="280" cy="220" r="7"/>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                @elseif($meta['flag'] === 'de')
+                                                    <!-- Germany Flag -->
+                                                    <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                        <path fill="#ffce00" d="M0 320h640v160H0z"/>
+                                                        <path fill="#000" d="M0 0h640v160H0z"/>
+                                                        <path fill="#d00" d="M0 160h640v160H0z"/>
+                                                    </svg>
+                                                @elseif($meta['flag'] === 'uk')
+                                                    <!-- UK Flag -->
+                                                    <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                        <path fill="#012169" d="M0 0h640v480H0z"/>
+                                                        <path fill="#fff" d="m75 0 245 180L565 0h75v60L400 240l240 180v60h-75L320 300 75 480H0v-60l240-180L0 60V0z"/>
+                                                        <path fill="#c8102e" d="m425 240 215 160v40L370 240zm140-240L320 180 75 0h490zm-565 40 215 160H60L0 40zm0 400 215-160h55L0 440z"/>
+                                                        <path fill="#fff" d="M260 0h120v480H260zM0 180h640v120H0z"/>
+                                                        <path fill="#c8102e" d="M280 0h80v480H280zM0 200h640v80H0z"/>
+                                                    </svg>
+                                                @elseif($meta['flag'] === 'sg')
+                                                    <!-- Singapore Flag -->
+                                                    <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                        <path fill="#fff" d="M0 240h640v240H0z"/>
+                                                        <path fill="#ed2939" d="M0 0h640v240H0z"/>
+                                                        <path fill="#fff" d="M120 40a80 80 0 1 0 0 160 80 80 0 0 0 0-160z"/>
+                                                        <path fill="#ed2939" d="M140 40a80 80 0 1 0 0 160 80 80 0 0 0 0-160z"/>
+                                                        <g fill="#fff">
+                                                            <circle cx="160" cy="80" r="10"/><circle cx="190" cy="100" r="10"/><circle cx="180" cy="135" r="10"/><circle cx="140" cy="135" r="10"/><circle cx="130" cy="100" r="10"/>
+                                                        </g>
+                                                    </svg>
+                                                @elseif($meta['flag'] === 'au')
+                                                    <!-- Australia Flag -->
+                                                    <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                                                        <path fill="#012169" d="M0 0h640v480H0z"/>
+                                                        <path fill="#fff" d="m75 0 245 180L565 0h75v60L400 240l240 180v60h-75L320 300 75 480H0v-60l240-180L0 60V0z"/>
+                                                        <path fill="#c8102e" d="m425 240 215 160v40L370 240zm140-240L320 180 75 0h490zm-565 40 215 160H60L0 40zm0 400 215-160h55L0 440z"/>
+                                                        <path fill="#fff" d="M260 0h120v480H260zM0 180h640v120H0z"/>
+                                                        <path fill="#c8102e" d="M280 0h80v480H280zM0 200h640v80H0z"/>
+                                                        <g fill="#fff">
+                                                            <circle cx="160" cy="360" r="28"/>
+                                                            <circle cx="480" cy="120" r="14"/><circle cx="530" cy="200" r="14"/><circle cx="480" cy="360" r="14"/><circle cx="430" cy="240" r="14"/><circle cx="460" cy="280" r="8"/>
+                                                        </g>
+                                                    </svg>
+                                                @else
+                                                    🌐
+                                                @endif
+                                            </div>
+                                            <div class="text-xs font-bold text-slate-900 leading-tight">{{ $region->name }}</div>
+                                            <div class="text-[10px] text-slate-500 mb-1.5">{{ $meta['city'] }}</div>
+                                            <div class="flex items-center gap-1.5">
+                                                @if($region->is_out_of_stock)
+                                                    <span class="text-[10px] text-rose-600 bg-rose-50 border border-rose-200 font-mono font-bold px-2 py-0.5 rounded-full">Sold Out</span>
+                                                @else
+                                                    <span class="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 font-mono font-bold px-2 py-0.5 rounded-full">{{ $meta['latency'] }}</span>
+                                                    @if($region->price > 0)
+                                                        <span class="text-[10px] text-purple-700 bg-purple-50 font-bold px-1.5 py-0.5 rounded">+${{ number_format($region->price, 2) }}</span>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- 3. NVMe Storage Capacity Upgrade -->
+                            @if($storageAddons->isNotEmpty())
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
+                                    Primary NVMe Storage Tier
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    @php $firstSelectableStorage = $storageAddons->firstWhere('is_out_of_stock', false)?->value; @endphp
+                                    @foreach($storageAddons as $index => $storage)
+                                    <label class="{{ $storage->is_out_of_stock ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer' }}">
+                                        <input type="radio" name="storage_type" value="{{ $storage->value }}" data-price="{{ $storage->price }}" class="addon-radio peer sr-only" {{ $storage->is_out_of_stock ? 'disabled' : '' }} {{ old('storage_type', $firstSelectableStorage) === $storage->value ? 'checked' : '' }} onchange="updateStorageDisplay('{{ $storage->name }}'); updateCalculations();">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 hover:border-purple-300 transition-all flex items-center justify-between">
+                                            <div class="flex items-center gap-2.5">
+                                                <span class="text-lg">💾</span>
+                                                <div>
+                                                    <div class="text-xs font-bold text-slate-900">{{ $storage->name }}</div>
+                                                    <div class="text-[10px] text-slate-500">PCIe 4.0 Ultra-Fast</div>
+                                                </div>
+                                            </div>
+                                            @if($storage->is_out_of_stock)
+                                                <span class="text-xs font-bold text-rose-600">Sold Out</span>
+                                            @else
+                                                <span class="text-xs font-bold {{ $storage->price > 0 ? 'text-purple-700' : 'text-emerald-600' }}">
+                                                    {{ $storage->price > 0 ? '+$' . number_format($storage->price, 2) . '/mo' : 'Included' }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+
+                            <!-- 4. Optional Enterprise Addons (Backups & Private Networking) -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
+                                    High-Availability Add-Ons
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                    
+                                    <!-- Automated Daily Backups -->
+                                    <label class="cursor-pointer">
+                                        <input type="checkbox" name="auto_backup" value="1" data-price="{{ $backupAddon ? $backupAddon->price : 1.95 }}" class="addon-checkbox peer sr-only" {{ old('auto_backup') ? 'checked' : '' }} onchange="toggleFeatureSummary('backup', this.checked); updateCalculations();">
+                                        <div class="p-4 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 hover:border-purple-300 transition-all flex items-start justify-between gap-3 h-full">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-8 h-8 rounded-xl bg-purple-50 text-[#673DE6] flex items-center justify-center text-sm shrink-0 mt-0.5">🛡️</div>
+                                                <div>
+                                                    <div class="text-xs font-bold text-slate-900">Automated Daily Backups</div>
+                                                    <div class="text-[11px] text-slate-500 leading-snug mt-0.5">Automated off-site snapshot retention with 1-click restore.</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-[#673DE6] shrink-0">+${{ number_format($backupAddon ? $backupAddon->price : 1.95, 2) }}/mo</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- Private Networking (VPC) -->
+                                    <label class="cursor-pointer">
+                                        <input type="checkbox" name="private_networking" value="1" data-price="{{ $networkAddon ? $networkAddon->price : 2.75 }}" class="addon-checkbox peer sr-only" {{ old('private_networking') ? 'checked' : '' }} onchange="toggleFeatureSummary('network', this.checked); updateCalculations();">
+                                        <div class="p-4 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/40 hover:border-purple-300 transition-all flex items-start justify-between gap-3 h-full">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm shrink-0 mt-0.5">🔒</div>
+                                                <div>
+                                                    <div class="text-xs font-bold text-slate-900">Private Networking (VPC)</div>
+                                                    <div class="text-[11px] text-slate-500 leading-snug mt-0.5">Isolated 10 Gbps backend LAN interconnect across nodes.</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-[#673DE6] shrink-0">+${{ number_format($networkAddon ? $networkAddon->price : 2.75, 2) }}/mo</span>
+                                        </div>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <!-- 5. Server Hostname & Root Password (Optional Customization) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Server Hostname <span class="text-slate-400 font-normal">(Optional)</span></label>
+                                    <input type="text" name="hostname" value="{{ old('hostname') }}" placeholder="vps-01.vortexcloud.net" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400 font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Root / SSH Password <span class="text-slate-400 font-normal">(Optional)</span></label>
+                                    <input type="password" name="root_password" placeholder="Auto-generated if empty" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- STEP 3: ACCOUNT DETAILS & EXISTING CLIENT LOGIN -->
+                        <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-soft-sm">
+                            <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-7 h-7 rounded-full bg-[#673DE6] text-white font-bold text-xs flex items-center justify-center shadow-md shadow-[#673DE6]/30">3</span>
+                                    <h2 class="text-lg font-bold text-slate-900">Account Information</h2>
+                                </div>
+                                <span class="text-xs text-slate-500 font-medium">Customer Portal</span>
+                            </div>
+
+                            @auth
+                                <!-- Authenticated Customer Banner -->
+                                <div class="p-4 bg-purple-50/80 border border-purple-200 rounded-2xl flex items-center justify-between gap-4">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-11 h-11 rounded-xl bg-[#673DE6] text-white font-bold flex items-center justify-center text-base shadow-md shadow-[#673DE6]/25">
+                                            {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-purple-900 font-semibold">Signed In Customer</div>
+                                            <div class="text-sm font-extrabold text-slate-900">{{ auth()->user()->name }}</div>
+                                            <div class="text-xs text-slate-600 font-mono">{{ auth()->user()->email }}</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1 bg-white border border-purple-200 text-xs font-bold text-[#673DE6] rounded-full shadow-soft-sm">
+                                        Active Account
+                                    </span>
+                                </div>
+                                <input type="hidden" name="auth_type" value="logged_in">
+                            @else
+                                <!-- Non-Logged In User: Tabbed Switcher (New vs Existing) -->
+                                <div class="mb-6">
+                                    <input type="hidden" name="auth_type" id="auth_type" value="{{ old('auth_type', 'register') }}">
+                                    
+                                    <div class="grid grid-cols-2 p-1 rounded-2xl bg-slate-100 border border-slate-200">
+                                        <button type="button" id="tab-btn-register" onclick="switchAuthTab('register')" class="py-2.5 px-4 text-xs sm:text-sm font-bold rounded-xl transition-all {{ old('auth_type', 'register') === 'register' ? 'bg-white text-[#673DE6] shadow-sm' : 'text-slate-600 hover:text-slate-900' }}">
+                                            ✨ Create New Account
+                                        </button>
+                                        <button type="button" id="tab-btn-login" onclick="switchAuthTab('login')" class="py-2.5 px-4 text-xs sm:text-sm font-bold rounded-xl transition-all {{ old('auth_type') === 'login' ? 'bg-white text-[#673DE6] shadow-sm' : 'text-slate-600 hover:text-slate-900' }}">
+                                            🔑 Existing Client Log In
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Tab 1: New Account Form -->
+                                <div id="auth-panel-register" class="{{ old('auth_type', 'register') === 'register' ? '' : 'hidden' }} space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Full Name</label>
+                                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Jane Doe" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Address</label>
+                                        <input type="email" name="email" value="{{ old('email') }}" placeholder="jane@company.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Account Password</label>
+                                        <input type="password" name="password" minlength="8" placeholder="Create a strong password (min 8 chars)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
+                                    </div>
+                                </div>
+
+                                <!-- Tab 2: Existing Client Login Form -->
+                                <div id="auth-panel-login" class="{{ old('auth_type') === 'login' ? '' : 'hidden' }} space-y-4">
+                                    <div class="p-3 bg-purple-50/60 border border-purple-100 rounded-xl text-xs text-purple-900 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#673DE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span>Enter your registered email and password to link this server to your account.</span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Registered Email</label>
+                                        <input type="email" name="login_email" value="{{ old('login_email') }}" placeholder="your-email@domain.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Account Password</label>
+                                            <a href="{{ url('/customer/password/reset') }}" target="_blank" class="text-xs text-[#673DE6] hover:underline font-medium">Forgot Password?</a>
+                                        </div>
+                                        <input type="password" name="login_password" placeholder="Enter your account password" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none transition-all placeholder:text-slate-400">
+                                    </div>
+                                </div>
+                            @endauth
+                        </div>
+
+                        <!-- STEP 4: PAYMENT METHOD & COUPON ENGINE -->
+                        <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-soft-sm space-y-6">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-7 h-7 rounded-full bg-[#673DE6] text-white font-bold text-xs flex items-center justify-center shadow-md shadow-[#673DE6]/30">4</span>
+                                    <h2 class="text-lg font-bold text-slate-900">Payment Method</h2>
+                                </div>
+                                <span class="text-xs text-slate-500 font-medium">256-Bit Encrypted</span>
+                            </div>
+
+                            <!-- Payment Method Toggle -->
+                            <div class="grid grid-cols-2 gap-3.5">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="payment_type" value="stripe" class="peer sr-only" {{ old('payment_type', 'stripe') === 'stripe' ? 'checked' : '' }} onchange="togglePaymentMethod('stripe')">
+                                    <div class="p-4 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 peer-checked:shadow-soft-sm hover:border-purple-300 transition-all text-center">
+                                        <div class="text-xl mb-1">💳</div>
+                                        <span class="block text-slate-900 font-bold text-sm">Credit / Debit Card</span>
+                                        <span class="text-[11px] text-slate-500">Instant via Stripe</span>
+                                    </div>
+                                </label>
+
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="payment_type" value="manual" class="peer sr-only" {{ old('payment_type') === 'manual' ? 'checked' : '' }} onchange="togglePaymentMethod('manual')">
+                                    <div class="p-4 rounded-2xl border-2 border-slate-200 peer-checked:border-[#673DE6] peer-checked:bg-purple-50/50 peer-checked:shadow-soft-sm hover:border-purple-300 transition-all text-center">
+                                        <div class="text-xl mb-1">🏦</div>
+                                        <span class="block text-slate-900 font-bold text-sm">Crypto / Bank Wire</span>
+                                        <span class="text-[11px] text-slate-500">Manual verification</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Stripe Card Element Container -->
+                            <div id="stripe-container" class="{{ old('payment_type', 'stripe') === 'stripe' ? '' : 'hidden' }} space-y-2">
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Card Information</label>
+                                <div id="card-element" class="bg-white border border-slate-200 p-4 rounded-xl shadow-soft-sm"></div>
+                                <div id="card-errors" class="text-rose-600 text-xs font-semibold mt-1"></div>
+                            </div>
+
+                            <!-- Manual Payment Info Box -->
+                            <div id="manual-info" class="{{ old('payment_type') === 'manual' ? '' : 'hidden' }} p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-amber-900 text-xs sm:text-sm leading-relaxed">
+                                <div class="font-bold mb-1 flex items-center gap-1.5">
+                                    <span>ℹ️</span> How Manual Payment Works:
+                                </div>
+                                <p>You will receive instant transfer instructions (Crypto Wallet address / Bank wire details) in your customer portal. Once your transfer is confirmed, your server spins up automatically.</p>
+                            </div>
+
+                            <!-- Coupon Code Input -->
+                            <div class="pt-4 border-t border-slate-100">
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Have a Promotional Code?</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" name="coupon_code" id="coupon_code" value="{{ old('coupon_code') }}" placeholder="e.g. VORTEX20" class="flex-grow bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 uppercase font-mono tracking-wider focus:ring-2 focus:ring-[#673DE6] focus:border-[#673DE6] outline-none">
+                                    <button type="button" onclick="applyCouponClient()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors shrink-0">
+                                        Apply
+                                    </button>
+                                </div>
+                                <div id="coupon-feedback" class="text-xs mt-1.5 font-medium hidden"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: Real-Time Sticky Order Summary (5 Cols) -->
+                    <div class="lg:col-span-5 sticky top-28 space-y-5">
+                        
+                        <div class="rounded-3xl bg-white border border-slate-200 shadow-soft-lg overflow-hidden">
+                            
+                            <!-- Cosmic Violet Gradient Header Strip -->
+                            <div class="p-6 bg-gradient-to-r from-[#180033] to-[#25004A] text-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-purple-300">Selected Plan</span>
+                                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold font-mono">Instant Setup</span>
+                                </div>
+                                <h3 class="text-2xl font-extrabold text-white tracking-tight">{{ $package->name }}</h3>
+                                <div class="text-xs text-purple-200 mt-0.5">High-Frequency AMD EPYC™ Cloud Instance</div>
+                            </div>
+
+                            <!-- Hardware Specs Snapshot -->
+                            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Included Hardware Specs</div>
+                                <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                                    <li class="flex items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">⚡</span> CPU Compute
+                                        </span>
+                                        <span class="font-bold text-slate-900">{{ $coresVal }}</span>
+                                    </li>
+                                    <li class="flex items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">🧠</span> Memory (RAM)
+                                        </span>
+                                        <span class="font-bold text-slate-900">{{ $ramVal }}</span>
+                                    </li>
+                                    <li class="flex items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">💾</span> NVMe Storage
+                                        </span>
+                                        <span id="summary-storage-display" class="font-bold text-slate-900">{{ $storageVal }}</span>
+                                    </li>
+                                    <li class="flex items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">🌐</span> Network Port
+                                        </span>
+                                        <span class="font-bold text-slate-900">{{ $portVal }}</span>
+                                    </li>
+                                    <li class="flex items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">🐧</span> OS Image
+                                        </span>
+                                        <span id="summary-os-display" class="font-bold text-slate-900">
+                                            {{ $osAddons->first()?->name ?? 'Ubuntu 24.04 LTS' }}
+                                        </span>
+                                    </li>
+                                    <li class="flex items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">📍</span> Datacenter
+                                        </span>
+                                        <span id="summary-loc-display" class="font-bold text-slate-900">
+                                            {{ $regionAddons->first()?->name ?? 'US East (New York)' }}
+                                        </span>
+                                    </li>
+                                    <li id="summary-backup-row" class="{{ old('auto_backup') ? 'flex' : 'hidden' }} items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">🛡️</span> Auto Backups
+                                        </span>
+                                        <span class="font-bold text-emerald-600">Enabled</span>
+                                    </li>
+                                    <li id="summary-network-row" class="{{ old('private_networking') ? 'flex' : 'hidden' }} items-center justify-between">
+                                        <span class="text-slate-500 flex items-center gap-2">
+                                            <span class="text-purple-600">🔒</span> Private Network
+                                        </span>
+                                        <span class="font-bold text-emerald-600">Enabled</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Live Price Calculation Breakdown -->
+                            <div class="p-6 space-y-3">
+                                <div class="flex items-center justify-between text-sm">
                                     <span class="text-slate-600">Period Subtotal</span>
-                                    <span id="summary-subtotal" class="font-bold text-slate-900">${{ number_format($baseMonthly * 12, 2) }}</span>
+                                    <span id="summary-subtotal" class="font-bold text-slate-900">${{ number_format($baseMonthly * 24, 2) }}</span>
                                 </div>
                                 <div id="summary-cycle-discount-row" class="flex items-center justify-between text-sm text-emerald-600 font-semibold">
                                     <span>Term Discount (<span id="summary-discount-pct">20%</span>)</span>
-                                    <span id="summary-discount-amt">-${{ number_format(($baseMonthly * 12) * 0.20, 2) }}</span>
+                                    <span id="summary-discount-amt">-${{ number_format(($baseMonthly * 24) * 0.20, 2) }}</span>
                                 </div>
                                 <div id="summary-coupon-row" class="hidden items-center justify-between text-sm text-purple-600 font-semibold">
                                     <span>Coupon Discount</span>
@@ -242,7 +640,7 @@
                                     </div>
                                     <div class="text-right">
                                         <div id="summary-total-display" class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                                            ${{ number_format($annualMonthly * 12, 2) }}
+                                            ${{ number_format($biennialMonthly * 24, 2) }}
                                         </div>
                                     </div>
                                 </div>
@@ -250,7 +648,7 @@
 
                             <!-- Main CTA Submit Button -->
                             <div class="p-6 pt-0">
-                                <button type="submit" id="submit-button" class="btn-shimmer w-full bg-[#673DE6] hover:bg-[#5428D8] text-white font-extrabold py-4 px-6 rounded-xl shadow-xl shadow-[#673DE6]/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 text-base">
+                                <button type="submit" id="submit-button" class="btn-shimmer w-full bg-[#673DE6] hover:bg-[#5428D8] text-white font-extrabold py-4 px-6 rounded-xl shadow-xl shadow-[#673DE6]/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 text-base cursor-pointer">
                                     <svg class="w-5 h-5 text-purple-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                     <span id="button-text">Complete Order & Deploy Server</span>
                                     <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -290,8 +688,8 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         const baseMonthly = {{ $baseMonthly }};
-        let currentDiscountPercent = 20; // default for 12 mo
-        let currentMonths = 12;
+        let currentDiscountPercent = 20; // default for 24 mo
+        let currentMonths = 24;
 
         function updateOSDisplay(val) {
             const el = document.getElementById('summary-os-display');
@@ -301,6 +699,24 @@
         function updateLocationDisplay(val) {
             const el = document.getElementById('summary-loc-display');
             if (el) el.textContent = val;
+        }
+
+        function updateStorageDisplay(val) {
+            const el = document.getElementById('summary-storage-display');
+            if (el) el.textContent = val;
+        }
+
+        function toggleFeatureSummary(feature, isChecked) {
+            const row = document.getElementById('summary-' + feature + '-row');
+            if (row) {
+                if (isChecked) {
+                    row.classList.remove('hidden');
+                    row.classList.add('flex');
+                } else {
+                    row.classList.add('hidden');
+                    row.classList.remove('flex');
+                }
+            }
         }
 
         function switchAuthTab(type) {
@@ -345,12 +761,6 @@
             if (selectedCycle === 'monthly' || selectedCycle === '1month') {
                 currentMonths = 1;
                 currentDiscountPercent = 0;
-            } else if (selectedCycle === 'quarterly' || selectedCycle === '3months') {
-                currentMonths = 3;
-                currentDiscountPercent = 0;
-            } else if (selectedCycle === 'semi_annually' || selectedCycle === '6months') {
-                currentMonths = 6;
-                currentDiscountPercent = 0;
             } else if (selectedCycle === 'annually' || selectedCycle === '12months') {
                 currentMonths = 12;
                 currentDiscountPercent = 15; // 15% savings
@@ -364,25 +774,32 @@
             document.querySelectorAll('.addon-radio:checked').forEach(function(el) {
                 addonsMonthly += parseFloat(el.getAttribute('data-price') || 0);
             });
+            document.querySelectorAll('.addon-checkbox:checked').forEach(function(el) {
+                addonsMonthly += parseFloat(el.getAttribute('data-price') || 0);
+            });
 
             const rawBase = (baseMonthly + addonsMonthly) * currentMonths;
             const discountAmt = (rawBase * currentDiscountPercent) / 100;
             const total = rawBase - discountAmt;
 
-            document.getElementById('summary-subtotal').textContent = '$' + rawBase.toFixed(2);
+            const subtotalEl = document.getElementById('summary-subtotal');
+            if (subtotalEl) subtotalEl.textContent = '$' + rawBase.toFixed(2);
             
             const discRow = document.getElementById('summary-cycle-discount-row');
-            if (currentDiscountPercent > 0) {
-                discRow.classList.remove('hidden');
-                discRow.classList.add('flex');
-                document.getElementById('summary-discount-pct').textContent = currentDiscountPercent + '%';
-                document.getElementById('summary-discount-amt').textContent = '-$' + discountAmt.toFixed(2);
-            } else {
-                discRow.classList.add('hidden');
-                discRow.classList.remove('flex');
+            if (discRow) {
+                if (currentDiscountPercent > 0) {
+                    discRow.classList.remove('hidden');
+                    discRow.classList.add('flex');
+                    document.getElementById('summary-discount-pct').textContent = currentDiscountPercent + '%';
+                    document.getElementById('summary-discount-amt').textContent = '-$' + discountAmt.toFixed(2);
+                } else {
+                    discRow.classList.add('hidden');
+                    discRow.classList.remove('flex');
+                }
             }
 
-            document.getElementById('summary-total-display').textContent = '$' + total.toFixed(2);
+            const totalEl = document.getElementById('summary-total-display');
+            if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
         }
 
         function applyCouponClient() {
@@ -447,7 +864,7 @@
 
                 if (!stripe) {
                     const errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = "Stripe credentials are not configured. Please choose Manual Payment or configure Stripe keys.";
+                    errorElement.textContent = "Stripe credentials are not configured. Please choose Manual Payment or configure Stripe keys in your .env file.";
                     return;
                 }
 
@@ -481,4 +898,3 @@
         });
     </script>
 </x-app-layout>
-

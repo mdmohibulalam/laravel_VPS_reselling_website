@@ -2,12 +2,14 @@
     @php
         $service = $this->record;
         $package = $service->package;
-        $specs = is_string($package->specs ?? null) ? json_decode($package->specs, true) : ($package->specs ?? []);
+        $specs = $service->specs_snapshot ?? (is_string($package->specs ?? null) ? json_decode($package->specs, true) : ($package->specs ?? []));
+        $activeAddons = $service->active_addons ?? [];
         $password = $service->decrypted_password ?? 'Not Available';
         $user = $service->default_user ?? 'root';
         $status = strtolower($this->liveStatus ?? $service->status ?? 'unknown');
         $isRdp = strtolower($package->category ?? '') === 'rdp';
         $port = $isRdp ? 3389 : 22;
+        $recurringPrice = (float)($service->recurring_amount > 0 ? $service->recurring_amount : ($package->price_monthly ?? 0));
     @endphp
 
     <div class="space-y-6" x-data="{ showPassword: false, copied: false, copyText(text) { navigator.clipboard.writeText(text); this.copied = true; setTimeout(() => this.copied = false, 2000); } }">
@@ -173,24 +175,48 @@
                     </div>
                 </div>
 
-                <!-- Operating System Bar -->
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Operating System:</span>
-                    <span class="font-bold text-slate-200">{{ $service->os_image ?? 'Ubuntu 22.04 LTS' }}</span>
+                <!-- Operating System & Datacenter Bar -->
+                <div class="mt-4 pt-3 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+                    <div>
+                        <span class="text-slate-400">Operating System:</span>
+                        <span class="font-bold text-slate-200 ml-1">{{ $specs['os'] ?? ($service->os_image ?? 'Ubuntu 24.04 LTS') }}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400">Datacenter:</span>
+                        <span class="font-bold text-slate-200 ml-1">{{ $specs['datacenter'] ?? ($service->region ?? 'EU Central') }}</span>
+                    </div>
                 </div>
+
+                @if(!empty($activeAddons) && count($activeAddons) > 0)
+                <!-- Active Cloud Add-Ons Section -->
+                <div class="mt-3 pt-3 border-t border-slate-800">
+                    <div class="text-xs text-slate-400 font-medium mb-2 uppercase tracking-wider">Active Cloud Add-Ons:</div>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($activeAddons as $addon)
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/30 shadow-sm">
+                                <span class="text-purple-400 mr-1.5">✓</span> {{ $addon['name'] ?? 'Addon' }}
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
 
         <!-- Billing & Subscription Footer Row -->
         <div class="p-5 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
-            <div class="flex items-center gap-6">
+            <div class="flex flex-wrap items-center gap-6">
                 <div>
                     <span class="text-slate-400">Billing Cycle:</span>
-                    <span class="font-semibold text-white ml-1">{{ ucfirst($service->billing_cycle) }} (${{ number_format($package->price_monthly ?? 0, 2) }}/mo)</span>
+                    <span class="font-semibold text-white ml-1">{{ ucfirst($service->billing_cycle) }}</span>
+                </div>
+                <div>
+                    <span class="text-slate-400">Renewal Rate:</span>
+                    <span class="font-bold text-emerald-400 ml-1">${{ number_format($recurringPrice, 2) }}</span>
                 </div>
                 @if($service->next_due_date)
                     <div>
-                        <span class="text-slate-400">Next Renewal:</span>
+                        <span class="text-slate-400">Next Due Date:</span>
                         <span class="font-semibold text-white ml-1">{{ \Carbon\Carbon::parse($service->next_due_date)->format('M d, Y') }}</span>
                     </div>
                 @endif

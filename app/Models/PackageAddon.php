@@ -11,7 +11,17 @@ class PackageAddon extends Model
     use HasFactory;
 
     protected $fillable = [
-        'package_id', 'is_global', 'type', 'name', 'value', 'price', 'billing_cycle'
+        'package_id',
+        'is_global',
+        'is_out_of_stock',
+        'is_enabled',
+        'sort_order',
+        'type',
+        'name',
+        'value',
+        'api_identifier',
+        'price',
+        'billing_cycle',
     ];
 
     protected function casts(): array
@@ -19,6 +29,9 @@ class PackageAddon extends Model
         return [
             'price' => 'decimal:2',
             'is_global' => 'boolean',
+            'is_out_of_stock' => 'boolean',
+            'is_enabled' => 'boolean',
+            'sort_order' => 'integer',
         ];
     }
 
@@ -35,5 +48,15 @@ class PackageAddon extends Model
     public function scopeOfType($query, $type)
     {
         return $query->where('type', $type);
+    }
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('is_enabled', true);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('is_out_of_stock', false);
     }
 }
