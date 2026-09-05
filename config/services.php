@@ -34,9 +34,19 @@ return [
     ],
 
     'stripe' => [
+        'enabled' => (bool) env('PAYMENT_STRIPE_ENABLED', true),
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
+    'crypto' => [
+        'enabled' => (bool) env('PAYMENT_CRYPTO_ENABLED', true),
+        'wallets' => [
+            'usdt_trc20' => env('CRYPTO_USDT_TRC20_ADDRESS', 'TPFMfZU4cPcfi3ivmUECDj9bYy5aWdZ4EE'),
+            'usdc_polygon' => env('CRYPTO_USDC_POLYGON_ADDRESS', '0x73F701571238739aBce996b6D7358599411FE233'),
+            'usdt_polygon' => env('CRYPTO_USDT_POLYGON_ADDRESS', '0x73F701571238739aBce996b6D7358599411FE233'),
+        ],
     ],
 
     'provisioning' => [

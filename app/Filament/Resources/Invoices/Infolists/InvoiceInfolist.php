@@ -74,17 +74,61 @@ class InvoiceInfolist
                         Grid::make(3)
                             ->schema([
                                 TextEntry::make('amount')
-                                    ->label('Subtotal')
+                                    ->label('Main Subtotal')
                                     ->money('USD'),
                                 TextEntry::make('tax')
                                     ->label('Tax')
-                                    ->money('USD'),
+                                    ->money('USD')
+                                    ->placeholder('$0.00'),
                                 TextEntry::make('total')
                                     ->label('Total Amount')
                                     ->weight('bold')
                                     ->color('success')
                                     ->money('USD')
                                     ->icon('heroicon-o-currency-dollar'),
+                            ]),
+                    ]),
+
+                Section::make('Payment & Settlement Details')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextEntry::make('payment_method')
+                                    ->label('Payment Method')
+                                    ->badge()
+                                    ->color(fn (?string $state): string => match ($state) {
+                                        'crypto' => 'info',
+                                        'stripe' => 'success',
+                                        default => 'gray',
+                                    })
+                                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'Pending')),
+
+                                TextEntry::make('crypto_network')
+                                    ->label('Crypto Network')
+                                    ->badge()
+                                    ->color('warning')
+                                    ->placeholder('N/A')
+                                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                                        'usdt_trc20' => 'USDT (Tron TRC-20)',
+                                        'usdc_polygon' => 'USDC (Polygon PoS)',
+                                        'usdt_polygon' => 'USDT (Polygon PoS)',
+                                        default => $state ?? 'N/A',
+                                    }),
+
+                                TextEntry::make('crypto_txid')
+                                    ->label('Transaction Proof (TxID)')
+                                    ->copyable()
+                                    ->placeholder('Awaiting Submission')
+                                    ->suffixAction(
+                                        \Filament\Actions\Action::make('open_explorer')
+                                            ->icon('heroicon-m-arrow-top-right-on-square')
+                                            ->tooltip('Open on Blockchain Explorer')
+                                            ->visible(fn ($record) => !empty($record->crypto_txid))
+                                            ->url(fn ($record) => (str_starts_with($record->crypto_txid ?? '', '0x') || str_contains($record->crypto_network ?? '', 'polygon'))
+                                                ? "https://polygonscan.com/tx/{$record->crypto_txid}"
+                                                : "https://tronscan.org/#/transaction/{$record->crypto_txid}", true)
+                                    ),
+
                                 TextEntry::make('stripe_payment_intent_id')
                                     ->label('Stripe Payment ID')
                                     ->placeholder('N/A')

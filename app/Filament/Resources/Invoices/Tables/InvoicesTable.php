@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Invoices\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -27,9 +27,6 @@ class InvoicesTable
                 TextColumn::make('amount')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('tax')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('total')
                     ->numeric()
                     ->sortable(),
@@ -49,8 +46,30 @@ class InvoicesTable
                         'cancelled' => 'Cancelled',
                         default => ucfirst($state),
                     }),
-                TextColumn::make('stripe_payment_intent_id')
-                    ->searchable(),
+                TextColumn::make('payment_method')
+                    ->label('Method')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'crypto' => 'info',
+                        'stripe' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A')),
+                TextColumn::make('crypto_network')
+                    ->label('Network')
+                    ->badge()
+                    ->color('warning')
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'usdt_trc20' => 'USDT (Tron)',
+                        'usdc_polygon' => 'USDC (Polygon)',
+                        'usdt_polygon' => 'USDT (Polygon)',
+                        default => $state ? strtoupper($state) : '-',
+                    }),
+                TextColumn::make('crypto_txid')
+                    ->label('TxID / Hash')
+                    ->copyable()
+                    ->limit(14)
+                    ->tooltip(fn ($record) => $record->crypto_txid),
                 TextColumn::make('due_date')
                     ->date()
                     ->sortable(),
@@ -61,16 +80,12 @@ class InvoicesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                \Filament\Actions\ViewAction::make(),
+                ViewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

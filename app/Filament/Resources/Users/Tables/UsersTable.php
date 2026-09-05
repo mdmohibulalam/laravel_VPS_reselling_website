@@ -15,17 +15,30 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
                 TextColumn::make('email')
                     ->label('Email address')
+                    ->copyable()
                     ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                TextColumn::make('company_name')
+                    ->label('Company')
+                    ->placeholder('Personal')
+                    ->searchable(),
+                TextColumn::make('phone')
+                    ->label('Phone')
+                    ->placeholder('N/A')
+                    ->searchable(),
+                TextColumn::make('country')
+                    ->label('Country')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('N/A')
+                    ->searchable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Registered')
+                    ->date('M j, Y')
+                    ->sortable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

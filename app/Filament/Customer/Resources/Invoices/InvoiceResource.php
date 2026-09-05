@@ -5,6 +5,7 @@ namespace App\Filament\Customer\Resources\Invoices;
 use App\Filament\Customer\Resources\Invoices\Pages\CreateInvoice;
 use App\Filament\Customer\Resources\Invoices\Pages\EditInvoice;
 use App\Filament\Customer\Resources\Invoices\Pages\ListInvoices;
+use App\Filament\Customer\Resources\Invoices\Pages\ViewInvoice;
 use App\Filament\Customer\Resources\Invoices\Schemas\InvoiceForm;
 use App\Filament\Customer\Resources\Invoices\Tables\InvoicesTable;
 use App\Models\Invoice;
@@ -30,6 +31,11 @@ class InvoiceResource extends Resource
         return InvoicesTable::configure($table);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return \App\Filament\Resources\Invoices\Infolists\InvoiceInfolist::configure($schema);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -41,8 +47,7 @@ class InvoiceResource extends Resource
     {
         return [
             'index' => ListInvoices::route('/'),
-            'create' => CreateInvoice::route('/create'),
-            'edit' => EditInvoice::route('/{record}/edit'),
+            'view' => ViewInvoice::route('/{record}'),
         ];
     }
     

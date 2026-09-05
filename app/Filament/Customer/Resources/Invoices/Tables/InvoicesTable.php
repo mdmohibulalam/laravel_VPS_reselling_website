@@ -2,9 +2,9 @@
 
 namespace App\Filament\Customer\Resources\Invoices\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use App\Models\Invoice;
+use Filament\Actions\ViewAction;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,52 +14,62 @@ class InvoicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('order_id')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('invoice_number')
-                    ->searchable(),
-                TextColumn::make('amount')
-                    ->numeric()
+                    ->label('Invoice #')
+                    ->weight(FontWeight::Bold)
+                    ->copyable()
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('tax')
-                    ->numeric()
+
+                TextColumn::make('order.order_number')
+                    ->label('Order #')
+                    ->badge()
+                    ->color('gray')
+                    ->placeholder('N/A')
+                    ->copyable()
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('total')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('status')
-                    ->badge(),
-                TextColumn::make('stripe_payment_intent_id')
-                    ->searchable(),
-                TextColumn::make('due_date')
-                    ->date()
-                    ->sortable(),
-                TextColumn::make('paid_at')
-                    ->dateTime()
-                    ->sortable(),
+
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Invoice Date')
+                    ->date('M j, Y')
+                    ->sortable(),
+
+                TextColumn::make('due_date')
+                    ->label('Due Date')
+                    ->date('M j, Y')
+                    ->sortable(),
+
+                TextColumn::make('total')
+                    ->label('Total')
+                    ->weight(FontWeight::Bold)
+                    ->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2) . ' USD')
+                    ->sortable(),
+
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'paid' => 'success',
+                        'pending', 'unpaid' => 'danger',
+                        'refunded' => 'info',
+                        'cancelled' => 'gray',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending', 'unpaid' => 'Unpaid',
+                        'paid' => 'Paid',
+                        'refunded' => 'Refunded',
+                        'cancelled' => 'Cancelled',
+                        default => ucfirst($state),
+                    }),
             ])
-            ->filters([
-                //
-            ])
+            ->defaultSort('created_at', 'desc')
+            ->recordUrl(fn (Invoice $record) => \App\Filament\Customer\Resources\Invoices\InvoiceResource::getUrl('view', ['record' => $record]))
             ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                ViewAction::make()
+                    ->label('View')
+                    ->color('gray'),
             ]);
     }
 }

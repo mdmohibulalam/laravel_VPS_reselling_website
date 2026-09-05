@@ -164,5 +164,18 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
   - Must use `animate-fade-in-up` with staggered inline styles (`style="animation-delay: 150ms;"`, `style="animation-delay: 250ms;"`).
 
 ---
-*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, and `<x-pricing-card>` rules.*
+
+## 9. Filament Table & Details Page Action Standards (Admin & Customer Panels)
+* **List Views / Table Rows Standard (`recordActions`)**:
+  - In all resource list views and tables across both Admin and Customer panels, table row actions must **ONLY contain the `View` button** (`ViewAction::make()`).
+  - **NEVER** place operational triggers, external verification buttons, deployment actions, or edit/delete triggers directly inside table row columns (e.g., no `Approve & Deploy`, `Verify Explorer`, `Pay Now`, `Edit`, or `Delete` in the table row).
+  - This maintains a clean, distraction-free table layout, prevents accidental trigger clicks, and eliminates horizontal table bloat.
+* **Details Page Standard (`ViewRecord` / `getHeaderActions()` & Infolists)**:
+  - **ALL** operational, financial, verification, and destructive actions must reside exclusively inside the record's details page (`ViewRecord` header actions or infolist actions).
+  - **Primary Actions**: (e.g. `Approve & Deploy`, `Verify Explorer`, `Pay Invoice Now`) must be placed in `getHeaderActions()` with appropriate state visibility filters (`visible(fn () => ...)`).
+  - **Secondary / Destructive Actions**: (e.g. `Cancel`, `Edit`, `Delete`) must be organized inside an `ActionGroup::make([...])` labeled `"More Actions"` with an ellipsis icon.
+  - **Inline Field Actions**: Use `suffixAction(...)` directly on specific infolist entries (e.g., blockchain explorer links next to TxID hashes) for contextual convenience.
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, and admin panels must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, and Filament table/details action separation rules.*
 

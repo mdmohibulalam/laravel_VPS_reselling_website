@@ -18,7 +18,25 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedServerStack;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Orders';
+
+    protected static ?string $navigationLabel = 'Active Orders (Services)';
+
+    protected static ?int $navigationSort = 3;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Service::where('status', 'active')->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -42,6 +60,7 @@ class ServiceResource extends Resource
         return [
             'index' => ListServices::route('/'),
             'create' => CreateService::route('/create'),
+            'view' => \App\Filament\Resources\Services\Pages\ViewService::route('/{record}'),
             'edit' => EditService::route('/{record}/edit'),
         ];
     }

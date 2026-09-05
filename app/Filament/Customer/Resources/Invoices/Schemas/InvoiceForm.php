@@ -20,6 +20,7 @@ class InvoiceForm
                 TextInput::make('order_id')
                     ->numeric(),
                 TextInput::make('invoice_number')
+                    ->default(fn () => \App\Models\Invoice::generateNextNumber())
                     ->required(),
                 TextInput::make('amount')
                     ->required()
