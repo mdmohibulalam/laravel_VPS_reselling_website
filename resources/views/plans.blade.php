@@ -155,6 +155,9 @@
             <a href="#specs-comparison" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 Specs Comparison
             </a>
+            <a href="#comparison" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                vs Cloud Giants
+            </a>
             <a href="#datacenters" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 Locations
             </a>
@@ -349,7 +352,11 @@
     </section>
 
 
-    <!-- SECTION 5: 1-CLICK OPERATING SYSTEMS & APP STACKS CATALOG -->
+    <!-- SECTION 5: COMPETITOR COMPARISON MATRIX (VORTEXCLOUD VS AWS, DIGITALOCEAN, HOSTINGER) -->
+    <x-competitor-comparison :packages="$packages" />
+
+
+    <!-- SECTION 6: 1-CLICK OPERATING SYSTEMS & APP STACKS CATALOG -->
     <section id="operating-systems" class="py-16 md:py-24 bg-slate-50/60 scroll-mt-24 border-t border-slate-200">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             

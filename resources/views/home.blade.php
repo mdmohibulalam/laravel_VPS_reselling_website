@@ -230,159 +230,239 @@
     </section>
 
 
-    <!-- SECTION 3: BRANDS YOU TRUST / HARDWARE PARTNERS SECTION -->
-    <section id="hardware" class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/80">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-            
-            <!-- Section Header -->
-            <div class="reveal-init text-center max-w-3xl mx-auto mb-14">
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">
-                    Enterprise Hardware You Can Trust.
-                </h2>
-                <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                    We never compromise on infrastructure. Your workloads run on industry-leading, high-availability server components.
-                </p>
-            </div>
+    <!-- SECTION 3: BRANDS YOU TRUST / HARDWARE PARTNERS SECTION (POSH HIGH-TECH BENTO DECK) -->
+    <section id="hardware" class="relative py-20 md:py-28 bg-gradient-to-b from-slate-50 via-[#F8FAFC] to-slate-50 border-y border-slate-200/90 overflow-hidden">
+        
+        <!-- Ambient Stage Glows for Posh Depth -->
+        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[350px] bg-purple-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-[500px] h-[300px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-            <!-- Hardware Logo Cards Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Partner Card 1: AMD EPYC -->
-                <div class="reveal-init delay-100 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-                            <rect x="9" y="9" width="6" height="6"></rect>
-                            <line x1="9" y1="1" x2="9" y2="4"></line>
-                            <line x1="15" y1="1" x2="15" y2="4"></line>
-                            <line x1="9" y1="20" x2="9" y2="23"></line>
-                            <line x1="15" y1="20" x2="15" y2="23"></line>
-                            <line x1="20" y1="9" x2="23" y2="9"></line>
-                            <line x1="20" y1="14" x2="23" y2="14"></line>
-                            <line x1="1" y1="9" x2="4" y2="9"></line>
-                            <line x1="1" y1="14" x2="4" y2="14"></line>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">AMD EPYC™ Processors</h3>
-                    <p class="text-xs text-slate-500">Up to 3.7 GHz boost frequency with multi-threaded performance</p>
-                </div>
-
-                <!-- Partner Card 2: Intel Xeon -->
-                <div class="reveal-init delay-200 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">Intel® Xeon® Scalable</h3>
-                    <p class="text-xs text-slate-500">Robust virtualization compute optimized for intense database throughput</p>
-                </div>
-
-                <!-- Partner Card 3: Samsung Gen4 NVMe -->
-                <div class="reveal-init delay-300 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">Samsung® Gen4 Enterprise NVMe</h3>
-                    <p class="text-xs text-slate-500">PCIe 4.0 ultra-low latency flash storage in high-resiliency RAID-10</p>
-                </div>
-
-                <!-- Partner Card 4: KVM Architecture -->
-                <div class="reveal-init delay-400 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">KVM Virtualization Architecture</h3>
-                    <p class="text-xs text-slate-500">100% hardware-isolated dedicated kernel with complete root access</p>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- SECTION 4: WHY CHOOSE US SECTION -->
-    <section id="features" class="py-16 md:py-24 bg-white">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
             
             <!-- Section Header -->
             <div class="reveal-init text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
-                    High-Reliability Architecture
+                <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-4 py-1.5 rounded-full mb-4 border border-purple-200/80 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#673DE6] animate-pulse"></span>
+                    <span>Battle-Tested Enterprise Cloud Nodes</span>
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Engineered for Reliable Cloud Infrastructure.
+                <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                    Enterprise Hardware You Can Trust.
                 </h2>
-                <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                    Built from the ground up to support modern devops workflows, production backends, and low-latency client applications.
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                    We never compromise on compute or storage silicon. Your workloads run exclusively on tier-1, high-frequency server architecture built for 24/7 sustained loads.
                 </p>
             </div>
 
-            <!-- 3-Column Feature Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- 4-Column Posh Hardware Bento Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
                 
-                <!-- Pillar 1: 99.99% Uptime Guarantee (with green ping dot) -->
-                <div class="reveal-init delay-100 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 group">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                        </svg>
+                <!-- Partner Card 1: AMD EPYC -->
+                <div class="reveal-init delay-100 card-interactive relative rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-purple-500/15 hover:border-purple-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+                    <!-- Subtle Corner Gradient Accent -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-500/10 via-transparent to-transparent rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-100"></div>
+
+                    <div>
+                        <!-- Header & Brand Pill -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 via-[#673DE6] to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-purple-600/30 group-hover:scale-110 group-hover:rotate-1 transition-transform duration-300">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                    <rect x="9" y="9" width="6" height="6"></rect>
+                                    <line x1="9" y1="1" x2="9" y2="4"></line>
+                                    <line x1="15" y1="1" x2="15" y2="4"></line>
+                                    <line x1="9" y1="20" x2="9" y2="23"></line>
+                                    <line x1="15" y1="20" x2="15" y2="23"></line>
+                                    <line x1="20" y1="9" x2="23" y2="9"></line>
+                                    <line x1="20" y1="14" x2="23" y2="14"></line>
+                                    <line x1="1" y1="9" x2="4" y2="9"></line>
+                                    <line x1="1" y1="14" x2="4" y2="14"></line>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-[#673DE6] border border-purple-200/80 text-[11px] font-bold uppercase tracking-wider shadow-inner">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#673DE6] animate-ping"></span>
+                                Zen 4 Genoa
+                            </span>
+                        </div>
+
+                        <!-- Card Titles -->
+                        <h3 class="font-extrabold text-slate-900 text-xl mb-1.5 group-hover:text-[#673DE6] transition-colors">
+                            AMD EPYC™ 9654
+                        </h3>
+                        <p class="text-xs text-slate-500 font-medium mb-5">
+                            Up to 3.70 GHz sustained all-core boost for intense backend compilation and multi-threaded web applications.
+                        </p>
+
+                        <!-- Hardware Spec Chips -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 font-semibold group-hover:bg-purple-50/50 group-hover:border-purple-100 transition-colors">
+                                <span class="text-slate-500">Architecture</span>
+                                <span class="text-slate-900 font-mono">128 Threads / Socket</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 font-semibold group-hover:bg-purple-50/50 group-hover:border-purple-100 transition-colors">
+                                <span class="text-slate-500">Security</span>
+                                <span class="text-emerald-600 font-mono">SEV-SNP Encrypted</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="flex items-center gap-2.5 mb-3">
-                        <span class="relative flex h-3 w-3">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                        </span>
-                        <h3 class="text-xl font-bold text-slate-900 tracking-tight group-hover:text-[#673DE6] transition-colors">99.99% Uptime Guarantee</h3>
+
+                    <!-- Live Hardware Frequency Wave Telemetry -->
+                    <div class="pt-4 border-t border-slate-100/90 flex items-center justify-between text-xs text-slate-500">
+                        <span class="font-medium">Clock Stability</span>
+                        <div class="flex items-center gap-1">
+                            <span class="inline-block w-1 h-3 bg-purple-400 rounded-full animate-pulse"></span>
+                            <span class="inline-block w-1 h-4 bg-[#673DE6] rounded-full animate-pulse" style="animation-delay: 150ms;"></span>
+                            <span class="inline-block w-1 h-2.5 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 300ms;"></span>
+                            <span class="inline-block w-1 h-5 bg-[#673DE6] rounded-full animate-pulse" style="animation-delay: 200ms;"></span>
+                            <span class="font-mono font-bold text-slate-900 ml-1">3.7 GHz</span>
+                        </div>
                     </div>
-                    
-                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Our redundant network architecture ensures your applications stay online 24/7/365 with zero unexpected interruptions.
-                    </p>
                 </div>
 
-                <!-- Pillar 2: Enterprise DDoS Protection -->
-                <div class="reveal-init delay-200 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 group">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-100 text-[#673DE6] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            <path d="M9 12l2 2 4-4"/>
-                        </svg>
+                <!-- Partner Card 2: Intel Xeon -->
+                <div class="reveal-init delay-200 card-interactive relative rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-blue-500/15 hover:border-blue-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/10 via-transparent to-transparent rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-100"></div>
+
+                    <div>
+                        <!-- Header & Brand Pill -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 via-sky-600 to-cyan-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 group-hover:scale-110 group-hover:rotate-1 transition-transform duration-300">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                                    <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                                    <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200/80 text-[11px] font-bold uppercase tracking-wider shadow-inner">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+                                Xeon Scalable
+                            </span>
+                        </div>
+
+                        <!-- Card Titles -->
+                        <h3 class="font-extrabold text-slate-900 text-xl mb-1.5 group-hover:text-blue-600 transition-colors">
+                            Intel® Xeon® Platinum
+                        </h3>
+                        <p class="text-xs text-slate-500 font-medium mb-5">
+                            Robust enterprise compute with deep hardware-level vector instructions optimized for intensive database queries.
+                        </p>
+
+                        <!-- Hardware Spec Chips -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 font-semibold group-hover:bg-blue-50/50 group-hover:border-blue-100 transition-colors">
+                                <span class="text-slate-500">Bus Speed</span>
+                                <span class="text-slate-900 font-mono">5.2 GT/s UPI Interconnect</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 font-semibold group-hover:bg-blue-50/50 group-hover:border-blue-100 transition-colors">
+                                <span class="text-slate-500">Compute Matrix</span>
+                                <span class="text-blue-600 font-mono">AVX-512 Instructions</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <h3 class="text-xl font-bold text-slate-900 tracking-tight mb-3 group-hover:text-[#673DE6] transition-colors">Enterprise DDoS Protection</h3>
-                    
-                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Advanced Layer 4 and Layer 7 traffic scrubbing filters out malicious attacks instantly before they ever reach your virtual server.
-                    </p>
+
+                    <!-- Telemetry -->
+                    <div class="pt-4 border-t border-slate-100/90 flex items-center justify-between text-xs text-slate-500">
+                        <span class="font-medium">Workload Optimization</span>
+                        <span class="font-mono font-bold text-slate-900">PostgreSQL / Redis Ready</span>
+                    </div>
                 </div>
 
-                <!-- Pillar 3: 24/7 Expert Support -->
-                <div class="reveal-init delay-300 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 group">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-100 text-[#673DE6] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                            <circle cx="9" cy="10" r="1"/>
-                            <circle cx="12" cy="10" r="1"/>
-                            <circle cx="15" cy="10" r="1"/>
-                        </svg>
+                <!-- Partner Card 3: Samsung Gen4 NVMe -->
+                <div class="reveal-init delay-300 card-interactive relative rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-amber-500/15 hover:border-amber-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-500/10 via-transparent to-transparent rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-100"></div>
+
+                    <div>
+                        <!-- Header & Brand Pill -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 text-white flex items-center justify-center shadow-lg shadow-amber-500/30 group-hover:scale-110 group-hover:rotate-1 transition-transform duration-300">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200/80 text-[11px] font-bold uppercase tracking-wider shadow-inner">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+                                PCIe 4.0 RAID-10
+                            </span>
+                        </div>
+
+                        <!-- Card Titles -->
+                        <h3 class="font-extrabold text-slate-900 text-xl mb-1.5 group-hover:text-amber-600 transition-colors">
+                            Samsung® Enterprise Flash
+                        </h3>
+                        <p class="text-xs text-slate-500 font-medium mb-4">
+                            Gen4 PCIe solid-state arrays in high-resiliency mirrored RAID-10 with instantaneous zero-wait I/O response.
+                        </p>
+
+                        <!-- Live Read Speed Benchmark Bar -->
+                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 mb-5 group-hover:border-amber-200 transition-colors">
+                            <div class="flex items-center justify-between text-xs mb-1.5">
+                                <span class="text-slate-600 font-semibold">Sequential Read</span>
+                                <span class="font-mono font-black text-amber-700">7,200 MB/s</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-rose-500 h-full rounded-full w-[94%] transition-all duration-700"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1 font-mono">
+                                <span>Industry Avg: 550 MB/s</span>
+                                <span class="text-amber-700 font-bold">13x Faster</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <h3 class="text-xl font-bold text-slate-900 tracking-tight mb-3 group-hover:text-[#673DE6] transition-colors">24/7 Expert Support</h3>
-                    
-                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Skip the front-line general support. Get direct assistance from experienced system administrators who speak your language.
-                    </p>
+
+                    <!-- Telemetry -->
+                    <div class="pt-4 border-t border-slate-100/90 flex items-center justify-between text-xs text-slate-500">
+                        <span class="font-medium">Random IOPS</span>
+                        <span class="font-mono font-bold text-slate-900">1,000,000+ IOPS</span>
+                    </div>
+                </div>
+
+                <!-- Partner Card 4: KVM Architecture -->
+                <div class="reveal-init delay-400 card-interactive relative rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-emerald-500/15 hover:border-emerald-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-500/10 via-transparent to-transparent rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-100"></div>
+
+                    <div>
+                        <!-- Header & Brand Pill -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-green-700 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 group-hover:scale-110 group-hover:rotate-1 transition-transform duration-300">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/80 text-[11px] font-bold uppercase tracking-wider shadow-inner">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                100% Isolated
+                            </span>
+                        </div>
+
+                        <!-- Card Titles -->
+                        <h3 class="font-extrabold text-slate-900 text-xl mb-1.5 group-hover:text-emerald-600 transition-colors">
+                            KVM Hypervisor Core
+                        </h3>
+                        <p class="text-xs text-slate-500 font-medium mb-5">
+                            Hardware-level kernel isolation. Dedicated memory and CPU scheduling without noisy neighbors or virtualization overhead.
+                        </p>
+
+                        <!-- Hardware Spec Chips -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 font-semibold group-hover:bg-emerald-50/50 group-hover:border-emerald-100 transition-colors">
+                                <span class="text-slate-500">Resource Policy</span>
+                                <span class="text-emerald-700 font-mono">Zero Overselling</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 font-semibold group-hover:bg-emerald-50/50 group-hover:border-emerald-100 transition-colors">
+                                <span class="text-slate-500">Kernel Authority</span>
+                                <span class="text-slate-900 font-mono">100% Root & Custom ISO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Telemetry -->
+                    <div class="pt-4 border-t border-slate-100/90 flex items-center justify-between text-xs text-slate-500">
+                        <span class="font-medium">Virtualization Level</span>
+                        <span class="font-mono font-bold text-emerald-700">Type-1 Bare-Metal</span>
+                    </div>
                 </div>
 
             </div>
@@ -391,7 +471,203 @@
     </section>
 
 
-    <!-- SECTION 5: CUSTOMER REVIEWS / TESTIMONIALS SECTION -->
+    <!-- SECTION 4: WHY CHOOSE US / INFRASTRUCTURE TELEMETRY SECTION (POSH LIVE DASHBOARD) -->
+    <section id="features" class="relative py-20 md:py-28 bg-white overflow-hidden">
+        
+        <!-- Subtle Ambient Lighting -->
+        <div class="absolute top-0 right-1/3 w-[500px] h-[300px] bg-purple-500/5 rounded-full blur-[130px] pointer-events-none"></div>
+
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
+            
+            <!-- Section Header -->
+            <div class="reveal-init text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+                <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-4 py-1.5 rounded-full mb-4 border border-purple-200/80 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>High-Reliability Architecture</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                    Engineered for Reliable Cloud Infrastructure.
+                </h2>
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                    Built from the ground up to support high-concurrency production backends, modern devops CI/CD pipelines, and zero-downtime applications.
+                </p>
+            </div>
+
+            <!-- 3-Column Posh Interactive Telemetry Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-10">
+                
+                <!-- Pillar 1: 99.99% Uptime Guarantee (with Live 30-Day Bar Graphic) -->
+                <div class="reveal-init delay-100 card-interactive relative rounded-3xl p-8 bg-gradient-to-b from-white via-white to-slate-50/50 border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <!-- Icon & Live SLA Indicator -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold font-mono shadow-sm">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                99.99% SLA
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mb-3 group-hover:text-emerald-700 transition-colors">
+                            99.99% Guaranteed Uptime
+                        </h3>
+                        
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">
+                            Redundant N+1 power generators, dual carrier-grade fiber uplinks, and automated hardware node failover ensure continuous availability for your servers.
+                        </p>
+
+                        <!-- Live 30-Day Operational Status Telemetry -->
+                        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 mb-6 group-hover:bg-emerald-50/30 group-hover:border-emerald-200/80 transition-colors">
+                            <div class="flex items-center justify-between text-xs font-semibold text-slate-700 mb-2.5">
+                                <span>30-Day Network Performance</span>
+                                <span class="text-emerald-700 font-mono font-bold">100.0% Operational</span>
+                            </div>
+                            
+                            <!-- 30 Interactive Day Status Bars -->
+                            <div class="flex items-end justify-between gap-0.5 sm:gap-1 h-8" title="All 30 days 100% operational">
+                                @for ($d = 0; $d < 30; $d++)
+                                    <div class="flex-1 h-full bg-emerald-500 hover:bg-emerald-400 rounded-sm transition-all duration-150 cursor-pointer hover:scale-y-110" title="Day {{ $d+1 }}: 100% Uptime (0 incidents)"></div>
+                                @endfor
+                            </div>
+
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 font-mono">
+                                <span>30 days ago</span>
+                                <span class="text-emerald-600 font-semibold">Today (Active)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Status Bar -->
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500">
+                        <span>Average Global Latency</span>
+                        <span class="font-mono font-bold text-slate-900">11.4 ms Direct Fiber</span>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Enterprise DDoS Protection -->
+                <div class="reveal-init delay-200 card-interactive relative rounded-3xl p-8 bg-gradient-to-b from-white via-white to-slate-50/50 border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <!-- Icon & Capacity Indicator -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-200/80 text-[#673DE6] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-[#673DE6] border border-purple-200 text-xs font-bold font-mono shadow-sm">
+                                🛡 2.4 Tbps Scrubbing
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mb-3 group-hover:text-[#673DE6] transition-colors">
+                            Enterprise Anti-DDoS Shield
+                        </h3>
+                        
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">
+                            Multi-terabit automated traffic scrubbing filters out malicious volumetric and protocol attacks in real-time before packets ever reach your virtual server.
+                        </p>
+
+                        <!-- Telemetry Attack Scrubbing Breakdown -->
+                        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 mb-6 space-y-2.5 group-hover:bg-purple-50/30 group-hover:border-purple-200/80 transition-colors">
+                            <div class="flex items-center justify-between text-xs font-semibold">
+                                <span class="text-slate-700">Layer 4 (SYN, UDP, ICMP Floods)</span>
+                                <span class="text-emerald-600 font-mono">Auto-Mitigated</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-[#673DE6] h-full rounded-full w-full"></div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between text-xs font-semibold pt-1">
+                                <span class="text-slate-700">Layer 7 (HTTP Flood, Slowloris)</span>
+                                <span class="text-emerald-600 font-mono">Inline Inspection</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-indigo-500 h-full rounded-full w-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Status Bar -->
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500">
+                        <span>Latency Added by Scrubbing</span>
+                        <span class="font-mono font-bold text-emerald-600">0.00 ms (Hardware Inline)</span>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: 24/7 Expert Sysadmin Support -->
+                <div class="reveal-init delay-300 card-interactive relative rounded-3xl p-8 bg-gradient-to-b from-white via-white to-slate-50/50 border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-300 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <!-- Icon & Response Time Indicator -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-200/80 text-[#673DE6] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                    <circle cx="9" cy="10" r="1"/>
+                                    <circle cx="12" cy="10" r="1"/>
+                                    <circle cx="15" cy="10" r="1"/>
+                                </svg>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold font-mono shadow-sm">
+                                ⚡ &lt; 15 Min Response
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mb-3 group-hover:text-[#673DE6] transition-colors">
+                            24/7 Expert SysAdmin Support
+                        </h3>
+                        
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">
+                            No scripted tier-1 gatekeepers. Get direct assistance from seasoned Linux and Windows DevOps administrators who understand kernels, firewalls, and networking.
+                        </p>
+
+                        <!-- Sysadmin Team Cluster & Capabilities -->
+                        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 mb-6 group-hover:bg-purple-50/30 group-hover:border-purple-200/80 transition-colors">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center -space-x-2">
+                                    <div class="w-8 h-8 rounded-full bg-purple-600 text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white">RH</div>
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white">MK</div>
+                                    <div class="w-8 h-8 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white">TL</div>
+                                    <div class="w-8 h-8 rounded-full bg-slate-700 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">+12</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-xs text-emerald-700 font-bold">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span>Engineers On Duty</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-semibold text-slate-700">Free Migration Help</span>
+                                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-semibold text-slate-700">SSH Debugging</span>
+                                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-semibold text-slate-700">Custom ISO Mount</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Status Bar -->
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500">
+                        <span>Resolution Rate</span>
+                        <span class="font-mono font-bold text-slate-900">99.4% First-Touch</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- SECTION 5: COMPETITOR COMPARISON MATRIX (ULTHOST-INSPIRED B2B CLOUD COMPARISON) -->
+    <x-competitor-comparison />
+
+
+    <!-- SECTION 6: CUSTOMER REVIEWS / TESTIMONIALS SECTION -->
     <section id="reviews" class="py-16 md:py-24 bg-white">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             
