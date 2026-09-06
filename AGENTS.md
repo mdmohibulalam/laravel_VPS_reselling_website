@@ -177,5 +177,69 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
   - **Inline Field Actions**: Use `suffixAction(...)` directly on specific infolist entries (e.g., blockchain explorer links next to TxID hashes) for contextual convenience.
 
 ---
-*Note: Any subsequent frontend pages, Filament resources, customer dashboards, and admin panels must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, and Filament table/details action separation rules.*
+
+## 10. Code Hygiene, Dead Code Removal & Runtime Integrity Standards
+* **Dead & Unused Code Elimination**:
+  - Whenever refactoring, updating, or fixing Blade views, components, controllers, scripts, or styles, **ALWAYS completely remove unused, obsolete, commented-out, or dead code**.
+  - Never leave behind orphaned DOM queries, legacy variables, or superseded handlers from prior iterations.
+* **DOM Reference & Element ID Integrity**:
+  - Every DOM query (e.g., `document.getElementById()`, `querySelector()`) must strictly target elements that actually exist in the current markup.
+  - When refactoring form inputs or layout containers (e.g., switching from single inputs to radio groups or dynamic modals), immediately clean up all JavaScript references that targeted the old IDs to avoid `null` dereference crashes.
+* **Null-Safety & Scope Verification**:
+  - Always guard DOM element access with null checks prior to modifying properties, values, or class lists (e.g., `const el = document.getElementById('...'); if (el) { ... }`).
+  - Never reference undeclared or implicit global variables. All variables must be properly declared and scoped (`const`, `let`) with valid fallbacks.
+* **Event Binding Completeness**:
+  - Any inline event handler declared in HTML/Blade (such as `onclick`, `onchange`, `onsubmit`) must have a corresponding, fully implemented function in the associated script. Never leave orphan handler references that result in `ReferenceError`.
+* **State & Modal Lifecycle Consistency**:
+  - Ensure modal, dropdown, and event lifecycles do not contain premature dismissal calls (e.g. closing a modal inside an item-selection function before the user confirms) that break user flows or prevent elements from rendering.
+
+---
+
+## 11. Environment Configuration (`.env` & `.env.example`) Synchronization Standards
+* **Mandatory Synchronization**:
+  - Whenever any new environment variable, configuration key, or toggle is added, modified, renamed, or referenced via `env(...)` in the codebase or in `.env`, the **exact same key MUST IMMEDIATELY be added to `.env.example`**.
+  - No pull request, feature branch, or refactor is considered complete if `.env` and `.env.example` are out of sync.
+* **Security & Secret Sanitization**:
+  - **NEVER** expose real private keys, live credentials, production database passwords, or secret tokens in `.env.example`.
+  - Always use clear, standardized dummy placeholders (e.g. `your_api_key_here`, `0x0000000000000000000000000000000000000000`, `sk_test_your_secret_key`).
+* **Sectional Grouping & Clarity**:
+  - Maintain structured headings and explanatory comments inside `.env.example` (e.g. `# Payment Gateways`, `# Contabo API Credentials`, `# Manual Crypto Wallets`, `# Demo Authentication`) so new developers and automated CI/CD pipelines have complete clarity on configuration requirements.
+
+---
+
+## 12. Contabo API Architecture & OpenAPI Specification Compliance Standard
+* **Local Specification as Single Source of Truth (SSOT)**:
+  - The official Contabo OpenAPI 3.0.3 specification is permanently stored in the project at `docs/contabo-api.json`.
+  - **MANDATORY**: Any and all API-related development, provisioning services, payload construction, power management, and database catalog mapping MUST be cross-referenced and validated directly against `docs/contabo-api.json`.
+* **VPS Product ID Mapping Standards**:
+  - All VPS packages in database seeders, forms, and provisioning payloads MUST use the exact Contabo `productId` defined in `docs/contabo-api.json`:
+    - Cloud VPS 4: `V153` (100 GB SSD)
+    - Cloud VPS 6: `V154` (200 GB SSD)
+    - Cloud VPS 8: `V155` (300 GB SSD)
+    - Cloud VPS 12: `V156` (400 GB SSD)
+    - Cloud VPS 16: `V157` (500 GB SSD)
+    - Cloud VPS 18: `V158` (600 GB SSD)
+* **Datacenter Region Enum Standards**:
+  - Region identifiers sent to `POST /v1/compute/instances` must strictly adhere to the allowed OpenAPI enum: `EU`, `US-central`, `US-east`, `US-west`, `SIN`, `UK`, `AUS`, `JPN`, `IND`. Never use non-spec region codes (e.g. always use `UK`, never `GBR`).
+* **Instance Lifecycle & Power Actions**:
+  - Power and maintenance actions must strictly use the dedicated Contabo sub-resource endpoints:
+    - Power On: `POST /v1/compute/instances/{instanceId}/actions/start`
+    - Power Off: `POST /v1/compute/instances/{instanceId}/actions/stop`
+    - ACPI Shutdown: `POST /v1/compute/instances/{instanceId}/actions/shutdown`
+    - Reboot / Restart: `POST /v1/compute/instances/{instanceId}/actions/restart`
+    - Rescue Mode: `POST /v1/compute/instances/{instanceId}/actions/rescue`
+    - Reset Root/Admin Password: `POST /v1/compute/instances/{instanceId}/actions/resetPassword`
+    - Reinstall OS: `PUT /v1/compute/instances/{instanceId}`
+    - Cancel Instance: `POST /v1/compute/instances/{instanceId}/cancel`
+* **Pre-Commit API Verification & Confirmation**:
+  - Whenever updating any Contabo API provisioning service, queue job, controller, or Filament action, verify that:
+    1. The HTTP verb and URI path match `docs/contabo-api.json`.
+    2. The request body matches the schema properties and required fields.
+    3. The response structure and error handling check both HTTP status codes and `message`/`errors` arrays.
+  - Confirm API synchronization in each relevant task summary.
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, and Contabo OpenAPI compliance rules.*
+
+
 

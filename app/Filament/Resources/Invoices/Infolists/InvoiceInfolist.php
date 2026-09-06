@@ -52,6 +52,19 @@ class InvoiceInfolist
                                     ->dateTime()
                                     ->placeholder('Not Paid')
                                     ->icon('heroicon-o-banknotes'),
+                                TextEntry::make('order.order_number')
+                                    ->label('Associated Order')
+                                    ->placeholder('No Order')
+                                    ->icon('heroicon-o-shopping-bag')
+                                    ->badge()
+                                    ->color('primary')
+                                    ->suffixAction(
+                                        \Filament\Actions\Action::make('view_order')
+                                            ->icon('heroicon-m-arrow-top-right-on-square')
+                                            ->tooltip('View Order Details')
+                                            ->visible(fn ($record) => !empty($record->order_id))
+                                            ->url(fn ($record) => \App\Filament\Resources\Orders\OrderResource::getUrl('view', ['record' => $record->order_id]))
+                                    ),
                             ]),
                     ]),
 

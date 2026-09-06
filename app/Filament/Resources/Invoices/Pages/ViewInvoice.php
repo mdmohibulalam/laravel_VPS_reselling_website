@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Invoices\Pages;
 
 use App\Filament\Resources\Invoices\InvoiceResource;
+use App\Filament\Resources\Orders\OrderResource;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
@@ -27,14 +28,14 @@ class ViewInvoice extends ViewRecord
                     : "https://tronscan.org/#/transaction/{$this->record->crypto_txid}", true)
                 ->openUrlInNewTab(),
 
-            Action::make('approve_crypto')
-                ->label('Approve & Deploy')
+            Action::make('confirm_payment')
+                ->label('Confirm Payment')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
                 ->requiresConfirmation()
-                ->modalHeading('Approve Payment & Deploy Services')
-                ->modalDescription('Confirm this invoice as PAID and activate all provisioned Cloud VPS services for this order?')
-                ->modalSubmitActionLabel('Confirm & Deploy')
+                ->modalHeading('Confirm Payment Received')
+                ->modalDescription('Confirm this invoice as PAID? This will mark the invoice as PAID, update the order status to "Payment Confirmed", and activate the deployment action on the order details page.')
+                ->modalSubmitActionLabel('Confirm Payment')
                 ->visible(fn () => in_array($this->record->status, ['pending', 'unpaid']))
                 ->action(function () {
                     $this->record->update([
@@ -43,17 +44,24 @@ class ViewInvoice extends ViewRecord
                     ]);
 
                     if ($this->record->order) {
-                        $this->record->order->update(['status' => 'completed']);
+                        $this->record->order->update(['status' => 'payment_confirmed']);
                     }
 
-                    \App\Models\Service::where('order_id', $this->record->order_id)->update(['status' => 'active']);
+                    \App\Models\Service::where('order_id', $this->record->order_id)->update(['status' => 'ready_for_provisioning']);
 
                     Notification::make()
-                        ->title('Invoice #' . $this->record->invoice_number . ' Approved')
-                        ->body('Payment confirmed! Cloud VPS instance has been deployed and set to active.')
+                        ->title('Payment Confirmed for Invoice #' . $this->record->invoice_number)
+                        ->body('Invoice marked as PAID. Order is now ready for deployment to Contabo.')
                         ->success()
                         ->send();
                 }),
+
+            Action::make('open_order')
+                ->label('Open Order to Deploy →')
+                ->icon('heroicon-o-arrow-right')
+                ->color('primary')
+                ->visible(fn () => $this->record->status === 'paid' && !empty($this->record->order_id))
+                ->url(fn () => OrderResource::getUrl('view', ['record' => $this->record->order_id])),
 
             ActionGroup::make([
                 Action::make('cancel_invoice')
@@ -77,3 +85,4 @@ class ViewInvoice extends ViewRecord
         ];
     }
 }
+

@@ -617,7 +617,7 @@
                                             <span class="text-purple-600">🐧</span> OS Image
                                         </span>
                                         <span id="summary-os-display" class="font-bold text-slate-900">
-                                            {{ $osAddons->first()?->name ?? 'Ubuntu 24.04 LTS' }}
+                                            {{ $currentSelectedOS?->name ?? ($osAddons->first()?->name ?? 'Ubuntu 24.04 LTS') }}
                                         </span>
                                     </li>
                                     <li class="flex items-center justify-between">
@@ -765,7 +765,7 @@
                 <button type="button"
                         id="modal-dropdown-trigger"
                         onclick="toggleOSDropdown()"
-                        class="w-full p-3.5 rounded-xl border-2 border-blue-500 bg-white flex items-center justify-between text-left cursor-pointer transition-all shadow-sm hover:border-blue-600 focus:outline-none">
+                        class="w-full p-3.5 rounded-xl border-2 border-[#673DE6] bg-white flex items-center justify-between text-left cursor-pointer transition-all shadow-sm hover:border-[#5428D8] focus:outline-none">
                     <span id="modal-trigger-name" class="font-bold text-slate-900 text-xs sm:text-sm truncate">
                         Windows Server Datacenter 2025
                     </span>
@@ -911,14 +911,14 @@
             let html = '';
             items.forEach(item => {
                 const isSelected = (item.value === currentVal);
-                const nameClass = isSelected ? 'text-blue-600 font-extrabold' : 'text-slate-700 font-semibold group-hover:text-slate-900';
-                const priceStr = item.price > 0 ? ('$' + item.price.toFixed(2)) : 'Free';
+                const nameClass = isSelected ? 'text-[#673DE6] font-extrabold' : 'text-slate-700 font-semibold group-hover:text-slate-900';
+                const priceStr = item.price > 0 ? ('$' + Number(item.price).toFixed(2)) : 'Free';
 
                 html += `
                     <div onclick="selectOSVersion('${familyKey}', '${item.value}')"
-                         class="px-4 py-3 cursor-pointer hover:bg-slate-50 flex items-center justify-between transition-colors group select-none ${isSelected ? 'bg-blue-50/40' : ''}">
+                         class="px-4 py-3 cursor-pointer hover:bg-slate-50 flex items-center justify-between transition-colors group select-none ${isSelected ? 'bg-purple-50/50' : ''}">
                         <div class="flex items-center gap-2">
-                            ${isSelected ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>' : ''}
+                            ${isSelected ? '<span class="w-1.5 h-1.5 rounded-full bg-[#673DE6]"></span>' : ''}
                             <span class="${nameClass} text-xs sm:text-sm">
                                 ${item.name}
                             </span>
@@ -947,6 +947,9 @@
                 radio.checked = true;
             }
 
+            // Update order summary OS text
+            updateOSDisplay(item.name);
+
             // Update version text and price badge on the family card
             const cardVersionText = document.getElementById('os-family-version-text-' + familyKey);
             if (cardVersionText) cardVersionText.textContent = item.name;
@@ -954,7 +957,7 @@
             const cardPriceTag = document.getElementById('os-family-price-tag-' + familyKey);
             if (cardPriceTag) {
                 if (item.price > 0) {
-                    cardPriceTag.textContent = '+$' + item.price.toFixed(2) + '/mo';
+                    cardPriceTag.textContent = '+$' + Number(item.price).toFixed(2) + '/mo';
                     cardPriceTag.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 whitespace-nowrap text-purple-700 bg-purple-100/70 border border-purple-200';
                 } else {
                     cardPriceTag.textContent = 'Free';
@@ -968,7 +971,7 @@
                 const badge = document.getElementById('os-family-badge-active-' + fKey);
                 if (fKey === familyKey) {
                     if (card) {
-                        card.className = 'os-family-card cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none border-[#673DE6] bg-purple-50/50 shadow-sm shadow-purple-600/10';
+                        card.className = 'os-family-card cursor-pointer p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none border-[#673DE6] bg-purple-50/50 shadow-sm shadow-purple-600/10';
                     }
                     if (badge) {
                         badge.classList.remove('hidden');
@@ -976,7 +979,7 @@
                     }
                 } else {
                     if (card) {
-                        card.className = 'os-family-card cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none border-slate-200 bg-white hover:border-purple-300 hover:shadow-soft-sm';
+                        card.className = 'os-family-card cursor-pointer p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col justify-between group relative select-none border-slate-200 bg-white hover:border-purple-300 hover:shadow-soft-sm';
                     }
                     if (badge) {
                         badge.classList.remove('flex');
@@ -985,14 +988,17 @@
                 }
             });
 
-            document.getElementById('input-selected-os').value = osValue;
-            document.getElementById('input-selected-os').setAttribute('data-price', osPrice || 0);
+            // Update modal trigger display & dropdown list
+            updateModalTriggerDisplay(familyKey, item);
+            renderDropdownItems(familyKey);
+            closeOSDropdown();
 
-            const familyCardText = document.getElementById('family-selected-name-' + familyKey);
-            if (familyCardText) familyCardText.textContent = osName;
-
-            closeOSModal();
             updateCalculations();
+        }
+
+        function updateOSDisplay(name) {
+            const el = document.getElementById('summary-os-display');
+            if (el) el.textContent = name;
         }
 
         function updateLocationDisplay(name) {
@@ -1035,9 +1041,6 @@
             let addonsMonthly = 0;
             document.querySelectorAll('.addon-radio:checked').forEach(el => addonsMonthly += parseFloat(el.getAttribute('data-price') || 0));
             document.querySelectorAll('.addon-checkbox:checked').forEach(el => addonsMonthly += parseFloat(el.getAttribute('data-price') || 0));
-
-            const osInput = document.getElementById('input-selected-os');
-            if (osInput) addonsMonthly += parseFloat(osInput.getAttribute('data-price') || 0);
 
             const rawBase = (baseMonthly + addonsMonthly) * currentMonths;
             const discountAmt = (rawBase * currentDiscountPercent) / 100;

@@ -2,23 +2,12 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
-use App\Mail\ServiceDeliveredMail;
 use App\Models\Order;
-use App\Models\Service;
-use App\Services\Provisioning\ProvisioningServiceInterface;
-use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class OrdersTable
 {
@@ -58,6 +47,7 @@ class OrdersTable
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
                         'contabo_ok' => 'info',
+                        'payment_confirmed' => 'warning',
                         'provision' => 'warning',
                         'pending' => 'gray',
                         'failed', 'cancelled' => 'danger',
@@ -65,12 +55,13 @@ class OrdersTable
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'pending' => 'Pending (Unpaid)',
+                        'payment_confirmed' => 'Payment Confirmed (Ready to Deploy)',
                         'provision' => 'Provisioning (Paid)',
-                        'contabo_ok' => 'Contabo OK',
+                        'contabo_ok' => 'Contabo OK (Ready to Deliver)',
                         'active' => 'Active / Delivered',
                         'failed' => 'Provisioning Failed',
                         'cancelled' => 'Cancelled',
-                        default => ucfirst($state),
+                        default => ucwords(str_replace('_', ' ', $state)),
                     }),
                 TextColumn::make('created_at')
                     ->label('Placed At')

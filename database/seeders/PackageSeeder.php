@@ -17,6 +17,7 @@ class PackageSeeder extends Seeder
                 'name' => 'Cloud VPS 4',
                 'description' => 'Great value VPS for getting started.',
                 'category' => 'vps',
+                'contabo_product_id' => 'V153',
                 'specs' => [
                     'cores' => '4 vCPU Cores',
                     'memory' => '8 GB RAM',
@@ -36,6 +37,7 @@ class PackageSeeder extends Seeder
                 'name' => 'Cloud VPS 6',
                 'description' => 'Balanced performance for growing sites.',
                 'category' => 'vps',
+                'contabo_product_id' => 'V154',
                 'specs' => [
                     'cores' => '6 vCPU Cores',
                     'memory' => '12 GB RAM',
@@ -55,6 +57,7 @@ class PackageSeeder extends Seeder
                 'name' => 'Cloud VPS 8',
                 'description' => 'High performance for demanding applications.',
                 'category' => 'vps',
+                'contabo_product_id' => 'V155',
                 'specs' => [
                     'cores' => '8 vCPU Cores',
                     'memory' => '24 GB RAM',
@@ -74,6 +77,7 @@ class PackageSeeder extends Seeder
                 'name' => 'Cloud VPS 12',
                 'description' => 'Enterprise-grade resources for professionals.',
                 'category' => 'vps',
+                'contabo_product_id' => 'V156',
                 'specs' => [
                     'cores' => '12 vCPU Cores',
                     'memory' => '48 GB RAM',
@@ -93,6 +97,7 @@ class PackageSeeder extends Seeder
                 'name' => 'Cloud VPS 16',
                 'description' => 'Massive resources for large scale projects.',
                 'category' => 'vps',
+                'contabo_product_id' => 'V157',
                 'specs' => [
                     'cores' => '16 vCPU Cores',
                     'memory' => '64 GB RAM',
@@ -112,6 +117,7 @@ class PackageSeeder extends Seeder
                 'name' => 'Cloud VPS 18',
                 'description' => 'Ultimate performance for extreme workloads.',
                 'category' => 'vps',
+                'contabo_product_id' => 'V158',
                 'specs' => [
                     'cores' => '18 vCPU Cores',
                     'memory' => '96 GB RAM',
