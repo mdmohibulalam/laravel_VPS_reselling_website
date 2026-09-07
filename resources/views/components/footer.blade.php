@@ -47,7 +47,7 @@
                     <li><a href="{{ url('/plans') }}" class="hover:text-[#673DE6] transition-colors">PCIe NVMe Storage</a></li>
                     <li><a href="{{ url('/#features') }}" class="hover:text-[#673DE6] transition-colors">DDoS Scrubbing Core</a></li>
                     <li><a href="{{ url('/#features') }}" class="hover:text-[#673DE6] transition-colors">Global Tier-1 Network</a></li>
-                    <li><a href="{{ url('/plans') }}" class="hover:text-[#673DE6] transition-colors">KVM Virtualization</a></li>
+                    <li><a href="{{ url('/#automation') }}" class="hover:text-[#673DE6] transition-colors">DevOps & Automation</a></li>
                 </ul>
             </div>
 

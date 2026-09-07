@@ -239,13 +239,15 @@
     <!-- SECTION 3: TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE -->
     <x-competitor-comparison />
 
+    <!-- SECTION: DEVOPS AUTOMATION & SELF-HOSTED ECOSYSTEM FLOWCHART (HOSTINGER-INSPIRED) -->
+    <x-automation-flowchart />
 
-    <!-- SECTION 4: CUSTOMER REVIEWS / DEVELOPER PROOF SECTION -->
-    <section id="reviews" class="py-20 md:py-28 bg-white border-t border-slate-200/90 relative overflow-hidden">
+    <!-- SECTION 4: CUSTOMER REVIEWS / DEVELOPER PROOF SECTION (HIGH-CONTRAST EDITORIAL) -->
+    <section id="reviews" class="py-20 md:py-28 bg-slate-50/70 border-t border-slate-200/90 relative overflow-hidden">
         
         <!-- Soft Ambient Edge Lighting Blooms -->
-        <div class="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-purple-500/[0.035] rounded-full blur-[140px] pointer-events-none"></div>
-        <div class="absolute -right-28 bottom-1/4 w-[500px] h-[500px] bg-indigo-500/[0.03] rounded-full blur-[130px] pointer-events-none"></div>
+        <div class="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-purple-500/[0.04] rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute -right-28 bottom-1/4 w-[500px] h-[500px] bg-indigo-500/[0.035] rounded-full blur-[130px] pointer-events-none"></div>
 
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
             
@@ -263,7 +265,7 @@
                 </p>
 
                 <!-- Global Trustproof Rating Strip -->
-                <div class="mt-6 inline-flex items-center flex-wrap justify-center gap-4 sm:gap-8 px-5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 font-medium shadow-sm">
+                <div class="mt-6 inline-flex items-center flex-wrap justify-center gap-4 sm:gap-8 px-5 py-2.5 rounded-2xl bg-white border border-slate-200/80 text-xs text-slate-600 font-medium shadow-sm">
                     <div class="flex items-center gap-2">
                         <div class="flex items-center text-amber-400">
                             <span class="text-sm tracking-widest">★★★★★</span>
@@ -281,154 +283,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 3-Column Reviews Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                
-                <!-- Review 1: Alex Miller -->
-                <div class="reveal-init delay-100 card-interactive bg-white p-7 sm:p-8 rounded-3xl border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:border-purple-300 flex flex-col justify-between group transition-all duration-300 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-bl-full pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-
-                    <div>
-                        <!-- Top Metadata Row: Stars + Verified Chip -->
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-1 text-amber-400 text-sm">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[11px] font-mono font-semibold">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Verified Node
-                            </span>
-                        </div>
-
-                        <!-- Workload Specs Badge -->
-                        <div class="inline-flex items-center gap-2 text-[11px] font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100 mb-5">
-                            <span class="text-[#673DE6] font-bold">⚡ Instance:</span> Cloud VPS 6 • 16 GB • Frankfurt
-                        </div>
-
-                        <!-- Quote Copy -->
-                        <blockquote class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-normal group-hover:text-slate-900 transition-colors">
-                            "We migrated 18 production Docker microservices and a 120 GB PostgreSQL cluster to VortexCloud. The PCIe 4.0 NVMe read speeds reduced our database API response times by 42%. Dedicated KVM hardware isolation eliminated noisy-neighbor latency spikes completely."
-                        </blockquote>
-                    </div>
-
-                    <!-- User Profile Footer -->
-                    <div class="pt-5 border-t border-slate-100 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-md shadow-purple-600/20">
-                                    AM
-                                </div>
-                                <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
-                            </div>
-                            <div>
-                                <div class="font-bold text-slate-900 text-sm flex items-center gap-1">
-                                    Alex Miller
-                                    <svg class="w-3.5 h-3.5 text-purple-600 inline" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </div>
-                                <div class="text-xs text-slate-500">Lead DevOps • StackScale Labs</div>
-                            </div>
-                        </div>
-                        <span class="text-[11px] font-mono text-slate-400">github/alexm</span>
-                    </div>
-                </div>
-
-                <!-- Review 2: Sarah Chen -->
-                <div class="reveal-init delay-200 card-interactive bg-white p-7 sm:p-8 rounded-3xl border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:border-purple-300 flex flex-col justify-between group transition-all duration-300 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-bl-full pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-
-                    <div>
-                        <!-- Top Metadata Row: Stars + Verified Chip -->
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-1 text-amber-400 text-sm">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[11px] font-mono font-semibold">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Verified Node
-                            </span>
-                        </div>
-
-                        <!-- Workload Specs Badge -->
-                        <div class="inline-flex items-center gap-2 text-[11px] font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100 mb-5">
-                            <span class="text-[#673DE6] font-bold">⚡ Instance:</span> Cloud VPS 4 • 8 GB • Singapore
-                        </div>
-
-                        <!-- Quote Copy -->
-                        <blockquote class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-normal group-hover:text-slate-900 transition-colors">
-                            "As a digital agency hosting 35+ client web platforms, predictable monthly billing is mandatory. Automated provisioning spins up in under 60 seconds, custom OS templates save hours of initial server configuration, and we have had zero downtime across 9 months."
-                        </blockquote>
-                    </div>
-
-                    <!-- User Profile Footer -->
-                    <div class="pt-5 border-t border-slate-100 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-md shadow-indigo-600/20">
-                                    SC
-                                </div>
-                                <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
-                            </div>
-                            <div>
-                                <div class="font-bold text-slate-900 text-sm flex items-center gap-1">
-                                    Sarah Chen
-                                    <svg class="w-3.5 h-3.5 text-purple-600 inline" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </div>
-                                <div class="text-xs text-slate-500">CTO • HyperDigital Agency</div>
-                            </div>
-                        </div>
-                        <span class="text-[11px] font-mono text-slate-400">hyperdigital.io</span>
-                    </div>
-                </div>
-
-                <!-- Review 3: David Lorentz -->
-                <div class="reveal-init delay-300 card-interactive bg-white p-7 sm:p-8 rounded-3xl border border-slate-200/90 shadow-soft-sm hover:shadow-2xl hover:border-purple-300 flex flex-col justify-between group transition-all duration-300 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-
-                    <div>
-                        <!-- Top Metadata Row: Stars + Verified Chip -->
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-1 text-amber-400 text-sm">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[11px] font-mono font-semibold">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Verified Node
-                            </span>
-                        </div>
-
-                        <!-- Workload Specs Badge -->
-                        <div class="inline-flex items-center gap-2 text-[11px] font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100 mb-5">
-                            <span class="text-[#673DE6] font-bold">⚡ Instance:</span> Cloud VPS 8 • 24 GB • US-Central
-                        </div>
-
-                        <!-- Quote Copy -->
-                        <blockquote class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-normal group-hover:text-slate-900 transition-colors">
-                            "Direct carrier-grade fiber peering keeps our transatlantic sync latency under 65ms. When an external UDP volumetric attack hit our public IP, the automated 2.4 Tbps DDoS scrubbing handled it without dropping a single packet. Support resolved our routing inquiry in 11 minutes."
-                        </blockquote>
-                    </div>
-
-                    <!-- User Profile Footer -->
-                    <div class="pt-5 border-t border-slate-100 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-700 to-pink-600 text-white font-bold flex items-center justify-center text-sm shadow-md shadow-purple-700/20">
-                                    DL
-                                </div>
-                                <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
-                            </div>
-                            <div>
-                                <div class="font-bold text-slate-900 text-sm flex items-center gap-1">
-                                    David Lorentz
-                                    <svg class="w-3.5 h-3.5 text-purple-600 inline" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </div>
-                                <div class="text-xs text-slate-500">Cloud Infrastructure Architect</div>
-                            </div>
-                        </div>
-                        <span class="text-[11px] font-mono text-slate-400">@lorentz_ops</span>
-                    </div>
-                </div>
-
-            </div>
-
         </div>
+
+        <!-- 2-Line Dual-Directional Marquee Scrollers -->
+        <x-reviews-marquee />
+
     </section>
 
 
