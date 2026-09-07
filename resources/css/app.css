@@ -36,6 +36,7 @@
     --animate-float-reverse: floatReverse 9s ease-in-out infinite;
     --animate-pulse-glow: pulseGlow 4s ease-in-out infinite;
     --animate-shimmer: shimmer 2.5s infinite;
+    --animate-telemetry-marquee: telemetryMarquee 35s linear infinite;
 
     @keyframes floatSlow {
         0%, 100% { transform: translateY(0px) scale(1); }
@@ -52,6 +53,10 @@
     @keyframes shimmer {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(200%); }
+    }
+    @keyframes telemetryMarquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-100%); }
     }
 }
 

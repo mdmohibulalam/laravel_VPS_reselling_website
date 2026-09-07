@@ -16,7 +16,7 @@
                     <span class="font-bold text-xl text-slate-900 tracking-tight">VortexCloud</span>
                 </div>
                 <p class="text-sm text-slate-600 max-w-sm leading-relaxed">
-                    High-performance B2B virtual private servers powered by AMD EPYC™, Intel® Xeon®, and enterprise Samsung® Gen4 NVMe arrays with instant automated provisioning.
+                    High-performance B2B virtual private servers powered by high-frequency multi-core compute and enterprise NVMe storage arrays with instant automated provisioning.
                 </p>
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
                     <span class="relative flex h-2.5 w-2.5">
@@ -43,11 +43,11 @@
             <div>
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">Infrastructure</h3>
                 <ul class="space-y-2.5 text-sm text-slate-600">
-                    <li><a href="{{ url('/#hardware') }}" class="hover:text-[#673DE6] transition-colors">AMD EPYC™ Nodes</a></li>
-                    <li><a href="{{ url('/#hardware') }}" class="hover:text-[#673DE6] transition-colors">Samsung® Gen4 NVMe</a></li>
+                    <li><a href="{{ url('/plans') }}" class="hover:text-[#673DE6] transition-colors">Enterprise Cloud Nodes</a></li>
+                    <li><a href="{{ url('/plans') }}" class="hover:text-[#673DE6] transition-colors">PCIe NVMe Storage</a></li>
                     <li><a href="{{ url('/#features') }}" class="hover:text-[#673DE6] transition-colors">DDoS Scrubbing Core</a></li>
                     <li><a href="{{ url('/#features') }}" class="hover:text-[#673DE6] transition-colors">Global Tier-1 Network</a></li>
-                    <li><a href="{{ url('/#hardware') }}" class="hover:text-[#673DE6] transition-colors">KVM Virtualization</a></li>
+                    <li><a href="{{ url('/plans') }}" class="hover:text-[#673DE6] transition-colors">KVM Virtualization</a></li>
                 </ul>
             </div>
 

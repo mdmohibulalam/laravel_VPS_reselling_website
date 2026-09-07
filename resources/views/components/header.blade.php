@@ -14,6 +14,10 @@
     data-variant="{{ $variant }}"
     class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out {{ $isHero ? 'bg-transparent border-b border-transparent shadow-none' : 'backdrop-blur-2xl bg-[#0F0024]/90 border-b border-white/[0.12] shadow-2xl shadow-purple-950/40' }}"
 >
+    @if(!$isMinimal)
+        <x-announcement-bar />
+    @endif
+
     <!-- Subtle Top Glass Highlight Line -->
     <div 
         id="header-glass-highlight" 
@@ -52,12 +56,7 @@
                             Features
                         </a>
 
-                        <!-- 3. Hardware -->
-                        <a href="{{ url('/#hardware') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors">
-                            Hardware
-                        </a>
-
-                        <!-- 4. Reviews -->
+                        <!-- 3. Reviews -->
                         <a href="{{ url('/#reviews') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors">
                             Reviews
                         </a>
@@ -126,8 +125,7 @@
             <div class="flex flex-col space-y-1 text-sm font-medium">
                 <a href="{{ url('/') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Home</a>
                 <a href="{{ url('/plans') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Pricing & Plans</a>
-                <a href="{{ url('/#features') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Features & Architecture</a>
-                <a href="{{ url('/#hardware') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Hardware Specs</a>
+                <a href="{{ url('/#features') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Features & Economics</a>
                 <a href="{{ url('/#reviews') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Customer Reviews</a>
                 <a href="{{ url('/#faq') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">FAQ</a>
             </div>

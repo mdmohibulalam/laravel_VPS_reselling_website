@@ -684,7 +684,7 @@
                         </tr>
                         <tr>
                             <td class="vortex-billing-label">Hardware Architecture</td>
-                            <td class="vortex-billing-value">AMD EPYC™ Gen4 Enterprise KVM</td>
+                            <td class="vortex-billing-value">Enterprise KVM Cloud Instance</td>
                         </tr>
                         <tr>
                             <td class="vortex-billing-label">Dedicated IPv4</td>

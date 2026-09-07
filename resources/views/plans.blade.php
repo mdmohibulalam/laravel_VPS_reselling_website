@@ -1,7 +1,7 @@
 <x-app-layout 
     title="VPS Hosting Plans & Pricing | Enterprise NVMe Cloud" 
-    description="Deploy high-performance NVMe cloud VPS instances powered by AMD EPYC™ processors, DDR5 ECC memory, Gen4 RAID-10 storage, and instant automated provisioning."
-    keywords="vps hosting, cloud vps, nvme vps, amd epyc server, linux vps, windows rdp, kvm hosting, developer cloud, cheap vps"
+    description="Deploy high-performance NVMe cloud VPS instances powered by high-frequency multi-core compute, ECC memory, Gen4 RAID-10 storage, and instant automated provisioning."
+    keywords="vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, cheap vps, high frequency vps"
     headerVariant="solid"
 >
     <x-slot:schema>
@@ -12,7 +12,7 @@
             "@@type": "Product",
             "name": "VortexCloud High-Frequency NVMe VPS Hosting",
             "image": "{{ url('/images/og-cover.png') }}",
-            "description": "Enterprise cloud VPS hosting instances powered by AMD EPYC CPUs, Samsung Gen4 NVMe, and dedicated KVM virtualization.",
+            "description": "Enterprise cloud VPS hosting instances powered by high-frequency server processors, enterprise PCIe NVMe storage, and dedicated KVM virtualization.",
             "brand": {
                 "@@type": "Brand",
                 "name": "VortexCloud"
@@ -101,7 +101,7 @@
                 <!-- Category Capsule Pill -->
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-purple-200 shadow-sm">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Next-Gen AMD EPYC™ 9654 & Gen4 NVMe Cloud</span>
+                    <span>High-Frequency Multi-Core & Gen4 NVMe Cloud</span>
                 </div>
 
                 <!-- Main H1 Headline -->
@@ -122,7 +122,7 @@
                     </div>
                     <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl backdrop-blur-sm">
                         <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Samsung Gen4 NVMe (7,200 MB/s)</span>
+                        <span>Enterprise Gen4 NVMe Storage</span>
                     </div>
                     <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl backdrop-blur-sm">
                         <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
@@ -241,7 +241,7 @@
                         <tr>
                             <td class="p-5 font-semibold text-slate-900">CPU Architecture</td>
                             @foreach($packages->take(4) as $pkg)
-                                <td class="p-5 text-center text-slate-600">AMD EPYC™ 9654 (3.70 GHz)</td>
+                                <td class="p-5 text-center text-slate-600">High-Frequency Multi-Core CPU</td>
                             @endforeach
                         </tr>
                         <tr>
@@ -274,7 +274,7 @@
                         <tr>
                             <td class="p-5 font-semibold text-slate-900">Storage Architecture</td>
                             @foreach($packages->take(4) as $pkg)
-                                <td class="p-5 text-center text-slate-600">Samsung® Gen4 Enterprise RAID-10</td>
+                                <td class="p-5 text-center text-slate-600">Enterprise Gen4 NVMe RAID-10</td>
                             @endforeach
                         </tr>
 
@@ -352,7 +352,7 @@
     </section>
 
 
-    <!-- SECTION 5: COMPETITOR COMPARISON MATRIX (VORTEXCLOUD VS AWS, DIGITALOCEAN, HOSTINGER) -->
+    <!-- SECTION 5: TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE (OPTION 2) -->
     <x-competitor-comparison :packages="$packages" />
 
 
@@ -647,7 +647,7 @@
                     <div class="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-[#673DE6]">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900">Samsung Gen4 NVMe RAID-10</h3>
+                    <h3 class="text-xl font-bold text-slate-900">Enterprise Gen4 NVMe RAID-10</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
                         Enterprise SSD arrays delivering over 7,200 MB/s read/write speeds and high random IOPS to power database queries and heavy concurrent workloads.
                     </p>

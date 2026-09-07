@@ -2,474 +2,221 @@
     'packages' => null,
 ])
 
-@php
-    if (!$packages) {
-        $packages = \App\Models\Package::where('is_active', true)->orderBy('price_monthly')->get();
-    }
-    $vps4 = $packages->firstWhere('slug', 'cloud-vps-4') ?? $packages->first();
-    $vps6 = $packages->firstWhere('slug', 'cloud-vps-6') ?? ($packages->count() > 1 ? $packages->skip(1)->first() : $vps4);
-@endphp
+<!-- TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE -->
+<section id="comparison" class="py-20 md:py-28 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/90 relative overflow-hidden scroll-mt-20">
+    <div id="features" class="sr-only"></div>
+    
+    <!-- Subtle Ambient Stage Lighting -->
+    <div class="absolute top-0 right-1/4 w-[600px] h-[350px] bg-purple-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-0 left-1/4 w-[500px] h-[300px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-<!-- COMPETITOR COMPARISON MATRIX SECTION -->
-<section id="comparison" class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/80">
-    <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+    <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
         
         <!-- Section Header -->
         <div class="reveal-init text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1.5 rounded-full mb-3.5 border border-purple-100 shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-[#673DE6] animate-pulse"></span>
-                <span>Unmatched Price-to-Performance</span>
+            <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-4 py-1.5 rounded-full mb-4 border border-purple-200/80 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#673DE6]"></span>
+                <span>Resource Economics & Transparency</span>
             </div>
-            <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-                Why Pay Up to 10x More for Cloud VPS?
+            <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                Maximum Compute Per Dollar. Zero Billing Surprises.
             </h2>
             <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-                See how VortexCloud stacks up against legacy cloud giants and shared hosting providers on real compute specs, bandwidth allotments, and true renewal costs.
+                Stop paying for hyperscaler markups and unpredictable egress fees. Get dedicated KVM hardware performance with predictable, fixed monthly pricing.
             </p>
-
-            <!-- Tier Switcher Capsule -->
-            <div class="mt-8 inline-flex items-center p-1.5 rounded-2xl bg-slate-200/80 border border-slate-300/80 shadow-inner gap-1">
-                <button type="button" 
-                    id="tierBtn1" 
-                    onclick="switchComparisonTier(1)" 
-                    class="transition-all duration-200 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#673DE6] text-white shadow-md shadow-[#673DE6]/25">
-                    Tier 1: 4 vCPU / 8 GB RAM
-                </button>
-                <button type="button" 
-                    id="tierBtn2" 
-                    onclick="switchComparisonTier(2)" 
-                    class="transition-all duration-200 px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-white/60">
-                    Tier 2: 6 vCPU / 16 GB RAM
-                </button>
-            </div>
         </div>
 
-        <!-- Matrix Table Card Container -->
-        <div class="reveal-init delay-100 relative rounded-3xl border border-slate-200/90 shadow-soft-md bg-white overflow-hidden">
+        <!-- 4-Pillar Architectural & Billing Comparison -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
             
-            <!-- Mobile Horizontal Swipe Tip -->
-            <div class="lg:hidden bg-purple-50/80 border-b border-purple-100 px-4 py-2 text-center text-xs font-medium text-[#673DE6] flex items-center justify-center gap-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                <span>Swipe horizontally to view all cloud providers</span>
+            <!-- Pillar 1: Egress & Bandwidth -->
+            <div class="reveal-init delay-100 card-interactive rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-xl hover:border-purple-300 transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute right-5 top-3 text-6xl sm:text-7xl font-mono font-black text-slate-900/[0.04] select-none pointer-events-none group-hover:text-[#673DE6]/[0.08] transition-colors">01</div>
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#673DE6] flex items-center justify-center mb-5 border border-purple-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Zero Egress Traps</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        Hyperscalers charge up to $0.09/GB on outbound traffic—a modest 10 TB month easily adds $900 in surprise fees.
+                    </p>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs font-semibold text-emerald-800">
+                    ✓ VortexCloud: 32 TB High-Speed Traffic included free on all plans.
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[780px]">
-                    <thead>
-                        <tr>
-                            <!-- Feature Header Cell (Sticky on Horizontal Scroll) -->
-                            <th scope="col" class="sticky left-0 z-20 bg-white/95 backdrop-blur-md p-5 sm:p-6 text-sm font-bold text-slate-900 border-b border-r border-slate-200 w-1/4 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span class="text-xs uppercase tracking-wider text-slate-500 font-bold block mb-1">Architecture Features</span>
-                                Server Specifications
-                            </th>
+            <!-- Pillar 2: Transparent Billing -->
+            <div class="reveal-init delay-200 card-interactive rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-xl hover:border-purple-300 transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute right-5 top-3 text-6xl sm:text-7xl font-mono font-black text-slate-900/[0.04] select-none pointer-events-none group-hover:text-[#673DE6]/[0.08] transition-colors">02</div>
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#673DE6] flex items-center justify-center mb-5 border border-purple-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Predictable Invoicing</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        No 30-page invoices fluctuating based on disk IOPS, API gateway hits, or internal network transfers.
+                    </p>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs font-semibold text-emerald-800">
+                    ✓ VortexCloud: 100% fixed monthly rate with zero hidden line items.
+                </div>
+            </div>
 
-                            <!-- VortexCloud (Winner Column) -->
-                            <th scope="col" class="relative p-5 sm:p-6 text-center bg-gradient-to-b from-purple-50/70 via-white to-white border-b-2 border-r-2 border-l-2 border-[#673DE6] w-[28%]">
-                                <div class="absolute -top-px left-0 right-0 h-1.5 bg-[#673DE6]"></div>
-                                <div class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-[#673DE6] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm mb-2">
-                                    ★ Top Performance
-                                </div>
-                                <div class="text-xl font-extrabold text-slate-900">VortexCloud</div>
-                                <div class="text-xs font-semibold text-[#673DE6] mt-0.5">Enterprise Cloud KVM</div>
-                                
-                                <div class="mt-4 pt-3 border-t border-purple-100/80">
-                                    <div class="flex items-baseline justify-center gap-0.5">
-                                        <span class="text-lg font-bold text-[#673DE6]">$</span>
-                                        <span id="vcPrice" class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight transition-all duration-300">4.99</span>
-                                        <span class="text-xs font-semibold text-slate-500">/month</span>
-                                    </div>
-                                    <div class="text-[11px] font-semibold text-emerald-600 mt-1">Guaranteed Fixed Renewal</div>
-                                </div>
-                            </th>
+            <!-- Pillar 3: Renewal Integrity -->
+            <div class="reveal-init delay-300 card-interactive rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-xl hover:border-purple-300 transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute right-5 top-3 text-6xl sm:text-7xl font-mono font-black text-slate-900/[0.04] select-none pointer-events-none group-hover:text-[#673DE6]/[0.08] transition-colors">03</div>
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#673DE6] flex items-center justify-center mb-5 border border-purple-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Guaranteed Fixed Rates</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        Legacy budget hosts use low initial teaser prices, then jack up renewal bills by 300% to 500% in month 2.
+                    </p>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs font-semibold text-emerald-800">
+                    ✓ VortexCloud: Locked-in renewal pricing for the entire life of your plan.
+                </div>
+            </div>
 
-                            <!-- Competitor 1: DigitalOcean -->
-                            <th scope="col" class="p-5 sm:p-6 text-center border-b border-r border-slate-200 w-[24%] bg-slate-50/40">
-                                <div class="text-lg font-bold text-slate-800">DigitalOcean</div>
-                                <div class="text-xs text-slate-500 font-medium mt-0.5">Basic Droplet</div>
-                                
-                                <div class="mt-4 pt-3 border-t border-slate-200/80">
-                                    <div class="flex items-baseline justify-center gap-0.5">
-                                        <span class="text-lg font-bold text-slate-600">$</span>
-                                        <span id="doPrice" class="text-2xl sm:text-3xl font-extrabold text-slate-700 tracking-tight transition-all duration-300">48.00</span>
-                                        <span class="text-xs font-semibold text-slate-500">/month</span>
-                                    </div>
-                                    <div class="text-[11px] text-slate-400 mt-1">9.6x higher cost</div>
-                                </div>
-                            </th>
-
-                            <!-- Competitor 2: AWS Lightsail -->
-                            <th scope="col" class="p-5 sm:p-6 text-center border-b border-r border-slate-200 w-[24%] bg-slate-50/40">
-                                <div class="text-lg font-bold text-slate-800">AWS Lightsail</div>
-                                <div class="text-xs text-slate-500 font-medium mt-0.5">Standard Instance</div>
-                                
-                                <div class="mt-4 pt-3 border-t border-slate-200/80">
-                                    <div class="flex items-baseline justify-center gap-0.5">
-                                        <span class="text-lg font-bold text-slate-600">$</span>
-                                        <span id="awsPrice" class="text-2xl sm:text-3xl font-extrabold text-slate-700 tracking-tight transition-all duration-300">44.00</span>
-                                        <span class="text-xs font-semibold text-slate-500">/month</span>
-                                    </div>
-                                    <div class="text-[11px] text-slate-400 mt-1">8.8x higher cost</div>
-                                </div>
-                            </th>
-
-                            <!-- Competitor 3: Hostinger -->
-                            <th scope="col" class="p-5 sm:p-6 text-center border-b border-slate-200 w-[24%] bg-slate-50/40">
-                                <div class="text-lg font-bold text-slate-800">Hostinger</div>
-                                <div class="text-xs text-slate-500 font-medium mt-0.5">KVM VPS Plan</div>
-                                
-                                <div class="mt-4 pt-3 border-t border-slate-200/80">
-                                    <div class="flex items-baseline justify-center gap-0.5">
-                                        <span class="text-lg font-bold text-slate-600">$</span>
-                                        <span id="hostingerPrice" class="text-2xl sm:text-3xl font-extrabold text-slate-700 tracking-tight transition-all duration-300">11.99</span>
-                                        <span class="text-xs font-semibold text-slate-500">/month</span>
-                                    </div>
-                                    <div class="text-[11px] text-amber-600 font-semibold mt-1">Renews at $19.99/mo (+67%)</div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="divide-y divide-slate-100 text-sm">
-                        
-                        <!-- Row 1: vCPU Cores & Hardware -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <div class="flex items-center gap-2">
-                                    <span>Processor & Cores</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">Hardware clock speed</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <span id="vcCores" class="font-extrabold text-slate-900 text-base">4 Cores</span>
-                                <div class="text-[11px] font-semibold text-[#673DE6]">AMD EPYC™ 3.7 GHz (Dedicated)</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span id="doCores" class="font-bold text-slate-800">4 Cores</span>
-                                <div class="text-[11px] text-slate-500">Standard Shared vCPU</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span id="awsCores" class="font-bold text-slate-800">4 Cores</span>
-                                <div class="text-[11px] text-slate-500">Burstable Baseline</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <span id="hostingerCores" class="font-bold text-slate-800">4 Cores</span>
-                                <div class="text-[11px] text-slate-500">Shared Host Node</div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 2: Dedicated RAM -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span>Dedicated RAM</span>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">ECC Memory Standard</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <span id="vcRam" class="font-extrabold text-slate-900 text-base">8 GB</span>
-                                <div class="text-[11px] font-semibold text-emerald-600">DDR5 ECC High-Speed</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span id="doRam" class="font-bold text-slate-800">8 GB</span>
-                                <div class="text-[11px] text-slate-500">Standard DDR4</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span id="awsRam" class="font-bold text-slate-800">8 GB</span>
-                                <div class="text-[11px] text-slate-500">Standard DDR4</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <span id="hostingerRam" class="font-bold text-slate-800">8 GB</span>
-                                <div class="text-[11px] text-slate-500">Standard RAM</div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 3: Fast NVMe Storage -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span>High-Speed Storage</span>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">PCIe Gen4 Flash Throughput</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <span id="vcStorage" class="font-extrabold text-slate-900 text-base">100 GB NVMe</span>
-                                <div class="text-[11px] font-semibold text-[#673DE6]">Samsung® Gen4 RAID-10 (7,200 MB/s)</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span id="doStorage" class="font-bold text-slate-800">160 GB SSD</span>
-                                <div class="text-[11px] text-slate-500">Standard SATA/SaaS SSD</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span id="awsStorage" class="font-bold text-slate-800">160 GB SSD</span>
-                                <div class="text-[11px] text-slate-500">Standard EBS Volumes</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <span id="hostingerStorage" class="font-bold text-slate-800">100 GB NVMe</span>
-                                <div class="text-[11px] text-slate-500">Shared SSD Pool</div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 4: Monthly Bandwidth Allotment -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span>Monthly Bandwidth</span>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">Port speed & traffic cap</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <span class="font-extrabold text-slate-900 text-base">32 TB Traffic</span>
-                                <div class="text-[11px] font-semibold text-emerald-600">10 Gbps Tier-1 Redundant Port</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="font-bold text-slate-800">5 TB Traffic</span>
-                                <div class="text-[11px] text-rose-500 font-medium">$0.01/GB Overage fee</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="font-bold text-slate-800">5 TB Traffic</span>
-                                <div class="text-[11px] text-rose-500 font-medium">$0.09/GB Outbound fee</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <span class="font-bold text-slate-800">8 TB Traffic</span>
-                                <div class="text-[11px] text-slate-500">Speed throttled at cap</div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 5: DDoS Scrubbing Protection -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span>DDoS Defense</span>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">Automated traffic filtering</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <div class="inline-flex items-center gap-1.5 font-extrabold text-emerald-600">
-                                    <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                    <span>Included Free</span>
-                                </div>
-                                <div class="text-[11px] font-medium text-slate-600">Layer 4 & Layer 7 Scrubbing</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="font-semibold text-slate-700">Basic Layer 3/4</span>
-                                <div class="text-[11px] text-slate-400">Limited attack mitigation</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="font-semibold text-slate-700">AWS Shield Standard</span>
-                                <div class="text-[11px] text-slate-400">Basic network protection</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <div class="inline-flex items-center gap-1 font-semibold text-slate-700">
-                                    <span>Standard Firewall</span>
-                                </div>
-                                <div class="text-[11px] text-slate-400">Basic filtering</div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 6: Renewal Price Hikes -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span>Renewal Price Lock</span>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">Long-term billing stability</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <div class="inline-flex items-center gap-1.5 font-extrabold text-emerald-600">
-                                    <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                    <span>Fixed For Life</span>
-                                </div>
-                                <div class="text-[11px] text-slate-600 font-medium">Zero surprise price hikes</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="text-slate-700 font-semibold">Standard Flat Rate</span>
-                                <div class="text-[11px] text-slate-400">Consistently expensive</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="text-slate-700 font-semibold">Variable AWS Billing</span>
-                                <div class="text-[11px] text-slate-400">Snapshot & traffic extras</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <span class="text-rose-600 font-bold">Increases to $19.99/mo</span>
-                                <div class="text-[11px] text-rose-500">67% price surge on renewal</div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 7: Full Root & OS Choices -->
-                        <tr class="hover:bg-slate-50/60 transition-colors">
-                            <td class="sticky left-0 z-10 bg-white/95 backdrop-blur-md p-4 sm:p-5 font-semibold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span>Full Root & OS Variety</span>
-                                <span class="text-[11px] text-slate-500 font-normal block mt-0.5">Linux distros & Windows RDP</span>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center bg-purple-50/20 border-r-2 border-l-2 border-[#673DE6]">
-                                <div class="font-extrabold text-slate-900">100% Root Access</div>
-                                <div class="text-[11px] font-semibold text-[#673DE6]">Ubuntu, Debian, AlmaLinux, Windows</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="font-semibold text-slate-800">Root Access</span>
-                                <div class="text-[11px] text-slate-500">Linux only (No native Windows)</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center border-r border-slate-200">
-                                <span class="font-semibold text-slate-800">Root / Admin</span>
-                                <div class="text-[11px] text-slate-500">Windows incurs heavy fee</div>
-                            </td>
-                            <td class="p-4 sm:p-5 text-center">
-                                <span class="font-semibold text-slate-800">Root Access</span>
-                                <div class="text-[11px] text-slate-500">Limited custom ISO support</div>
-                            </td>
-                        </tr>
-
-                        <!-- Bottom Action Row -->
-                        <tr class="bg-slate-50/80">
-                            <td class="sticky left-0 z-10 bg-slate-50/95 backdrop-blur-md p-5 sm:p-6 font-bold text-slate-900 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
-                                <span class="text-xs text-slate-500 block mb-1">Instant Deployment</span>
-                                Select Configuration
-                            </td>
-                            
-                            <!-- VortexCloud CTA -->
-                            <td class="p-5 sm:p-6 text-center bg-purple-50/40 border-r-2 border-l-2 border-b-2 border-[#673DE6]">
-                                <a id="vcDeployBtn" 
-                                   href="{{ route('checkout.show', $vps4) }}" 
-                                   class="btn-shimmer inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl bg-[#673DE6] hover:bg-[#5428D8] text-white text-sm font-extrabold shadow-lg shadow-[#673DE6]/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                                    <span>Deploy With VortexCloud</span>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                                </a>
-                                <div class="text-[11px] text-slate-500 mt-2 font-medium">60-second automated provisioning</div>
-                            </td>
-
-                            <!-- DigitalOcean -->
-                            <td class="p-5 sm:p-6 text-center border-r border-slate-200">
-                                <span class="inline-block py-2.5 px-4 rounded-xl bg-slate-200/60 text-slate-600 text-xs font-bold cursor-not-allowed">
-                                    Overpriced ($48.00)
-                                </span>
-                            </td>
-
-                            <!-- AWS -->
-                            <td class="p-5 sm:p-6 text-center border-r border-slate-200">
-                                <span class="inline-block py-2.5 px-4 rounded-xl bg-slate-200/60 text-slate-600 text-xs font-bold cursor-not-allowed">
-                                    Overpriced ($44.00)
-                                </span>
-                            </td>
-
-                            <!-- Hostinger -->
-                            <td class="p-5 sm:p-6 text-center">
-                                <span class="inline-block py-2.5 px-4 rounded-xl bg-slate-200/60 text-slate-600 text-xs font-bold cursor-not-allowed">
-                                    High Renewal ($19.99)
-                                </span>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
+            <!-- Pillar 4: True KVM Virtualization -->
+            <div class="reveal-init delay-400 card-interactive rounded-3xl p-7 bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-xl hover:border-purple-300 transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute right-5 top-3 text-6xl sm:text-7xl font-mono font-black text-slate-900/[0.04] select-none pointer-events-none group-hover:text-[#673DE6]/[0.08] transition-colors">04</div>
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#673DE6] flex items-center justify-center mb-5 border border-purple-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Dedicated KVM Compute</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        No "burstable CPU credits" or artificial throttling that slows down your production apps during traffic peaks.
+                    </p>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs font-semibold text-emerald-800">
+                    ✓ VortexCloud: 100% KVM hardware isolation with custom ISOs & full root.
+                </div>
             </div>
 
         </div>
 
-        <!-- Trust Highlights Strip Below Matrix -->
-        <div class="reveal-init delay-200 mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-soft-sm flex items-center justify-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-purple-50 text-[#673DE6] flex items-center justify-center font-bold shrink-0">
-                    ⚡
+        <!-- Editorial Minimalist Standards & SLA Matrix (Lighter Inspired) -->
+        <div class="mt-16 sm:mt-20 max-w-5xl mx-auto">
+            <div class="reveal-init text-center mb-10">
+                <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-4 py-1.5 rounded-full mb-3 border border-purple-200/80 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#673DE6]"></span>
+                    <span>Infrastructure Architecture Standards</span>
                 </div>
-                <div class="text-left">
-                    <div class="text-xs font-bold text-slate-900">Zero Setup Fees</div>
-                    <div class="text-[11px] text-slate-500">Deploy without hidden charges</div>
-                </div>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Recognized Compliance & Network SLA
+                </h3>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-soft-sm flex items-center justify-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0">
-                    ✓
+            <div class="reveal-init delay-100 bg-white rounded-3xl border border-slate-200/90 shadow-soft-sm overflow-hidden divide-y divide-slate-100">
+                
+                <!-- Row 1 -->
+                <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors group">
+                    <div class="w-full sm:w-1/3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Datacenter Security</span>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-[#673DE6] transition-colors">Tier-3+ Facilities</h4>
+                    </div>
+                    <div class="w-full sm:w-1/2 text-xs sm:text-sm text-slate-600">
+                        ISO 27001 & SOC 2 Type II Aligned • Dual N+1 Diesel Generators
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-mono font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            99.99% SLA
+                        </span>
+                    </div>
                 </div>
-                <div class="text-left">
-                    <div class="text-xs font-bold text-slate-900">Free Migration Help</div>
-                    <div class="text-[11px] text-slate-500">Assisted transfer from any host</div>
-                </div>
-            </div>
 
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-soft-sm flex items-center justify-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-purple-50 text-[#673DE6] flex items-center justify-center font-bold shrink-0">
-                    🛡
+                <!-- Row 2 -->
+                <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors group">
+                    <div class="w-full sm:w-1/3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">DDoS Mitigation Core</span>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-[#673DE6] transition-colors">Automated Inline Scrubbing</h4>
+                    </div>
+                    <div class="w-full sm:w-1/2 text-xs sm:text-sm text-slate-600">
+                        Multi-Terabit 2.4 Tbps Real-Time Edge Filtering (Volumetric L3/L4 & L7)
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-purple-50 text-[#673DE6] border border-purple-200/80 text-xs font-mono font-bold">
+                            0.00 ms Added
+                        </span>
+                    </div>
                 </div>
-                <div class="text-left">
-                    <div class="text-xs font-bold text-slate-900">30-Day Money Back</div>
-                    <div class="text-[11px] text-slate-500">100% risk-free testing guarantee</div>
-                </div>
-            </div>
 
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-soft-sm flex items-center justify-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0">
-                    99.9%
+                <!-- Row 3 -->
+                <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors group">
+                    <div class="w-full sm:w-1/3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Fiber Connectivity</span>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-[#673DE6] transition-colors">Tier-1 Direct Peering</h4>
+                    </div>
+                    <div class="w-full sm:w-1/2 text-xs sm:text-sm text-slate-600">
+                        Redundant Low-Latency Carrier Transit via Lumen, Telia, Cogent & DE-CIX
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-xs font-mono font-bold">
+                            &lt; 15ms Regional
+                        </span>
+                    </div>
                 </div>
-                <div class="text-left">
-                    <div class="text-xs font-bold text-slate-900">Tier-3+ Datacenters</div>
-                    <div class="text-[11px] text-slate-500">9 global low-latency regions</div>
+
+                <!-- Row 4 -->
+                <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors group">
+                    <div class="w-full sm:w-1/3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Hypervisor Layer</span>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-[#673DE6] transition-colors">Dedicated Type-1 KVM</h4>
+                    </div>
+                    <div class="w-full sm:w-1/2 text-xs sm:text-sm text-slate-600">
+                        100% Kernel Isolation • Custom ISO Booting • Zero CPU Overcommit
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-purple-50 text-[#673DE6] border border-purple-200/80 text-xs font-mono font-bold">
+                            Dedicated Threads
+                        </span>
+                    </div>
                 </div>
+
+                <!-- Row 5 -->
+                <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors group">
+                    <div class="w-full sm:w-1/3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Storage Subsystem</span>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-[#673DE6] transition-colors">Enterprise PCIe 4.0 NVMe</h4>
+                    </div>
+                    <div class="w-full sm:w-1/2 text-xs sm:text-sm text-slate-600">
+                        Zero-Wait Solid-State Flash Arrays in Mirrored RAID-10 Resiliency
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200/80 text-xs font-mono font-bold">
+                            7,200 MB/s Peak
+                        </span>
+                    </div>
+                </div>
+
             </div>
         </div>
 
+        <!-- Trust Badges Strip -->
+        <div class="mt-12 pt-8 border-t border-slate-200/80 flex flex-wrap items-center justify-center gap-6 sm:gap-12 text-xs font-semibold text-slate-500">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span>Instant 60-Second Setup</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span>14-Day Money-Back Guarantee</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span>99.99% Hardware Uptime SLA</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span>Dedicated IPv4 + /64 IPv6</span>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Vanilla JS Comparison Switcher Controller -->
-<script>
-    (function () {
-        const tierData = {
-            1: {
-                name: 'Cloud VPS 4',
-                checkoutUrl: '{{ route("checkout.show", $vps4) }}',
-                vc: { price: '4.99', cores: '4 Cores', ram: '8 GB', storage: '100 GB NVMe' },
-                do: { price: '48.00', cores: '4 Cores', ram: '8 GB', storage: '160 GB SSD' },
-                aws: { price: '44.00', cores: '4 Cores', ram: '8 GB', storage: '160 GB SSD' },
-                hostinger: { price: '11.99', cores: '4 Cores', ram: '8 GB', storage: '100 GB NVMe' }
-            },
-            2: {
-                name: 'Cloud VPS 6',
-                checkoutUrl: '{{ route("checkout.show", $vps6) }}',
-                vc: { price: '8.99', cores: '6 Cores', ram: '16 GB', storage: '200 GB NVMe' },
-                do: { price: '96.00', cores: '6 Cores', ram: '16 GB', storage: '320 GB SSD' },
-                aws: { price: '88.00', cores: '6 Cores', ram: '16 GB', storage: '320 GB SSD' },
-                hostinger: { price: '19.99', cores: '6 Cores', ram: '16 GB', storage: '200 GB NVMe' }
-            }
-        };
 
-        window.switchComparisonTier = function (tier) {
-            const data = tierData[tier];
-            if (!data) return;
-
-            const btn1 = document.getElementById('tierBtn1');
-            const btn2 = document.getElementById('tierBtn2');
-
-            if (btn1 && btn2) {
-                if (tier === 1) {
-                    btn1.className = 'transition-all duration-200 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#673DE6] text-white shadow-md shadow-[#673DE6]/25';
-                    btn2.className = 'transition-all duration-200 px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-white/60';
-                } else {
-                    btn2.className = 'transition-all duration-200 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#673DE6] text-white shadow-md shadow-[#673DE6]/25';
-                    btn1.className = 'transition-all duration-200 px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-white/60';
-                }
-            }
-
-            // Update Elements safely
-            const updateText = (id, text) => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = text;
-            };
-
-            updateText('vcPrice', data.vc.price);
-            updateText('doPrice', data.do.price);
-            updateText('awsPrice', data.aws.price);
-            updateText('hostingerPrice', data.hostinger.price);
-
-            updateText('vcCores', data.vc.cores);
-            updateText('doCores', data.do.cores);
-            updateText('awsCores', data.aws.cores);
-            updateText('hostingerCores', data.hostinger.cores);
-
-            updateText('vcRam', data.vc.ram);
-            updateText('doRam', data.do.ram);
-            updateText('awsRam', data.aws.ram);
-            updateText('hostingerRam', data.hostinger.ram);
-
-            updateText('vcStorage', data.vc.storage);
-            updateText('doStorage', data.do.storage);
-            updateText('awsStorage', data.aws.storage);
-            updateText('hostingerStorage', data.hostinger.storage);
-
-            const deployBtn = document.getElementById('vcDeployBtn');
-            if (deployBtn) {
-                deployBtn.href = data.checkoutUrl;
-            }
-        };
-    })();
-</script>

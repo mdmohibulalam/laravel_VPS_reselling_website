@@ -12,7 +12,7 @@
     $siteName = config('app.name', 'VortexCloud');
     $pageTitle = $title ? $title . ' | ' . $siteName : $siteName . ' - Lightning-Fast NVMe VPS Hosting for Developers';
     $metaDescription = $description ?? 'Lightning-Fast NVMe VPS Hosting for Developers. Deploy high-performance virtual private servers in seconds with dedicated resources, root access, and unmetered bandwidth.';
-    $metaKeywords = $keywords ?? 'vps hosting, cloud vps, nvme vps, amd epyc server, linux vps, windows rdp, kvm hosting, developer cloud';
+    $metaKeywords = $keywords ?? 'vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, high frequency vps';
     $canonicalUrl = $canonical ?? url()->current();
     $socialImage = $ogImage ?? url('/images/og-cover.png');
 @endphp

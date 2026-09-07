@@ -378,7 +378,7 @@
                                     <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold font-mono">Instant Setup</span>
                                 </div>
                                 <h3 class="text-2xl font-extrabold text-white tracking-tight">{{ $package->name }}</h3>
-                                <div class="text-xs text-purple-200 mt-0.5">High-Frequency AMD EPYC™ Cloud Instance</div>
+                                <div class="text-xs text-purple-200 mt-0.5">High-Performance KVM Cloud Instance</div>
                             </div>
 
                             <!-- Hardware Specs Snapshot -->

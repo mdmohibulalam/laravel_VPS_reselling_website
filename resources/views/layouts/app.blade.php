@@ -36,63 +36,113 @@
     <!-- Styles & Asset Bundling -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Global Rich Animation & Transition Styles -->
+    <!-- Global Rich Animation & Transition Styles (Zero-Library Luxury System) -->
     <style>
+        /* Dynamic Announcement Bar Transition */
+        #top-announcement-bar {
+            transition: margin-top 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+        }
+
+        /* Bespoke Luxury Cosmic Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0014;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(103, 61, 230, 0.35);
+            border-radius: 9999px;
+            border: 2px solid #0B0014;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(103, 61, 230, 0.7);
+        }
+
         /* Smooth Entrance Keyframes */
         @keyframes pageFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(16px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .animate-fade-in-up {
-            animation: pageFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: pageFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Scroll-Reveal Base & Stagger Classes */
+        /* Cinema-Grade Scroll-Reveal Base & Stagger Classes */
         .reveal-init {
             opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(32px) scale(0.985);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity, transform;
         }
 
         .reveal-visible {
             opacity: 1 !important;
-            transform: translateY(0) !important;
+            transform: translateY(0) scale(1) !important;
         }
 
+        .delay-75  { transition-delay: 75ms; }
         .delay-100 { transition-delay: 100ms; }
+        .delay-150 { transition-delay: 150ms; }
         .delay-200 { transition-delay: 200ms; }
+        .delay-250 { transition-delay: 250ms; }
         .delay-300 { transition-delay: 300ms; }
         .delay-400 { transition-delay: 400ms; }
 
-        /* Button Light Shimmer Effect */
+        /* Button Refined Angled Shimmer & Kinetic Press */
         .btn-shimmer {
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-shimmer::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 200%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.75s ease;
+            background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.28) 50%, transparent 80%);
+            transform: translateX(-150%);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
         }
         .btn-shimmer:hover::after {
             transform: translateX(100%);
         }
+        .btn-shimmer:active {
+            transform: scale(0.98);
+        }
 
-        /* Interactive Card Elevation & Glow Transition */
+        /* Springy Luxury Card Hover Dynamics with Cursor Spotlight */
         .card-interactive {
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+            position: relative;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.25s ease;
+            will-change: transform, box-shadow;
         }
         .card-interactive:hover {
-            transform: translateY(-4px);
+            transform: translateY(-5px) scale(1.006);
+            box-shadow: 0 22px 40px -15px rgba(103, 61, 230, 0.12), 0 0 0 1px rgba(103, 61, 230, 0.25);
+        }
+
+        /* Subtle Internal Radial Cursor Spotlight Sheen */
+        .card-interactive::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(400px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(103, 61, 230, 0.05), transparent 75%);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .card-interactive:hover::before {
+            opacity: 1;
         }
 
         /* Smooth FAQ Accordion Expansion */
@@ -118,7 +168,7 @@
     @endif
 
     <!-- Main Content Area with Adaptive Top Offset for Non-Hero Pages -->
-    <main class="{{ $headerVariant !== 'hero' && !$hideHeader ? 'pt-20 sm:pt-22' : '' }} flex-grow">
+    <main class="{{ $headerVariant !== 'hero' && !$hideHeader ? 'pt-28 sm:pt-32' : '' }} flex-grow">
         {{ $slot }}
     </main>
 
@@ -130,16 +180,30 @@
     <!-- Global Navigation Scroll Controller & Scroll-Reveal IntersectionObserver -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Navigation Frosted Glass Transition
+            // 1. Navigation & Announcement Bar Scroll Controller
             const header = document.getElementById('main-nav-header');
             const glassHighlight = document.getElementById('header-glass-highlight');
+            const announcementBar = document.getElementById('top-announcement-bar');
 
-            if (header) {
-                const variant = header.getAttribute('data-variant') || 'hero';
+            const handleHeaderScroll = () => {
+                const scrollY = window.scrollY;
 
-                if (variant === 'hero') {
-                    const checkGlassBarState = () => {
-                        if (window.scrollY > 50) {
+                // Announcement bar scrolls away with page (tucks away when scrolling down)
+                if (announcementBar) {
+                    if (scrollY > 25) {
+                        announcementBar.classList.add('-mt-9', 'opacity-0', 'pointer-events-none');
+                        announcementBar.classList.remove('mt-0', 'opacity-100');
+                    } else {
+                        announcementBar.classList.remove('-mt-9', 'opacity-0', 'pointer-events-none');
+                        announcementBar.classList.add('mt-0', 'opacity-100');
+                    }
+                }
+
+                // Frosted glass transition for hero header
+                if (header) {
+                    const variant = header.getAttribute('data-variant') || 'hero';
+                    if (variant === 'hero') {
+                        if (scrollY > 50) {
                             header.classList.remove('bg-transparent', 'border-transparent', 'shadow-none');
                             header.classList.add('backdrop-blur-2xl', 'bg-[#0F0024]/90', 'border-white/[0.12]', 'shadow-2xl', 'shadow-purple-950/40');
                             if (glassHighlight) glassHighlight.classList.remove('opacity-0');
@@ -148,12 +212,12 @@
                             header.classList.remove('backdrop-blur-2xl', 'bg-[#0F0024]/90', 'border-white/[0.12]', 'shadow-2xl', 'shadow-purple-950/40');
                             if (glassHighlight) glassHighlight.classList.add('opacity-0');
                         }
-                    };
-
-                    window.addEventListener('scroll', checkGlassBarState, { passive: true });
-                    checkGlassBarState();
+                    }
                 }
-            }
+            };
+
+            window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+            handleHeaderScroll();
 
             // 2. Mobile Menu Toggle
             const menuBtn = document.getElementById('mobile-menu-btn');
@@ -187,7 +251,7 @@
                         }
                     });
                 }, {
-                    threshold: 0.12,
+                    threshold: 0.08,
                     rootMargin: '0px 0px -40px 0px'
                 });
 
@@ -198,6 +262,18 @@
                 // Fallback for older browsers
                 document.querySelectorAll('.reveal-init').forEach(el => {
                     el.classList.add('reveal-visible');
+                });
+            }
+
+            // 4. Subtle Radial Spotlight Tracking on Interactive Cards
+            const interactiveCards = document.querySelectorAll('.card-interactive');
+            if (interactiveCards.length && window.matchMedia('(pointer: fine)').matches) {
+                interactiveCards.forEach(card => {
+                    card.addEventListener('mousemove', e => {
+                        const rect = card.getBoundingClientRect();
+                        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                    }, { passive: true });
                 });
             }
         });
