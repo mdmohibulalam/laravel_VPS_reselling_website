@@ -3,11 +3,17 @@
 namespace App\Filament\Resources\Orders\Tables;
 
 use App\Models\Order;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OrdersTable
 {
@@ -19,29 +25,36 @@ class OrdersTable
                     ->label('Order #')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold'),
+                    ->weight('bold')
+                    ->toggleable(),
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable()
-                    ->description(fn (Order $record) => $record->user->email ?? ''),
+                    ->sortable()
+                    ->description(fn (Order $record) => $record->user->email ?? '')
+                    ->toggleable(),
                 TextColumn::make('invoice.invoice_number')
                     ->label('Invoice #')
                     ->searchable()
                     ->placeholder('N/A')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('services.package.name')
                     ->label('Package')
                     ->badge()
-                    ->color('primary'),
+                    ->color('primary')
+                    ->toggleable(),
                 TextColumn::make('services.ip_address')
                     ->label('Server IP')
                     ->placeholder('Pending Provisioning')
                     ->copyable()
-                    ->copyMessage('IP copied to clipboard'),
+                    ->copyMessage('IP copied to clipboard')
+                    ->toggleable(),
                 TextColumn::make('total_amount')
                     ->label('Total')
                     ->money('USD')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -62,14 +75,71 @@ class OrdersTable
                         'failed' => 'Provisioning Failed',
                         'cancelled' => 'Cancelled',
                         default => ucwords(str_replace('_', ' ', $state)),
-                    }),
+                    })
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Placed At')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->columnToggleFormColumns(2)
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'pending' => 'Pending (Unpaid)',
+                        'payment_confirmed' => 'Payment Confirmed',
+                        'provision' => 'Provisioning (Paid)',
+                        'contabo_ok' => 'Contabo OK (Ready)',
+                        'active' => 'Active / Delivered',
+                        'failed' => 'Provisioning Failed',
+                        'cancelled' => 'Cancelled',
+                    ]),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')->label('Placed From'),
+                        DatePicker::make('created_until')->label('Placed Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
+            ])
+            ->filtersFormColumns(2)
+            ->headerActions([
+                Action::make('export')
+                    ->label('Export CSV')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->action(function ($livewire): StreamedResponse {
+                        $records = $livewire->getFilteredTableQuery()->with(['user', 'invoice', 'services.package'])->get();
+                        $filename = 'orders-export-' . now()->format('Y-m-d_His') . '.csv';
+
+                        return response()->streamDownload(function () use ($records) {
+                            $file = fopen('php://output', 'w');
+                            fputs($file, "\xEF\xBB\xBF");
+                            fputcsv($file, ['Order #', 'Customer Name', 'Customer Email', 'Invoice #', 'Packages', 'Server IPs', 'Total Amount', 'Status', 'Placed At']);
+
+                            foreach ($records as $record) {
+                                $packages = $record->services->map(fn ($s) => $s->package?->name)->filter()->implode(', ');
+                                $ips = $record->services->map(fn ($s) => $s->ip_address)->filter()->implode(', ');
+
+                                fputcsv($file, [
+                                    $record->order_number,
+                                    $record->user?->name ?? 'N/A',
+                                    $record->user?->email ?? 'N/A',
+                                    $record->invoice?->invoice_number ?? 'N/A',
+                                    $packages ?: 'N/A',
+                                    $ips ?: 'Pending',
+                                    number_format((float) $record->total_amount, 2, '.', ''),
+                                    $record->status,
+                                    $record->created_at?->toIso8601String(),
+                                ]);
+                            }
+                            fclose($file);
+                        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+                    }),
             ])
             ->recordActions([
                 ViewAction::make(),

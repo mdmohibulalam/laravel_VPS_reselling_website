@@ -13,6 +13,11 @@ class ListServices extends ListRecords
 {
     protected static string $resource = ServiceResource::class;
 
+    public function getTitle(): string
+    {
+        return 'Active Orders';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -23,7 +28,7 @@ class ListServices extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('All Services')
+            'all' => Tab::make('All Active Orders')
                 ->badge(Service::count()),
             'active' => Tab::make('Active VPS')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'active'))

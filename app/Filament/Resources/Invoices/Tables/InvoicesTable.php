@@ -2,11 +2,17 @@
 
 namespace App\Filament\Resources\Invoices\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InvoicesTable
 {
@@ -17,19 +23,29 @@ class InvoicesTable
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('order.order_number')
                     ->label('Order #')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('invoice_number')
-                    ->searchable(),
+                    ->label('Invoice #')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold')
+                    ->toggleable(),
                 TextColumn::make('amount')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Subtotal')
+                    ->money('USD')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('total')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Total')
+                    ->money('USD')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -45,7 +61,8 @@ class InvoicesTable
                         'refunded' => 'Refunded',
                         'cancelled' => 'Cancelled',
                         default => ucfirst($state),
-                    }),
+                    })
+                    ->toggleable(),
                 TextColumn::make('payment_method')
                     ->label('Method')
                     ->badge()
@@ -54,7 +71,8 @@ class InvoicesTable
                         'stripe' => 'success',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A')),
+                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A'))
+                    ->toggleable(),
                 TextColumn::make('crypto_network')
                     ->label('Network')
                     ->badge()
@@ -64,25 +82,110 @@ class InvoicesTable
                         'usdc_polygon' => 'USDC (Polygon)',
                         'usdt_polygon' => 'USDT (Polygon)',
                         default => $state ? strtoupper($state) : '-',
-                    }),
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('crypto_txid')
                     ->label('TxID / Hash')
                     ->copyable()
                     ->limit(14)
-                    ->tooltip(fn ($record) => $record->crypto_txid),
+                    ->tooltip(fn ($record) => $record->crypto_txid)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('due_date')
+                    ->label('Due Date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('paid_at')
+                    ->label('Paid At')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
+                    ->label('Issued At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->columnToggleFormColumns(2)
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'paid' => 'Paid',
+                        'pending' => 'Pending (Unpaid)',
+                        'refunded' => 'Refunded',
+                        'cancelled' => 'Cancelled',
+                    ]),
+                SelectFilter::make('payment_method')
+                    ->options([
+                        'stripe' => 'Stripe (Credit / Debit Card)',
+                        'crypto' => 'Cryptocurrency',
+                    ]),
+                SelectFilter::make('crypto_network')
+                    ->options([
+                        'usdt_trc20' => 'USDT (Tron TRC20)',
+                        'usdc_polygon' => 'USDC (Polygon)',
+                        'usdt_polygon' => 'USDT (Polygon)',
+                    ]),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')->label('Issued From'),
+                        DatePicker::make('created_until')->label('Issued Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
+            ])
+            ->filtersFormColumns(2)
+            ->headerActions([
+                Action::make('export')
+                    ->label('Export CSV')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->action(function ($livewire): StreamedResponse {
+                        $records = $livewire->getFilteredTableQuery()->with(['user', 'order'])->get();
+                        $filename = 'invoices-export-' . now()->format('Y-m-d_His') . '.csv';
+
+                        return response()->streamDownload(function () use ($records) {
+                            $file = fopen('php://output', 'w');
+                            fputs($file, "\xEF\xBB\xBF");
+                            fputcsv($file, [
+                                'Invoice #',
+                                'Order #',
+                                'Customer Name',
+                                'Customer Email',
+                                'Subtotal Amount',
+                                'Total Amount',
+                                'Status',
+                                'Payment Method',
+                                'Crypto Network',
+                                'Crypto TxID',
+                                'Due Date',
+                                'Paid At',
+                                'Issued At',
+                            ]);
+
+                            foreach ($records as $record) {
+                                fputcsv($file, [
+                                    $record->invoice_number,
+                                    $record->order?->order_number ?? 'N/A',
+                                    $record->user?->name ?? 'N/A',
+                                    $record->user?->email ?? 'N/A',
+                                    number_format((float) ($record->amount ?? 0), 2, '.', ''),
+                                    number_format((float) $record->total, 2, '.', ''),
+                                    $record->status,
+                                    strtoupper($record->payment_method ?? 'N/A'),
+                                    $record->crypto_network ?? 'N/A',
+                                    $record->crypto_txid ?? 'N/A',
+                                    $record->due_date ? $record->due_date->format('Y-m-d') : 'N/A',
+                                    $record->paid_at ? $record->paid_at->toIso8601String() : 'N/A',
+                                    $record->created_at?->toIso8601String(),
+                                ]);
+                            }
+                            fclose($file);
+                        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+                    }),
             ])
             ->recordActions([
                 ViewAction::make(),

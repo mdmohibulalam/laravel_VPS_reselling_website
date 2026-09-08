@@ -309,7 +309,213 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
   - `<x-seo-meta>` must automatically inject `<meta name="google-site-verification">` and `<meta name="msvalidate.01">` whenever `GOOGLE_SITE_VERIFICATION` or `BING_SITE_VERIFICATION` are defined in `.env`.
 
 ---
-*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, and cookie consent standards.*
+
+## 18. Mandatory Filament Admin Table Standards (Column Toggle, Smart Filters & Data Export)
+* **The Admin Table Trifecta Mandate**:
+  - Whenever creating, updating, scaffolding, or refactoring ANY resource or table in the Filament Admin panel (`app/Filament/Resources/*/Tables/*Table.php`), the table **MUST AUTOMATICALLY implement all three core control tools without requiring individual user prompts**:
+    1. **Column Visibility Toggle (`->toggleable()`)**
+    2. **Smart Contextual Filters (`->filters([...])`)**
+    3. **One-Click Instant CSV Export (`->headerActions([ Action::make('export')... ])`)**
+  - **Zero Exceptions**: An agent or developer must NEVER deliver an admin table with an empty `->filters([])` array or missing export/column toggle capabilities. Every table must feel enterprise-grade, data-dense, and highly actionable.
+
+### 1. Column Visibility Toggle Architecture
+* **Primary Columns (Always Visible by Default)**:
+  - High-priority identifiers, customer names, primary statuses, and money totals must be marked `->toggleable()` (visible by default, but toggleable if the admin wants a stripped-down view).
+* **Auxiliary & Metadata Columns (Hidden by Default)**:
+  - Secondary metadata, technical hashes, and timestamps (e.g., `created_at`, `updated_at`, `paid_at`, `crypto_txid`, `contabo_instance_id`, internal notes) must be designated with:
+    ```php
+    ->toggleable(isToggledHiddenByDefault: true)
+    ```
+  - This prevents horizontal table bloat and eliminates horizontal scrolling on standard laptop screens while granting admins instant visibility into technical fields whenever needed.
+* **Toggle Form Layout**:
+  - Configure multi-column layout for the column toggle popover to maintain neat organization:
+    ```php
+    ->columnToggleFormColumns(2)
+    ```
+
+### 2. Smart Contextual Filters Architecture
+* **Zero-Empty-Filters Rule**: The `->filters([ ... ])` array must NEVER be empty.
+* **Contextual Domain Matrix**:
+  - **Orders (`OrdersTable`)**:
+    - Status filter: `SelectFilter::make('status')->options([...])`
+    - Date range filter: `Filter::make('created_at')->form([ DatePicker::make('created_from'), DatePicker::make('created_until') ])`
+  - **Active Orders / Services (`ServicesTable`)**:
+    - Status filter: `SelectFilter::make('status')->options(['active' => 'Active', 'provisioning' => 'Provisioning', 'suspended' => 'Suspended', ...])`
+    - Billing Cycle filter: `SelectFilter::make('billing_cycle')->options(['monthly' => 'Monthly', 'annually' => 'Annually', 'biennially' => 'Biennially'])`
+    - Package filter: `SelectFilter::make('package_id')->relationship('package', 'name')`
+  - **Invoices (`InvoicesTable`)**:
+    - Status filter: `SelectFilter::make('status')->options(['paid' => 'Paid', 'pending' => 'Pending / Unpaid', 'cancelled' => 'Cancelled'])`
+    - Payment Method filter: `SelectFilter::make('payment_method')->options(['stripe' => 'Stripe / Card', 'crypto' => 'Cryptocurrency'])`
+    - Date range filter: `Filter::make('due_date')->form([ DatePicker::make('due_from'), DatePicker::make('due_until') ])`
+  - **Users (`UsersTable`)**:
+    - Role filter: `SelectFilter::make('roles')->relationship('roles', 'name')`
+    - Email Verification: `TernaryFilter::make('email_verified_at')->label('Email Verified')->nullable()`
+  - **Support Tickets (`SupportTicketsTable`)**:
+    - Status filter: `SelectFilter::make('status')->options(['open' => 'Open', 'replied' => 'Replied', 'closed' => 'Closed'])`
+    - Priority filter: `SelectFilter::make('priority')->options(['low' => 'Low', 'medium' => 'Medium', 'high' => 'High', 'urgent' => 'Urgent'])`
+    - Department filter: `SelectFilter::make('department')`
+* **Filter Layout UX**:
+  - Use multi-column filter forms to keep filter modals/dropdowns compact:
+    ```php
+    ->filtersFormColumns(2)
+    ```
+
+### 3. One-Click Instant Data Export Architecture
+* **Table Header Action Placement**:
+  - Every table must include an instant CSV export button in `->headerActions([...])`.
+  - Action Specification:
+    ```php
+    use Filament\Actions\Action;
+    use Symfony\Component\HttpFoundation\StreamedResponse;
+
+    Action::make('export')
+        ->label('Export CSV')
+        ->icon('heroicon-o-arrow-down-tray')
+        ->color('gray')
+        ->action(function ($livewire): StreamedResponse {
+            $query = $livewire->getFilteredTableQuery();
+            $records = $query->get();
+            $filename = strtolower(class_basename($livewire->getModel())) . '-export-' . now()->format('Y-m-d_His') . '.csv';
+
+            return response()->streamDownload(function () use ($records) {
+                $handle = fopen('php://output', 'w');
+                // Output UTF-8 BOM for Microsoft Excel compatibility
+                fputs($handle, "\xEF\xBB\xBF");
+
+                // Headers & rows dynamically mapped based on model attributes...
+                // fputcsv($handle, [...]);
+                
+                fclose($handle);
+            }, $filename, [
+                'Content-Type' => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            ]);
+        })
+    ```
+* **Instant Browser Download**:
+  - Always stream downloads directly in the browser. Never introduce asynchronous worker requirements or database export tables unless explicitly requested.
+  - Automatically respect all applied table filters, search keywords, and active column sorting from `$livewire->getFilteredTableQuery()`.
+
+### 4. Preservation of Section 9 Row Action Standard
+* **Row Actions (`recordActions`)**:
+  - Must remain strictly limited to **`ViewAction::make()` only**.
+  - NEVER place export triggers, edit buttons, or destructive actions directly into table row columns.
+  - Toolbar actions (`toolbarActions`) house bulk actions: `BulkActionGroup::make([ DeleteBulkAction::make() ])`.
+
+---
+
+### 5. Universal Admin Table Reference Template
+Whenever building or refactoring any Filament Admin table, use this exact structural blueprint:
+
+```php
+<?php
+
+namespace App\Filament\Resources\Example\Tables;
+
+use App\Models\Example;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class ExamplesTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                // Primary Identifiers (Visible by Default)
+                TextColumn::make('name')
+                    ->label('Name')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('status')
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(),
+
+                // Auxiliary & Metadata (Hidden by Default)
+                TextColumn::make('created_at')
+                    ->label('Created At')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('updated_at')
+                    ->label('Updated At')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->columnToggleFormColumns(2)
+            ->filters([
+                SelectFilter::make('status')
+                    ->options([
+                        'active' => 'Active',
+                        'inactive' => 'Inactive',
+                    ]),
+
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')->label('Created From'),
+                        DatePicker::make('created_until')->label('Created Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
+            ])
+            ->filtersFormColumns(2)
+            ->headerActions([
+                Action::make('export')
+                    ->label('Export CSV')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->action(function ($livewire): StreamedResponse {
+                        $records = $livewire->getFilteredTableQuery()->get();
+                        $filename = 'examples-export-' . now()->format('Y-m-d_His') . '.csv';
+
+                        return response()->streamDownload(function () use ($records) {
+                            $file = fopen('php://output', 'w');
+                            fputs($file, "\xEF\xBB\xBF");
+                            fputcsv($file, ['ID', 'Name', 'Status', 'Created At']);
+
+                            foreach ($records as $record) {
+                                fputcsv($file, [
+                                    $record->id,
+                                    $record->name,
+                                    $record->status,
+                                    $record->created_at?->toIso8601String(),
+                                ]);
+                            }
+                            fclose($file);
+                        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+                    }),
+            ])
+            ->recordActions([
+                ViewAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}
+```
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, and mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export).*
 
 
 

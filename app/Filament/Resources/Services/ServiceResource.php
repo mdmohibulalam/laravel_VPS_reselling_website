@@ -22,7 +22,11 @@ class ServiceResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Orders';
 
-    protected static ?string $navigationLabel = 'Active Orders (Services)';
+    protected static ?string $navigationLabel = 'Active Orders';
+
+    protected static ?string $modelLabel = 'Active Order';
+
+    protected static ?string $pluralModelLabel = 'Active Orders';
 
     protected static ?int $navigationSort = 3;
 
