@@ -26,7 +26,7 @@ class CustomerPanelProvider extends PanelProvider
             ->id('customer')
             ->path('customer')
             ->login(\App\Filament\Customer\Pages\Auth\Login::class)
-            ->registration()
+            ->registration(\App\Filament\Customer\Pages\Auth\Register::class)
             ->passwordReset()
             ->profile(\App\Filament\Customer\Pages\Auth\EditProfile::class, isSimple: false)
             ->authGuard('web')

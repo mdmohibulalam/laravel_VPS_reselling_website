@@ -27,3 +27,24 @@ Route::get('/customer/invoices/{invoice}/print', function (\App\Models\Invoice $
     return view('customer.invoice-print', ['invoice' => $invoice]);
 })->middleware('auth')->name('customer.invoices.print');
 
+// Legal & Compliance Routes
+Route::get('/privacy-policy', function () {
+    return view('legal.privacy');
+})->name('legal.privacy');
+
+Route::get('/terms-of-service', function () {
+    return view('legal.terms');
+})->name('legal.terms');
+
+Route::get('/cookie-policy', function () {
+    return view('legal.cookies');
+})->name('legal.cookies');
+
+// Dynamic XML Sitemap for Search Engines
+Route::get('/sitemap.xml', function () {
+    $packages = \App\Models\Package::where('is_active', true)->get();
+    return response()
+        ->view('sitemap', compact('packages'))
+        ->header('Content-Type', 'text/xml');
+})->name('sitemap');
+

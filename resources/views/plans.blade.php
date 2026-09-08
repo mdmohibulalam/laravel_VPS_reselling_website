@@ -181,7 +181,7 @@
                     Choose Your Virtual Server Configuration
                 </h2>
                 <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
-                    Scale compute, memory, and high-speed NVMe storage on demand. 30-day money-back guarantee on all plans.
+                    Scale compute, memory, and high-speed NVMe storage on demand. 99.99% uptime SLA across all plans.
                 </p>
 
             </div>
@@ -766,13 +766,13 @@
                 <!-- Q5 -->
                 <details class="reveal-init delay-200 group bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
                     <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-lg gap-4 group-hover:text-[#673DE6]">
-                        <span>Do you offer a money-back guarantee?</span>
+                        <span>What is your uptime guarantee and SLA?</span>
                         <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </span>
                     </summary>
                     <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Yes. All VPS packages come with our unconditional 30-day money-back guarantee. If you are not completely satisfied with your server latency or performance, our 24/7 support team will refund your payment.
+                        We provide an enterprise-grade 99.99% network uptime SLA across all high-frequency nodes. If an automated provisioning issue occurs on our platform, our 24/7 technical desk will immediately investigate or credit your account balance.
                     </div>
                 </details>
 
@@ -827,7 +827,7 @@
                         </span>
                         <span class="hidden sm:flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                            30-day money-back guarantee
+                            99.99% uptime guarantee
                         </span>
                     </div>
                 </div>

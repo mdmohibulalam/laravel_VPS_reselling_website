@@ -64,4 +64,22 @@ return [
         'default_image_id' => env('CONTABO_DEFAULT_IMAGE_ID', 'afecbb85-e2fc-46f0-9684-b46b1faf00bb'), // Ubuntu 22.04 LTS default
     ],
 
+    'google' => [
+        'tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID'),
+        'analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+        'site_verification' => env('GOOGLE_SITE_VERIFICATION'),
+    ],
+
+    'bing' => [
+        'site_verification' => env('BING_SITE_VERIFICATION'),
+    ],
+
+    'meta' => [
+        'pixel_id' => env('META_PIXEL_ID'),
+    ],
+
+    'legal' => [
+        'contact_email' => env('LEGAL_CONTACT_EMAIL', 'support@vortexcloud.com'),
+    ],
+
 ];

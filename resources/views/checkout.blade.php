@@ -705,7 +705,7 @@
                         <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-3 text-xs text-slate-600 shadow-soft-sm">
                             <div class="flex items-center gap-2.5">
                                 <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                <span><strong>30-Day Money-Back Guarantee</strong> if unsatisfied</span>
+                                <span><strong>99.99% Uptime SLA Guarantee</strong> enterprise hardware</span>
                             </div>
                             <div class="flex items-center gap-2.5">
                                 <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>

@@ -279,6 +279,9 @@
         });
     </script>
 
+    <!-- Free Vanilla CookieConsent v3 System -->
+    <x-cookie-consent />
+
     <!-- Page-Specific Scripts Stack -->
     @stack('scripts')
 </body>

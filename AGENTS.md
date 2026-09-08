@@ -239,7 +239,77 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
   - Confirm API synchronization in each relevant task summary.
 
 ---
-*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, and Contabo OpenAPI compliance rules.*
+
+## 13. 100% Brand White-Labeling & Upstream Provider Anonymity Standard
+* **Absolute Provider Secrecy**:
+  - Under **NO circumstances** may "Contabo" (or any other third-party upstream supplier, infrastructure host, or datacenter partner) ever be named, referenced, or hinted at in customer-facing views, legal agreements, marketing copy, HTML comments, error messages, or meta tags.
+  - The customer-facing brand is strictly **VortexCloud**.
+  - All datacenter facilities and hypervisors must be described using generic enterprise phrasing: *"our certified Tier-3 and Tier-4 global datacenter facilities and enterprise NVMe cloud nodes"*.
+* **Code Isolation**:
+  - Provider names (like `ContaboProvisioningService`) are strictly restricted to backend service classes and admin panels. Never expose these service identifiers in client routes, API responses, or customer panel views.
+
+---
+
+## 14. Legal, Compliance & AUP Architecture Standard
+* **Mandatory Legal Suite**:
+  - The platform must permanently maintain three dedicated, high-typography legal views extending `<x-app-layout headerVariant="solid">`:
+    - `/privacy-policy`: Comprehensive GDPR & CCPA compliant data handling, encryption, and subject rights.
+    - `/terms-of-service`: Core master contract including mandatory AUP and non-refund clauses.
+    - `/cookie-policy`: Detailed explanation of Essential, Analytics, and Marketing cookies with an interactive settings trigger.
+* **Acceptable Use Policy (AUP) Enforcement**:
+  - All server instances are subject to a strict, non-negotiable Acceptable Use Policy that explicitly bans:
+    1. **Cryptocurrency Mining**: PoW algorithms, Monero/Bitcoin miners, or high-compute blockchain validation.
+    2. **DDoS & Stressing**: Originating, amplifying, or participating in denial of service attacks, booter/stresser scripts, or packet storms.
+    3. **Port Scanning & Probing**: Masscan, Nmap sweeping, banner grabbing, or unauthorized vulnerability assessment.
+    4. **Phishing & Fraud**: Fake banking portals, cloned login forms, social engineering, or deceptive redirect chains.
+    5. **Spam & Bulk Mail**: Unsolicited commercial email (UCE), open relays, or actions causing IP blacklisting on Spamhaus/RBLs.
+    6. **Malware & Botnets**: Trojans, keyloggers, C2 servers, or ransomware payloads.
+* **Digital Goods Non-Refund & Cancellation Standard**:
+  - Cloud VPS servers are instantly allocated digital computing goods with immediate operational costs (vCPU reservation, physical RAM lock, IPv4 route propagation).
+  - **All sales are final upon server provisioning.** No prorated cash refunds are granted for early cancellation.
+  - Platform provisioning failures on our side lasting more than 24 hours are credited to internal account balances or original payment methods.
+
+---
+
+## 15. Frictionless Checkout vs. Registration Consent Separation Standard
+* **Checkout Page (`/checkout/*`)**:
+  - The checkout and payment screens must remain **100% frictionless and clean**.
+  - **NEVER** place legal agreement checkboxes, AUP warnings, or refund disclaimers on checkout or payment views. This prevents cart abandonment and maintains maximum conversion.
+* **Registration Page (`/customer/register`)**:
+  - Account creation is the **sole mandatory touchpoint** for legal agreement collection.
+  - The customer registration form must include a required terms checkbox:  
+    `[✓] I have read and agree to the Terms of Service and Privacy Policy.`
+  - The checkbox must feature direct clickable links to `/terms-of-service` and `/privacy-policy`.
+
+---
+
+## 16. Cookie Consent & Consent-Gated Tracking Standard
+* **Free, Open-Source Engine**:
+  - Cookie consent is powered by `vanilla-cookieconsent` (v3). No paid subscriptions, no monthly pageview caps, and no third-party branding.
+* **Visual Identity & Placement**:
+  - **Position**: Strictly anchored to the **bottom left** (`position: 'bottom left'`), preserving clean breathing room for footer and interactive widgets.
+  - **Styling**: Styled as a clean, high-contrast SaaS card: Pure white surface (`#FFFFFF`), crisp slate border (`#E2E8F0`), deep navy typography (`#0F172A`), electric royal purple primary CTA (`#673DE6`), and high-contrast soft-slate secondary buttons (`#F8FAFC`, border `#CBD5E1`, text `#0F172A`) ensuring 100% effortless legibility.
+* **Consent-Gated Script Execution**:
+  - All third-party analytics and tracking scripts (GA4, GTM, Meta Pixel) in `<x-analytics>` must use `type="text/plain" data-category="analytics"` or `data-category="marketing"`.
+  - Scripts must not execute until the visitor grants explicit affirmative consent.
+  - If tracking IDs in `.env` are empty, zero scripts and zero console errors should be emitted.
+* **Persistent Settings Trigger**:
+  - A permanent "Cookie Preferences" link must exist in `<x-footer>` and on `/cookie-policy` allowing users to reopen the preferences modal at any time (`CookieConsent.showPreferences()`).
+
+---
+
+## 17. SEO Crawling, Sitemap & Search Engine Verification Standard
+* **Search Bot Directives (`public/robots.txt`)**:
+  - Must explicitly allow all public pages: `/`, `/plans`, `/privacy-policy`, `/terms-of-service`, `/cookie-policy`.
+  - Must explicitly disallow private and transaction endpoints: `/admin/`, `/customer/`, `/checkout/`, `/stripe/`.
+  - Must declare the absolute XML sitemap URL: `Sitemap: <APP_URL>/sitemap.xml`.
+* **Dynamic XML Sitemap (`/sitemap.xml`)**:
+  - Must dynamically generate valid XML (`text/xml`) containing all main public pages, legal policies, and active VPS product catalog endpoints with accurate `changefreq` and `priority`.
+* **Search Console Verification**:
+  - `<x-seo-meta>` must automatically inject `<meta name="google-site-verification">` and `<meta name="msvalidate.01">` whenever `GOOGLE_SITE_VERIFICATION` or `BING_SITE_VERIFICATION` are defined in `.env`.
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, and cookie consent standards.*
 
 
 
