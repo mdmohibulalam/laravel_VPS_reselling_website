@@ -44,26 +44,16 @@
                 </a>
 
                 @if(!$isMinimal)
-                    <!-- Left-Aligned Clean Direct Navigation Links (No Mega Dropdowns) -->
+                    <!-- Left-Aligned Clean Direct Navigation Links (Page Routes Only) -->
                     <nav class="hidden lg:flex items-center space-x-1.5 text-sm font-medium text-slate-300">
-                        <!-- 1. Pricing -->
+                        <!-- 1. Home -->
+                        <a href="{{ url('/') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors {{ request()->is('/') ? 'text-white bg-white/[0.10]' : '' }}">
+                            Home
+                        </a>
+
+                        <!-- 2. Pricing & Plans -->
                         <a href="{{ url('/plans') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors {{ request()->is('plans*') ? 'text-white bg-white/[0.10]' : '' }}">
                             Pricing
-                        </a>
-
-                        <!-- 2. Features -->
-                        <a href="{{ url('/#features') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors">
-                            Features
-                        </a>
-
-                        <!-- 3. Reviews -->
-                        <a href="{{ url('/#reviews') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors">
-                            Reviews
-                        </a>
-
-                        <!-- 5. FAQ -->
-                        <a href="{{ url('/#faq') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors">
-                            FAQ
                         </a>
                     </nav>
                 @endif
@@ -123,11 +113,8 @@
         <!-- Mobile Navigation Menu Drawer -->
         <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-[#120024]/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 text-slate-200 shadow-2xl">
             <div class="flex flex-col space-y-1 text-sm font-medium">
-                <a href="{{ url('/') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Home</a>
-                <a href="{{ url('/plans') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Pricing & Plans</a>
-                <a href="{{ url('/#features') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Features & Economics</a>
-                <a href="{{ url('/#reviews') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">Customer Reviews</a>
-                <a href="{{ url('/#faq') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white">FAQ</a>
+                <a href="{{ url('/') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white {{ request()->is('/') ? 'text-white bg-white/10' : '' }}">Home</a>
+                <a href="{{ url('/plans') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white {{ request()->is('plans*') ? 'text-white bg-white/10' : '' }}">Pricing & Plans</a>
             </div>
             <div class="pt-3 border-t border-white/10 flex flex-col gap-2">
                 @auth

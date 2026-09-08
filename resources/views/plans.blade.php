@@ -2,7 +2,7 @@
     title="VPS Hosting Plans & Pricing | Enterprise NVMe Cloud" 
     description="Deploy high-performance NVMe cloud VPS instances powered by high-frequency multi-core compute, ECC memory, Gen4 RAID-10 storage, and instant automated provisioning."
     keywords="vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, cheap vps, high frequency vps"
-    headerVariant="solid"
+    headerVariant="hero"
 >
     <x-slot:schema>
         <!-- Product & AggregateOffer Schema for Google Search Rich Snippets -->
@@ -88,7 +88,7 @@
     @endphp
 
     <!-- SECTION 1: VPS HERO & VALUE PROPOSITION -->
-    <section class="relative bg-gradient-to-b from-[#120024] via-[#16002C] to-[#120024] text-white pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden">
+    <section class="relative bg-gradient-to-b from-[#120024] via-[#16002C] to-[#120024] text-white pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
         <!-- Ambient Stage Lighting Glows -->
         <div class="absolute -top-32 -left-32 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
         <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-3xl pointer-events-none animate-float-reverse"></div>

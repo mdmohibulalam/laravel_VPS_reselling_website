@@ -3,8 +3,8 @@
 ])
 
 <!-- TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE -->
-<section id="comparison" class="py-20 md:py-28 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/90 relative overflow-hidden scroll-mt-20">
-    <div id="features" class="sr-only"></div>
+<section id="features" class="py-20 md:py-28 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/90 relative overflow-hidden scroll-mt-24">
+    <div id="comparison" class="sr-only"></div>
     
     <!-- Subtle Ambient Stage Lighting -->
     <div class="absolute top-0 right-1/4 w-[600px] h-[350px] bg-purple-500/5 rounded-full blur-[140px] pointer-events-none"></div>

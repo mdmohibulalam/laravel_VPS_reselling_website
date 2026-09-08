@@ -1,5 +1,5 @@
 <!-- SECTION: DEVOPS AUTOMATION & SELF-HOSTED ECOSYSTEM FLOWCHART -->
-<section id="automation" class="py-24 md:py-32 bg-[#0B0014] text-white relative overflow-hidden border-t border-white/[0.08] scroll-mt-20">
+<section id="automation" class="py-24 md:py-32 bg-[#0B0014] text-white relative overflow-hidden border-t border-white/[0.08] scroll-mt-24">
     
     <!-- Ambient Stage Lighting Blobs -->
     <div class="absolute top-1/4 -left-32 w-[650px] h-[650px] bg-gradient-to-br from-purple-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none animate-float-slow"></div>

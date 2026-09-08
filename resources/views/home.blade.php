@@ -188,8 +188,30 @@
     <x-telemetry-marquee />
 
 
+    <!-- FLOATING DARK PILL SUB-MENU (HOSTINGER CAPSULE PATTERN) -->
+    <div class="sticky top-20 z-30 py-3 flex justify-center pointer-events-none px-4">
+        <nav id="floating-sub-nav" class="pointer-events-auto inline-flex items-center gap-1 sm:gap-1.5 p-1.5 rounded-full bg-[#16002C]/90 backdrop-blur-xl border border-white/15 shadow-2xl shadow-purple-950/70 overflow-x-auto max-w-full no-scrollbar">
+            <a href="#pricing" class="sub-nav-link px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 bg-white text-[#120024] shadow-md">
+                Pricing
+            </a>
+            <a href="#features" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                Features
+            </a>
+            <a href="#automation" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                Automation
+            </a>
+            <a href="#reviews" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                Reviews
+            </a>
+            <a href="#faq" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                FAQ
+            </a>
+        </nav>
+    </div>
+
+
     <!-- SECTION 2: PRICING TABLE (3-Column VPS Tiers) -->
-    <section id="pricing" class="py-16 md:py-24 bg-white relative overflow-hidden">
+    <section id="pricing" class="py-16 md:py-24 bg-white relative overflow-hidden scroll-mt-24">
         <!-- Soft Ambient Edge Lighting Blooms -->
         <div class="absolute -left-36 top-1/4 w-[600px] h-[600px] bg-purple-500/[0.035] rounded-full blur-[140px] pointer-events-none"></div>
         <div class="absolute -right-36 bottom-1/4 w-[550px] h-[550px] bg-indigo-500/[0.03] rounded-full blur-[140px] pointer-events-none"></div>
@@ -243,7 +265,7 @@
     <x-automation-flowchart />
 
     <!-- SECTION 4: CUSTOMER REVIEWS / DEVELOPER PROOF SECTION (HIGH-CONTRAST EDITORIAL) -->
-    <section id="reviews" class="py-20 md:py-28 bg-slate-50/70 border-t border-slate-200/90 relative overflow-hidden">
+    <section id="reviews" class="py-20 md:py-28 bg-slate-50/70 border-t border-slate-200/90 relative overflow-hidden scroll-mt-24">
         
         <!-- Soft Ambient Edge Lighting Blooms -->
         <div class="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-purple-500/[0.04] rounded-full blur-[140px] pointer-events-none"></div>
@@ -292,7 +314,7 @@
 
 
     <!-- SECTION 5: FAQ SECTION (2-COLUMN SPLIT SAAS ARCHITECTURE) -->
-    <section id="faq" class="py-20 md:py-28 bg-slate-50 border-y border-slate-200/80 scroll-mt-20 relative overflow-hidden">
+    <section id="faq" class="py-20 md:py-28 bg-slate-50 border-y border-slate-200/80 scroll-mt-24 relative overflow-hidden">
         <!-- Soft Ambient Edge Lighting Blooms -->
         <div class="absolute -left-36 top-1/3 w-[550px] h-[550px] bg-purple-500/[0.035] rounded-full blur-[140px] pointer-events-none"></div>
         <div class="absolute -right-36 bottom-1/4 w-[500px] h-[500px] bg-indigo-500/[0.03] rounded-full blur-[130px] pointer-events-none"></div>
@@ -497,5 +519,43 @@
         </div>
     </section>
 
+    <script>
+        // Sub-Navigation Scrollspy Active State Updater
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('#floating-sub-nav .sub-nav-link');
+            const sections = [];
+            
+            navLinks.forEach(link => {
+                const targetId = link.getAttribute('href');
+                if (targetId && targetId.startsWith('#')) {
+                    const section = document.querySelector(targetId);
+                    if (section) sections.push({ link, section });
+                }
+            });
+
+            function updateActiveSubNav() {
+                const scrollY = window.scrollY + 220;
+                let current = sections[0];
+
+                sections.forEach(item => {
+                    const top = item.section.offsetTop;
+                    if (scrollY >= top) {
+                        current = item;
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.className = 'sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10';
+                });
+
+                if (current && current.link) {
+                    current.link.className = 'sub-nav-link px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 bg-white text-[#120024] shadow-md';
+                }
+            }
+
+            window.addEventListener('scroll', updateActiveSubNav, { passive: true });
+            updateActiveSubNav();
+        });
+    </script>
 </x-app-layout>
 
