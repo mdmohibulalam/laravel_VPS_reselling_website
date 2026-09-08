@@ -55,7 +55,12 @@ class ProvisioningLogsTable
                     ->label('API Action Type'),
             ])
             ->filtersFormColumns(2)
-            ->headerActions([
+            ->recordActions([
+                ViewAction::make()
+                    ->label('View Details')
+                    ->modalWidth('7xl'),
+            ])
+            ->toolbarActions([
                 Action::make('export')
                     ->label('Export CSV')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -89,14 +94,6 @@ class ProvisioningLogsTable
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-            ])
-            ->recordActions([
-                ViewAction::make()
-                    ->label('View Details')
-                    ->modalWidth('7xl'),
-            ])
-            ->bulkActions([
-                // Read-only logs
             ]);
     }
 }

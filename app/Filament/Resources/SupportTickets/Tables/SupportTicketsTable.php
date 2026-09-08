@@ -95,8 +95,10 @@ class SupportTicketsTable
                         'general' => 'General Inquiry',
                     ]),
             ])
-            ->filtersFormColumns(3)
-            ->headerActions([
+            ->recordActions([
+                ViewAction::make(),
+            ])
+            ->toolbarActions([
                 Action::make('export')
                     ->label('Export CSV')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -136,11 +138,6 @@ class SupportTicketsTable
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-            ])
-            ->recordActions([
-                ViewAction::make(),
-            ])
-            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

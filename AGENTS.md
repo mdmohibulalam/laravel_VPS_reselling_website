@@ -360,9 +360,12 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
     ->filtersFormColumns(2)
     ```
 
-### 3. One-Click Instant Data Export Architecture
-* **Table Header Action Placement**:
-  - Every table must include an instant CSV export button in `->headerActions([...])`.
+### 3. One-Click Instant Data Export Architecture (Single-Row Toolbar Standard)
+* **Zero-Wasted-Space Toolbar Placement**:
+  - To prevent Filament from generating an empty, dedicated header strip that pushes table data down, the export button MUST be placed inside `->toolbarActions([...])` alongside `BulkActionGroup`.
+  - This natively renders on **one single compact line**:
+    - **Left Side**: `[ Export CSV ]`
+    - **Right Side**: `[ Search Bar ]` `[ Filter ⛛ ]` `[ Columns ☷ ]`
   - Action Specification:
     ```php
     use Filament\Actions\Action;
@@ -400,7 +403,13 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
 * **Row Actions (`recordActions`)**:
   - Must remain strictly limited to **`ViewAction::make()` only**.
   - NEVER place export triggers, edit buttons, or destructive actions directly into table row columns.
-  - Toolbar actions (`toolbarActions`) house bulk actions: `BulkActionGroup::make([ DeleteBulkAction::make() ])`.
+  - Toolbar actions (`toolbarActions`) house the single-row Export button and bulk actions:
+    ```php
+    ->toolbarActions([
+        Action::make('export')->...,
+        BulkActionGroup::make([ DeleteBulkAction::make() ]),
+    ])
+    ```
 
 ---
 
@@ -476,7 +485,11 @@ class ExamplesTable
                     }),
             ])
             ->filtersFormColumns(2)
-            ->headerActions([
+            ->recordActions([
+                ViewAction::make(),
+            ])
+            ->toolbarActions([
+                // Single-Row Toolbar Placement: Left side: Export CSV, Right side: Search + Filters + Column Manager
                 Action::make('export')
                     ->label('Export CSV')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -501,11 +514,6 @@ class ExamplesTable
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-            ])
-            ->recordActions([
-                ViewAction::make(),
-            ])
-            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

@@ -102,8 +102,10 @@ class PackageAddonsTable
                 TernaryFilter::make('is_out_of_stock')
                     ->label('Out of Stock Status'),
             ])
-            ->filtersFormColumns(2)
-            ->headerActions([
+            ->recordActions([
+                ViewAction::make(),
+            ])
+            ->toolbarActions([
                 Action::make('export')
                     ->label('Export CSV')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -143,11 +145,6 @@ class PackageAddonsTable
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-            ])
-            ->recordActions([
-                ViewAction::make(),
-            ])
-            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

@@ -67,7 +67,10 @@ class CouponsTable
                         'percent' => 'Percentage (%)',
                     ]),
             ])
-            ->headerActions([
+            ->recordActions([
+                ViewAction::make(),
+            ])
+            ->toolbarActions([
                 Action::make('export')
                     ->label('Export CSV')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -105,11 +108,6 @@ class CouponsTable
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-            ])
-            ->recordActions([
-                ViewAction::make(),
-            ])
-            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
