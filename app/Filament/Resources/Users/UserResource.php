@@ -9,6 +9,7 @@ use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,46 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Users';
+
+    public static function getNavigationItems(): array
+    {
+        return [
+            NavigationItem::make('All Users')
+                ->group('Users')
+                ->icon(Heroicon::OutlinedUsers)
+                ->sort(1)
+                ->badge(fn () => User::count() ?: null)
+                ->url(static::getUrl('index', ['tab' => 'all']))
+                ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.users.index') && (!request()->has('tab') || request()->get('tab') === 'all')),
+
+            NavigationItem::make('Active Users')
+                ->group('Users')
+                ->icon(Heroicon::OutlinedCheckCircle)
+                ->sort(2)
+                ->badge(fn () => User::activeCustomer()->count() ?: null, color: 'success')
+                ->url(static::getUrl('index', ['tab' => 'active']))
+                ->isActiveWhen(fn (): bool => request()->get('tab') === 'active'),
+
+            NavigationItem::make('Suspended Users')
+                ->group('Users')
+                ->icon(Heroicon::OutlinedExclamationTriangle)
+                ->sort(3)
+                ->badge(fn () => User::suspendedCustomer()->count() ?: null, color: 'warning')
+                ->url(static::getUrl('index', ['tab' => 'suspended']))
+                ->isActiveWhen(fn (): bool => request()->get('tab') === 'suspended'),
+
+            NavigationItem::make('Inactive Users')
+                ->group('Users')
+                ->icon(Heroicon::OutlinedXCircle)
+                ->sort(4)
+                ->badge(fn () => User::inactiveCustomer()->count() ?: null, color: 'gray')
+                ->url(static::getUrl('index', ['tab' => 'inactive']))
+                ->isActiveWhen(fn (): bool => request()->get('tab') === 'inactive'),
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {

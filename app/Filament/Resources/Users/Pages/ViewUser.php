@@ -17,28 +17,28 @@ class ViewUser extends ViewRecord
         return [
             ActionGroup::make([
                 \Filament\Actions\Action::make('suspend')
-                    ->label('Suspend User')
+                    ->label('Block Portal Login')
                     ->icon('heroicon-o-no-symbol')
                     ->color('danger')
                     ->requiresConfirmation()
-                    ->modalHeading('Suspend User')
-                    ->modalDescription('Are you sure you want to suspend this user? They will instantly lose access to their customer dashboard.')
+                    ->modalHeading('Block Customer Portal Login')
+                    ->modalDescription('Are you sure you want to block this user? They will immediately lose access to their customer dashboard. Their server instances will remain unchanged.')
                     ->visible(fn () => !$this->record->is_suspended)
                     ->action(function () {
                         $this->record->update(['is_suspended' => true]);
-                        \Filament\Notifications\Notification::make()->title('User Suspended')->danger()->send();
+                        \Filament\Notifications\Notification::make()->title('Portal Login Blocked')->danger()->send();
                     }),
                 \Filament\Actions\Action::make('unsuspend')
-                    ->label('Unsuspend User')
+                    ->label('Restore Portal Login')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->modalHeading('Unsuspend User')
-                    ->modalDescription('Are you sure you want to restore this user\'s access to their dashboard?')
+                    ->modalHeading('Restore Customer Portal Login')
+                    ->modalDescription('Are you sure you want to restore this user\'s access to their customer dashboard?')
                     ->visible(fn () => $this->record->is_suspended)
                     ->action(function () {
                         $this->record->update(['is_suspended' => false]);
-                        \Filament\Notifications\Notification::make()->title('User Restored')->success()->send();
+                        \Filament\Notifications\Notification::make()->title('Portal Login Restored')->success()->send();
                     }),
                 EditAction::make(),
                 DeleteAction::make(),
