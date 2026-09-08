@@ -87,10 +87,13 @@ This document establishes the mandatory design system rules and visual identity 
       robots="index, follow|noindex, nofollow">
   ```
 * **Header Standards (`<x-header>`)**:
-  - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll (used on homepage).
-  - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-20 sm:pt-22`) for inner pages (`/plans`, knowledgebase, legal).
+  - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll. **MANDATORY** for any page with a dark cosmic hero section (e.g. `/` homepage, `/plans`). The navbar initializes completely borderless (`bg-transparent border-b border-transparent shadow-none`). The page's hero section must declare top padding `pt-32 pb-20 md:pt-40 md:pb-28` to provide headroom below the floating navbar.
+  - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-28 sm:pt-32` on `<main>`). Reserved strictly for light-mode text/content inner pages without a dark hero stage (e.g. `/terms-of-service`, `/privacy-policy`, `/cookie-policy`, documentation).
   - `headerVariant="minimal"`: Distraction-free header with logo & SSL security badge for `/checkout` and auth pages.
   - **Auth Button Standard**: Single unified **`[ 👤 Login / Register ]`** button (`bg-[#673DE6] hover:bg-[#5428D8] text-white px-4 py-2.5 rounded-xl shadow-lg shadow-[#673DE6]/25`) for guests; **`[ 👤 Client Area ]`** for logged-in clients. Never include redundant "Deploy VPS" pills in the header.
+  - **Primary Navigation Links Standard (Page Routes Only)**:
+    - The main navigation bar in `<x-header>` must **STRICTLY contain only top-level page routes** (e.g. `Home` `/`, `Pricing & Plans` `/plans`, etc.) across both desktop navigation and the mobile drawer.
+    - **NEVER** place in-page section hash anchors (such as `/#features`, `/#reviews`, `/#faq`, `#pricing`) inside `<x-header>`. Hash links create confusing multi-page jumps and visual clutter. All in-page section navigation belongs exclusively in the floating capsule sub-menu.
 * **Unified Pricing Matrix Component (`<x-pricing-matrix>`)**:
   - Always use `<x-pricing-matrix :packages="$packages" />` on any page displaying pricing tiers.
   - Encapsulates the entire pricing table system into a single reusable component:
@@ -113,11 +116,15 @@ This document establishes the mandatory design system rules and visual identity 
   - The "Choose Plan" buttons dynamically update their query parameter (`?cycle=monthly`, `?cycle=annually`, `?cycle=biennially`) when users interact with the billing switcher.
   - The Checkout page (`/checkout/{package}`) automatically pre-selects and checks the exact billing period the user chose.
   - The Datacenter Region selection cards must feature high-fidelity vector SVG country flags (e.g. 🇺🇸 US, 🇩🇪 DE, 🇬🇧 UK, 🇸🇬 SG) with region names, city codes, and active ping latency badges.
-* **Floating Capsule Sub-Menu (Hostinger Pattern)**:
-  - Sticky sub-menus must use a centered floating dark pill capsule (`sticky top-20 z-30 py-3 flex justify-center pointer-events-none` with inner `pointer-events-auto rounded-full bg-[#16002C]/90 backdrop-blur-xl border border-white/15 shadow-2xl shadow-purple-950/70`).
-  - Active item: Solid white rounded pill with dark text (`bg-white text-[#120024] font-bold px-5 py-2 rounded-full shadow-md`).
-  - Inactive items: Muted slate text (`text-slate-300 hover:text-white hover:bg-white/10 px-4 py-2 rounded-full`).
-  - Scrollspy: Include auto-updating scrollspy to highlight the active section pill dynamically.
+* **Floating Capsule Sub-Menu Standard (Hostinger Pattern for Multi-Section Pages)**:
+  - Any landing page or feature-dense page containing multiple thematic sections (e.g. `/` homepage, `/plans`, or any future multi-section product page) **MUST AUTOMATICALLY** feature the sticky floating dark pill capsule directly below the hero section.
+  - **Position & Container**: `sticky top-20 z-30 py-3 flex justify-center pointer-events-none px-4`
+  - **Capsule Shell**: `pointer-events-auto inline-flex items-center gap-1 sm:gap-1.5 p-1.5 rounded-full bg-[#16002C]/90 backdrop-blur-xl border border-white/15 shadow-2xl shadow-purple-950/70 overflow-x-auto max-w-full no-scrollbar`
+  - **Active Pill State**: Solid white rounded pill with dark navy text (`bg-white text-[#120024] font-bold px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm shadow-md`).
+  - **Inactive Pill State**: Muted slate text (`text-slate-300 hover:text-white hover:bg-white/10 px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200`).
+  - **Target Section Headroom Standard (`scroll-mt-24`)**: Every section linked in the capsule sub-menu **MUST declare `scroll-mt-24`** on its `<section>` container (e.g. `<section id="pricing" class="... scroll-mt-24">`). This guarantees that clicking or jumping to a section never causes the header or capsule to overlap section headings.
+  - **Scrollspy Controller Standard**: Every page with a floating sub-menu must include the reactive Scrollspy listener that tracks scroll position (`scrollY + 220 >= top`) and dynamically updates the active white pill to reflect the currently viewed section in real time.
+  - **Mobile Horizontal Overflow**: Sub-menus must include `overflow-x-auto no-scrollbar` to allow fluid swipe scrolling on small devices without visible browser scrollbars.
 * **Modular Components**:
   - `<x-seo-meta>`: Handles OpenGraph, Twitter Cards, Canonical URLs, CSRF meta tokens, and global `Organization` / `WebSite` JSON-LD schemas.
   - `<x-analytics>`: Safe Google Analytics (GA4) / Tag Manager tracking.
