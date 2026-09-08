@@ -45,15 +45,16 @@
 
                 @if(!$isMinimal)
                     <!-- Left-Aligned Clean Direct Navigation Links (Page Routes Only) -->
-                    <nav class="hidden lg:flex items-center space-x-1.5 text-sm font-medium text-slate-300">
-                        <!-- 1. Home -->
-                        <a href="{{ url('/') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors {{ request()->is('/') ? 'text-white bg-white/[0.10]' : '' }}">
-                            Home
-                        </a>
-
-                        <!-- 2. Pricing & Plans -->
-                        <a href="{{ url('/plans') }}" class="px-3.5 py-2 rounded-xl hover:text-white hover:bg-white/[0.08] transition-colors {{ request()->is('plans*') ? 'text-white bg-white/[0.10]' : '' }}">
-                            Pricing
+                    <nav class="hidden lg:flex items-center space-x-1.5 text-sm font-medium">
+                        <!-- Pricing & Plans -->
+                        <a href="{{ url('/plans') }}" class="group relative inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm transition-all duration-200 {{ request()->is('plans*') ? 'text-white font-bold bg-gradient-to-r from-purple-500/15 via-purple-600/20 to-purple-500/15 border border-purple-400/35 shadow-[0_0_20px_rgba(103,61,230,0.3)]' : 'text-slate-300 hover:text-white hover:bg-white/[0.08]' }}">
+                            @if(request()->is('plans*'))
+                                <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#c084fc]"></span>
+                            @endif
+                            <span>Pricing & Plans</span>
+                            @if(request()->is('plans*'))
+                                <span class="absolute -bottom-1 left-3 right-3 h-[2px] bg-gradient-to-r from-transparent via-purple-400 to-transparent rounded-full shadow-[0_0_10px_rgba(192,132,252,0.8)]"></span>
+                            @endif
                         </a>
                     </nav>
                 @endif
@@ -113,8 +114,12 @@
         <!-- Mobile Navigation Menu Drawer -->
         <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-[#120024]/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 text-slate-200 shadow-2xl">
             <div class="flex flex-col space-y-1 text-sm font-medium">
-                <a href="{{ url('/') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white {{ request()->is('/') ? 'text-white bg-white/10' : '' }}">Home</a>
-                <a href="{{ url('/plans') }}" class="px-3 py-2.5 rounded-lg hover:bg-white/10 hover:text-white {{ request()->is('plans*') ? 'text-white bg-white/10' : '' }}">Pricing & Plans</a>
+                <a href="{{ url('/plans') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all {{ request()->is('plans*') ? 'text-white font-bold bg-purple-500/20 border border-purple-400/30 shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+                    <span>Pricing & Plans</span>
+                    @if(request()->is('plans*'))
+                        <span class="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_6px_#c084fc]"></span>
+                    @endif
+                </a>
             </div>
             <div class="pt-3 border-t border-white/10 flex flex-col gap-2">
                 @auth
