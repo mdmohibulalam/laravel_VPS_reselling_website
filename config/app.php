@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'demo_login_enabled' => (bool) env('DEMO_LOGIN_ENABLED', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

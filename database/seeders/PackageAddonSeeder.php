@@ -154,7 +154,7 @@ class PackageAddonSeeder extends Seeder
                 'type' => 'region',
                 'name' => 'UK (London)',
                 'value' => 'uk_london',
-                'api_identifier' => 'GBR',
+                'api_identifier' => 'UK',
                 'price' => 0.00,
                 'sort_order' => 2,
             ],

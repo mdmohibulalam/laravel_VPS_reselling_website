@@ -1,7 +1,7 @@
 <x-app-layout 
     title="High-Speed Cloud VPS & NVMe Hosting"
-    description="Deploy high-performance NVMe cloud VPS instances starting at $4.99/mo with AMD EPYC processors, 99.99% uptime SLA, and 24/7 expert support."
-    keywords="vps hosting, cloud vps, nvme vps, amd epyc server, linux vps, windows rdp, kvm hosting, developer cloud"
+    description="Deploy high-performance NVMe cloud VPS instances starting at $4.99/mo with high-frequency compute cores, 99.99% uptime SLA, and 24/7 expert support."
+    keywords="vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, high frequency vps"
     headerVariant="hero"
 >
     <x-slot:schema>
@@ -41,7 +41,7 @@
     </x-slot:schema>
 
     <!-- SECTION 1: EXACT HOSTINGER-STYLE CENTERED HERO SECTION & INTERACTIVE SHOWCASE DECK -->
-    <section class="relative overflow-hidden pt-28 sm:pt-36 pb-20 md:pb-28 bg-[#120024] text-white">
+    <section class="relative overflow-hidden pt-32 sm:pt-40 pb-20 md:pb-28 bg-[#120024] text-white">
         
         <!-- Ambient Cosmic Violet & Magenta Radial Glow (Hostinger Dynamic Lighting) -->
         <div class="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-gradient-to-br from-purple-600/40 to-fuchsia-600/30 rounded-full blur-[140px] pointer-events-none animate-float-slow"></div>
@@ -66,7 +66,7 @@
 
             <!-- 3. Centered Subheadline -->
             <p class="animate-fade-in-up text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mt-6 leading-relaxed font-normal" style="animation-delay: 150ms;">
-                One high-performance cloud platform, powered by AMD EPYC™ from the first deploy, with the tools to build, launch, manage, and scale your applications.
+                One high-performance cloud platform, powered by high-frequency multi-core compute from the first deploy, with the tools to build, launch, manage, and scale your applications.
             </p>
 
             <!-- 4. Primary CTA & Trust Guarantee -->
@@ -76,7 +76,7 @@
                 </a>
                 <div class="flex items-center gap-2 text-slate-400 text-xs mt-1">
                     <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>30-day money-back guarantee</span>
+                    <span>99.99% uptime guarantee</span>
                     <span class="text-white/30">•</span>
                     <span>Instant 60-second activation</span>
                 </div>
@@ -91,7 +91,7 @@
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-[11px] font-bold backdrop-blur-md border border-white/15">
                             <span class="text-purple-300">✦</span> Build
                         </span>
-                        <span class="text-[10px] font-mono text-purple-300 font-semibold">AMD EPYC™ 9654</span>
+                        <span class="text-[10px] font-mono text-purple-300 font-semibold">High-Clock VPS</span>
                     </div>
 
                     <!-- Visual Prompt Input Bar in Card -->
@@ -133,7 +133,7 @@
                         <span class="px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold">Gen4 NVMe</span>
                     </div>
                     <div>
-                        <div class="text-xs text-indigo-300 uppercase font-bold tracking-wider mb-1">Samsung® Flash Array</div>
+                        <div class="text-xs text-indigo-300 uppercase font-bold tracking-wider mb-1">Enterprise Flash Array</div>
                         <h4 class="text-lg font-bold text-white leading-tight">7,200 MB/s Read Speed</h4>
                         <p class="text-xs text-slate-400 mt-1.5">PCIe 4.0 high-resiliency RAID-10 storage nodes.</p>
                     </div>
@@ -184,10 +184,17 @@
         </div>
     </section>
 
+    <!-- LIVE CLOUD TELEMETRY PULSE MARQUEE TICKER -->
+    <x-telemetry-marquee />
+
 
     <!-- SECTION 2: PRICING TABLE (3-Column VPS Tiers) -->
-    <section id="pricing" class="py-16 md:py-24 bg-white">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+    <section id="pricing" class="py-16 md:py-24 bg-white relative overflow-hidden">
+        <!-- Soft Ambient Edge Lighting Blooms -->
+        <div class="absolute -left-36 top-1/4 w-[600px] h-[600px] bg-purple-500/[0.035] rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute -right-36 bottom-1/4 w-[550px] h-[550px] bg-indigo-500/[0.03] rounded-full blur-[140px] pointer-events-none"></div>
+
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
             
             <!-- Section Header & Billing Switcher -->
             <div class="reveal-init text-center max-w-3xl mx-auto mb-14">
@@ -229,342 +236,205 @@
         </div>
     </section>
 
+    <!-- SECTION 3: TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE -->
+    <x-competitor-comparison />
 
-    <!-- SECTION 3: BRANDS YOU TRUST / HARDWARE PARTNERS SECTION -->
-    <section id="hardware" class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/80">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+    <!-- SECTION: DEVOPS AUTOMATION & SELF-HOSTED ECOSYSTEM FLOWCHART (HOSTINGER-INSPIRED) -->
+    <x-automation-flowchart />
+
+    <!-- SECTION 4: CUSTOMER REVIEWS / DEVELOPER PROOF SECTION (HIGH-CONTRAST EDITORIAL) -->
+    <section id="reviews" class="py-20 md:py-28 bg-slate-50/70 border-t border-slate-200/90 relative overflow-hidden">
+        
+        <!-- Soft Ambient Edge Lighting Blooms -->
+        <div class="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-purple-500/[0.04] rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute -right-28 bottom-1/4 w-[500px] h-[500px] bg-indigo-500/[0.035] rounded-full blur-[130px] pointer-events-none"></div>
+
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
             
             <!-- Section Header -->
-            <div class="reveal-init text-center max-w-3xl mx-auto mb-14">
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">
-                    Enterprise Hardware You Can Trust.
+            <div class="reveal-init text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+                <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-4 py-1.5 rounded-full mb-4 border border-purple-200/80 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#673DE6]"></span>
+                    <span>Developer Approved</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                    Trusted for Production. Verified by Engineers.
                 </h2>
-                <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                    We never compromise on infrastructure. Your workloads run on industry-leading, high-availability server components.
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                    From high-concurrency microservices to enterprise database clusters, see why dev teams and agencies build on VortexCloud.
                 </p>
+
+                <!-- Global Trustproof Rating Strip -->
+                <div class="mt-6 inline-flex items-center flex-wrap justify-center gap-4 sm:gap-8 px-5 py-2.5 rounded-2xl bg-white border border-slate-200/80 text-xs text-slate-600 font-medium shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center text-amber-400">
+                            <span class="text-sm tracking-widest">★★★★★</span>
+                        </div>
+                        <span class="font-bold text-slate-900">4.9 / 5.0 Rating</span>
+                    </div>
+                    <span class="text-slate-300 hidden sm:inline">•</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="font-semibold text-slate-900">99.99% Hardware SLA</span>
+                    </div>
+                    <span class="text-slate-300 hidden sm:inline">•</span>
+                    <div>
+                        <span class="font-mono font-bold text-slate-900">1,200+</span> Active Virtual Nodes
+                    </div>
+                </div>
             </div>
-
-            <!-- Hardware Logo Cards Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Partner Card 1: AMD EPYC -->
-                <div class="reveal-init delay-100 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-                            <rect x="9" y="9" width="6" height="6"></rect>
-                            <line x1="9" y1="1" x2="9" y2="4"></line>
-                            <line x1="15" y1="1" x2="15" y2="4"></line>
-                            <line x1="9" y1="20" x2="9" y2="23"></line>
-                            <line x1="15" y1="20" x2="15" y2="23"></line>
-                            <line x1="20" y1="9" x2="23" y2="9"></line>
-                            <line x1="20" y1="14" x2="23" y2="14"></line>
-                            <line x1="1" y1="9" x2="4" y2="9"></line>
-                            <line x1="1" y1="14" x2="4" y2="14"></line>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">AMD EPYC™ Processors</h3>
-                    <p class="text-xs text-slate-500">Up to 3.7 GHz boost frequency with multi-threaded performance</p>
-                </div>
-
-                <!-- Partner Card 2: Intel Xeon -->
-                <div class="reveal-init delay-200 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">Intel® Xeon® Scalable</h3>
-                    <p class="text-xs text-slate-500">Robust virtualization compute optimized for intense database throughput</p>
-                </div>
-
-                <!-- Partner Card 3: Samsung Gen4 NVMe -->
-                <div class="reveal-init delay-300 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">Samsung® Gen4 Enterprise NVMe</h3>
-                    <p class="text-xs text-slate-500">PCIe 4.0 ultra-low latency flash storage in high-resiliency RAID-10</p>
-                </div>
-
-                <!-- Partner Card 4: KVM Architecture -->
-                <div class="reveal-init delay-400 card-interactive bg-white p-6 rounded-2xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col items-center text-center group">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-[#673DE6] group-hover:border-purple-200 group-hover:scale-110 transition-all duration-300 mb-4">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#673DE6] transition-colors">KVM Virtualization Architecture</h3>
-                    <p class="text-xs text-slate-500">100% hardware-isolated dedicated kernel with complete root access</p>
-                </div>
-
-            </div>
-
         </div>
+
+        <!-- 2-Line Dual-Directional Marquee Scrollers -->
+        <x-reviews-marquee />
+
     </section>
 
 
-    <!-- SECTION 4: WHY CHOOSE US SECTION -->
-    <section id="features" class="py-16 md:py-24 bg-white">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+    <!-- SECTION 5: FAQ SECTION (2-COLUMN SPLIT SAAS ARCHITECTURE) -->
+    <section id="faq" class="py-20 md:py-28 bg-slate-50 border-y border-slate-200/80 scroll-mt-20 relative overflow-hidden">
+        <!-- Soft Ambient Edge Lighting Blooms -->
+        <div class="absolute -left-36 top-1/3 w-[550px] h-[550px] bg-purple-500/[0.035] rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute -right-36 bottom-1/4 w-[500px] h-[500px] bg-indigo-500/[0.03] rounded-full blur-[130px] pointer-events-none"></div>
+
+        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
             
-            <!-- Section Header -->
-            <div class="reveal-init text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
-                    High-Reliability Architecture
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Engineered for Reliable Cloud Infrastructure.
-                </h2>
-                <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                    Built from the ground up to support modern devops workflows, production backends, and low-latency client applications.
-                </p>
-            </div>
-
-            <!-- 3-Column Feature Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
                 
-                <!-- Pillar 1: 99.99% Uptime Guarantee (with green ping dot) -->
-                <div class="reveal-init delay-100 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 group">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                        </svg>
-                    </div>
+                <!-- Left Column (5 cols): Sticky Context & Live Sysadmin Help Hub -->
+                <div class="lg:col-span-5 lg:sticky lg:top-28 space-y-6">
                     
-                    <div class="flex items-center gap-2.5 mb-3">
-                        <span class="relative flex h-3 w-3">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                        </span>
-                        <h3 class="text-xl font-bold text-slate-900 tracking-tight group-hover:text-[#673DE6] transition-colors">99.99% Uptime Guarantee</h3>
-                    </div>
-                    
-                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Our redundant network architecture ensures your applications stay online 24/7/365 with zero unexpected interruptions.
-                    </p>
-                </div>
-
-                <!-- Pillar 2: Enterprise DDoS Protection -->
-                <div class="reveal-init delay-200 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 group">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-100 text-[#673DE6] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            <path d="M9 12l2 2 4-4"/>
-                        </svg>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-slate-900 tracking-tight mb-3 group-hover:text-[#673DE6] transition-colors">Enterprise DDoS Protection</h3>
-                    
-                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Advanced Layer 4 and Layer 7 traffic scrubbing filters out malicious attacks instantly before they ever reach your virtual server.
-                    </p>
-                </div>
-
-                <!-- Pillar 3: 24/7 Expert Support -->
-                <div class="reveal-init delay-300 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 group">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-100 text-[#673DE6] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                            <circle cx="9" cy="10" r="1"/>
-                            <circle cx="12" cy="10" r="1"/>
-                            <circle cx="15" cy="10" r="1"/>
-                        </svg>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-slate-900 tracking-tight mb-3 group-hover:text-[#673DE6] transition-colors">24/7 Expert Support</h3>
-                    
-                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Skip the front-line general support. Get direct assistance from experienced system administrators who speak your language.
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- SECTION 5: CUSTOMER REVIEWS / TESTIMONIALS SECTION -->
-    <section id="reviews" class="py-16 md:py-24 bg-white">
-        <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-            
-            <!-- Section Header -->
-            <div class="reveal-init text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
-                    Developer Approved
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Trusted by Developers and System Administrators.
-                </h2>
-                <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                    See why engineering teams and digital agencies rely on VortexCloud for mission-critical hosting.
-                </p>
-            </div>
-
-            <!-- 3-Column Reviews Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <!-- Review 1: Alex M. -->
-                <div class="reveal-init delay-100 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 flex flex-col justify-between group">
                     <div>
-                        <!-- 5-Star Rating Graphic -->
-                        <div class="flex items-center space-x-1 text-amber-400 mb-6">
-                            @for ($i = 0; $i < 5; $i++)
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                            @endfor
+                        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-4 py-1.5 rounded-full mb-4 border border-purple-200/80 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-[#673DE6]"></span>
+                            <span>Got Questions?</span>
                         </div>
-
-                        <!-- Quote Copy -->
-                        <blockquote class="text-slate-700 italic text-base leading-relaxed mb-6 font-normal group-hover:text-slate-900 transition-colors">
-                            "The NVMe read/write speeds on these servers are absolutely incredible. Migrated my database here and cut loading times in half."
-                        </blockquote>
+                        <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                            Frequently Asked Questions.
+                        </h2>
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+                            Everything you need to know about our cloud architecture, automated provisioning, scalability, and network policies.
+                        </p>
                     </div>
 
-                    <!-- User Label -->
-                    <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 text-[#673DE6] font-bold flex items-center justify-center text-sm">
-                            AM
-                        </div>
-                        <div>
-                            <div class="font-bold text-slate-900 text-sm">Alex M.</div>
-                            <div class="text-xs text-slate-500">Full-Stack Developer</div>
+                    <!-- Direct Sysadmin Technical Assistance Card -->
+                    <div class="rounded-3xl bg-gradient-to-b from-[#16002C] to-[#120024] p-7 sm:p-8 text-white border border-white/10 shadow-xl shadow-purple-950/40 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-bl-full pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+
+                        <div class="relative z-10 space-y-4">
+                            <!-- Live Status Indicator -->
+                            <div class="flex items-center justify-between">
+                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-mono font-semibold">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    Sysadmins On Duty
+                                </span>
+                                <span class="text-[11px] font-mono text-purple-300 font-semibold">24/7/365</span>
+                            </div>
+
+                            <h3 class="text-xl font-extrabold text-white tracking-tight">
+                                Have a custom architecture question?
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                Our real Linux systems administrators can assist with sizing, custom OS images, or migration planning before you deploy.
+                            </p>
+
+                            <!-- Response Metric & Action Button -->
+                            <div class="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="text-xs text-slate-400">
+                                    Typical response: <strong class="text-white font-mono">&lt; 15 mins</strong>
+                                </div>
+                                <a href="{{ url('/customer/support-tickets') }}" class="btn-shimmer inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#673DE6] hover:bg-[#5428D8] text-white text-xs font-bold shadow-md shadow-[#673DE6]/30 transition-all">
+                                    <span>Open Support Ticket</span>
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
-                <!-- Review 2: Sarah K. -->
-                <div class="reveal-init delay-200 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 flex flex-col justify-between group">
-                    <div>
-                        <!-- 5-Star Rating Graphic -->
-                        <div class="flex items-center space-x-1 text-amber-400 mb-6">
-                            @for ($i = 0; $i < 5; $i++)
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                            @endfor
+                <!-- Right Column (7 cols): Comprehensive 6-Question Accordion Deck -->
+                <div class="lg:col-span-7 space-y-4">
+                    
+                    <!-- Q1 -->
+                    <details class="reveal-init delay-100 group bg-white rounded-2xl border border-slate-200/90 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200" open>
+                        <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-base sm:text-lg gap-4 group-hover:text-[#673DE6] transition-colors">
+                            <span>How fast is server provisioning after payment?</span>
+                            <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
+                            Deployment is completely automated. Within 60 seconds of checkout confirmation, your bare-metal hypervisor node allocates dedicated KVM vCPU cores, PCIe 4.0 NVMe storage, and network interfaces. Your root credentials and web dashboard access are generated instantly.
                         </div>
+                    </details>
 
-                        <!-- Quote Copy -->
-                        <blockquote class="text-slate-700 italic text-base leading-relaxed mb-6 font-normal group-hover:text-slate-900 transition-colors">
-                            "I needed a reliable VPS reseller for my client websites. The uptime has been absolutely flawless, and deployment takes under a minute."
-                        </blockquote>
-                    </div>
+                    <!-- Q2 -->
+                    <details class="reveal-init delay-150 group bg-white rounded-2xl border border-slate-200/90 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
+                        <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-base sm:text-lg gap-4 group-hover:text-[#673DE6] transition-colors">
+                            <span>Can I seamlessly upgrade my VPS resources later without losing data?</span>
+                            <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
+                            Yes. You can instantly scale your vCPU cores, RAM, and NVMe storage directly from your billing dashboard. The upgrade requires a simple automated 30-second restart to adjust your hypervisor allocation, with zero data loss or configuration changes.
+                        </div>
+                    </details>
 
-                    <!-- User Label -->
-                    <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 text-[#673DE6] font-bold flex items-center justify-center text-sm">
-                            SK
+                    <!-- Q3 -->
+                    <details class="reveal-init delay-200 group bg-white rounded-2xl border border-slate-200/90 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
+                        <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-base sm:text-lg gap-4 group-hover:text-[#673DE6] transition-colors">
+                            <span>Which operating systems and custom ISOs are supported?</span>
+                            <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
+                            We support 1-click deployments of Ubuntu 24.04/22.04 LTS, Debian 12, AlmaLinux 9, Rocky Linux 9, and Windows Server (2022/2025). Additionally, our panel allows you to mount and boot custom ISO images for specialized distributions (such as FreeBSD, Alpine Linux, or custom recovery images).
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-900 text-sm">Sarah K.</div>
-                            <div class="text-xs text-slate-500">Agency Founder</div>
+                    </details>
+
+                    <!-- Q4 -->
+                    <details class="reveal-init delay-250 group bg-white rounded-2xl border border-slate-200/90 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
+                        <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-base sm:text-lg gap-4 group-hover:text-[#673DE6] transition-colors">
+                            <span>What are the monthly bandwidth limits and egress policies?</span>
+                            <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
+                            Every instance includes generous high-speed monthly transfer (up to 32 TB) on 1 Gbps - 10 Gbps uplinks. We do not charge hidden egress surcharges. If you reach your monthly transfer limit, speed is gently shaped without service interruption or unexpected invoices.
                         </div>
-                    </div>
+                    </details>
+
+                    <!-- Q5 -->
+                    <details class="reveal-init delay-300 group bg-white rounded-2xl border border-slate-200/90 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
+                        <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-base sm:text-lg gap-4 group-hover:text-[#673DE6] transition-colors">
+                            <span>How does the automated 2.4 Tbps DDoS protection work?</span>
+                            <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
+                            Multi-terabit automated scrubbing centers continuously filter incoming traffic. Malicious volumetric Layer 3/4 flood traffic and Layer 7 protocol attacks are absorbed at the edge in real time before reaching your virtual interface, introducing 0.00 ms of added latency to legitimate requests.
+                        </div>
+                    </details>
+
+                    <!-- Q6 -->
+                    <details class="reveal-init delay-350 group bg-white rounded-2xl border border-slate-200/90 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
+                        <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-base sm:text-lg gap-4 group-hover:text-[#673DE6] transition-colors">
+                            <span>Do I get full root access and dedicated static IP addresses?</span>
+                            <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
+                            Yes. Every virtual server includes unrestricted root/administrator privileges over SSH and remote VNC console. Each node is provisioned with a dedicated static IPv4 address and a routed /64 IPv6 prefix with reverse DNS (PTR) management.
+                        </div>
+                    </details>
+
                 </div>
-
-                <!-- Review 3: David L. -->
-                <div class="reveal-init delay-300 card-interactive bg-white p-8 rounded-3xl border border-slate-200 shadow-soft-sm hover:shadow-soft-md hover:border-purple-200 flex flex-col justify-between group">
-                    <div>
-                        <!-- 5-Star Rating Graphic -->
-                        <div class="flex items-center space-x-1 text-amber-400 mb-6">
-                            @for ($i = 0; $i < 5; $i++)
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                            @endfor
-                        </div>
-
-                        <!-- Quote Copy -->
-                        <blockquote class="text-slate-700 italic text-base leading-relaxed mb-6 font-normal group-hover:text-slate-900 transition-colors">
-                            "Excellent network latency and ping speeds across all global locations. Best price-to-performance ratio in the hosting market."
-                        </blockquote>
-                    </div>
-
-                    <!-- User Label -->
-                    <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 text-[#673DE6] font-bold flex items-center justify-center text-sm">
-                            DL
-                        </div>
-                        <div>
-                            <div class="font-bold text-slate-900 text-sm">David L.</div>
-                            <div class="text-xs text-slate-500">DevOps Engineer</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- SECTION 6: FAQ SECTION -->
-    <section id="faq" class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/80">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- Section Header -->
-            <div class="reveal-init text-center mb-14">
-                <div class="inline-block text-xs font-bold uppercase tracking-wider text-[#673DE6] bg-purple-50 px-3.5 py-1 rounded-full mb-3 border border-purple-100">
-                    Got Questions?
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Frequently Asked Questions About Our VPS Hosting.
-                </h2>
-                <p class="text-base sm:text-lg text-slate-600">
-                    Everything you need to know about our cloud provisioning, scaling, and network limits.
-                </p>
-            </div>
-
-            <!-- FAQ Stacked Vertical Accordions -->
-            <div class="space-y-4">
-                
-                <!-- Q1 -->
-                <details class="reveal-init delay-100 group bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200" open>
-                    <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-lg gap-4 group-hover:text-[#673DE6]">
-                        <span>How long does it take to deploy a virtual private server?</span>
-                        <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Deployment is completely automated. Once your payment is confirmed, your server dashboard configuration initiates, and your operating system spins up in under 60 seconds.
-                    </div>
-                </details>
-
-                <!-- Q2 -->
-                <details class="reveal-init delay-200 group bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
-                    <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-lg gap-4 group-hover:text-[#673DE6]">
-                        <span>Can I upgrade my VPS resources later without losing my data?</span>
-                        <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Yes. You can instantly scale your CPU, RAM, and storage directly from your billing dashboard. The upgrade requires a simple automated reboot with zero data loss or structural configuration changes.
-                    </div>
-                </details>
-
-                <!-- Q3 -->
-                <details class="reveal-init delay-300 group bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
-                    <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-lg gap-4 group-hover:text-[#673DE6]">
-                        <span>What happens if I exceed my monthly bandwidth limit?</span>
-                        <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
-                        We do not charge hidden overage fees. If you hit your monthly traffic cap, your network speed is gently throttled to 10Mbps until the next billing cycle, or you can instantly upgrade your bandwidth allotment via your account panel.
-                    </div>
-                </details>
 
             </div>
 

@@ -13,7 +13,20 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
-#[Fillable(['name', 'email', 'password', 'is_suspended'])]
+#[Fillable([
+    'name',
+    'email',
+    'phone',
+    'company_name',
+    'address',
+    'city',
+    'state',
+    'country',
+    'zip_code',
+    'notification_preferences',
+    'password',
+    'is_suspended',
+])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -34,6 +47,89 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'notification_preferences' => 'array',
         ];
+    }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function services(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function invoices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public const ACTIVE_SERVICE_STATUSES = [
+        'active',
+        'provisioning',
+        'awaiting_provisioning',
+        'ready_for_provisioning',
+        'contabo_ok',
+        'provisioned',
+    ];
+
+    public const SUSPENDED_SERVICE_STATUSES = [
+        'suspended',
+    ];
+
+    /**
+     * Scope for Active Customers (has >= 1 active/provisioning service)
+     */
+    public function scopeActiveCustomer(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereHas('services', fn ($q) => $q->whereIn('status', self::ACTIVE_SERVICE_STATUSES));
+    }
+
+    /**
+     * Scope for Suspended Customers (has suspended service(s) and 0 active)
+     */
+    public function scopeSuspendedCustomer(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereHas('services', fn ($q) => $q->whereIn('status', self::SUSPENDED_SERVICE_STATUSES))
+            ->whereDoesntHave('services', fn ($q) => $q->whereIn('status', self::ACTIVE_SERVICE_STATUSES));
+    }
+
+    /**
+     * Scope for Inactive Customers (0 active or suspended services)
+     */
+    public function scopeInactiveCustomer(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereDoesntHave('services', fn ($q) => $q->whereIn('status', array_merge(self::ACTIVE_SERVICE_STATUSES, self::SUSPENDED_SERVICE_STATUSES)));
+    }
+
+    /**
+     * Dynamic computed customer status based on live database services.
+     */
+    public function getCustomerStatusAttribute(): string
+    {
+        $active = isset($this->active_services_count)
+            ? (int) $this->active_services_count
+            : $this->services()->whereIn('status', self::ACTIVE_SERVICE_STATUSES)->count();
+
+        if ($active > 0) {
+            return "Active ({$active})";
+        }
+
+        $suspended = isset($this->suspended_services_count)
+            ? (int) $this->suspended_services_count
+            : $this->services()->whereIn('status', self::SUSPENDED_SERVICE_STATUSES)->count();
+
+        if ($suspended > 0) {
+            return "Suspended ({$suspended})";
+        }
+
+        return 'Inactive';
+    }
+
+    public function supportTickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SupportTicket::class);
     }
 }

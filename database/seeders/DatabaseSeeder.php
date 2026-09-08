@@ -38,10 +38,11 @@ class DatabaseSeeder extends Seeder
             $admin->assignRole('super_admin');
         }
 
-        // Seed packages & addons
+        // Seed packages & addons & customer lifecycle states
         $this->call([
             PackageSeeder::class,
             PackageAddonSeeder::class,
+            CustomerLifecycleSeeder::class,
         ]);
     }
 }

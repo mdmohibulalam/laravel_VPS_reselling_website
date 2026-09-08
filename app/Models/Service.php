@@ -32,11 +32,102 @@ class Service extends Model
             return null;
         }
 
+        // 1. Check if encrypted_credentials is a JSON string of configuration
+        $data = is_array($this->encrypted_credentials) 
+            ? $this->encrypted_credentials 
+            : json_decode($this->encrypted_credentials, true);
+
+        if (is_array($data)) {
+            if (!empty($data['root_password'])) {
+                try {
+                    return decrypt($data['root_password']);
+                } catch (\Exception $e) {
+                    return $data['root_password'];
+                }
+            }
+            return null;
+        }
+
+        // 2. Standard Laravel decrypt
         try {
             return decrypt($this->encrypted_credentials);
         } catch (\Exception $e) {
-            return $this->encrypted_credentials;
+            return null;
         }
+    }
+
+    /**
+     * Get the customer-configured or assigned server hostname.
+     */
+    public function getFormattedHostnameAttribute(): string
+    {
+        if (!empty($this->server_name)) {
+            return $this->server_name;
+        }
+
+        if (!empty($this->encrypted_credentials)) {
+            $data = is_array($this->encrypted_credentials) 
+                ? $this->encrypted_credentials 
+                : json_decode($this->encrypted_credentials, true);
+
+            if (!empty($data['hostname'])) {
+                return $data['hostname'];
+            }
+        }
+
+        return 'vps-' . $this->id . '.vortexcloud.net';
+    }
+
+    /**
+     * Get the human-readable datacenter location.
+     */
+    public function getFormattedRegionAttribute(): string
+    {
+        if (!empty($this->specs_snapshot['datacenter'])) {
+            return $this->specs_snapshot['datacenter'];
+        }
+
+        if (!empty($this->region)) {
+            return strtoupper($this->region);
+        }
+
+        return 'Global';
+    }
+
+    /**
+     * Get a compact specs summary (e.g. 8 vCPU Cores • 24 GB RAM • 100 GB NVMe).
+     */
+    public function getSpecsSummaryAttribute(): string
+    {
+        $specs = $this->specs_snapshot ?? [];
+        $parts = [];
+        if (!empty($specs['cores'])) $parts[] = $specs['cores'];
+        if (!empty($specs['memory'])) $parts[] = $specs['memory'];
+        if (!empty($specs['storage'])) $parts[] = $specs['storage'];
+
+        return !empty($parts) ? implode(' • ', $parts) : '';
+    }
+
+    /**
+     * Get recurring price formatted like $322.56 USD.
+     */
+    public function getFormattedPricingAttribute(): string
+    {
+        $amount = number_format((float) ($this->recurring_amount ?? $this->package?->price ?? 0), 2);
+        return '$' . $amount . ' USD';
+    }
+
+    /**
+     * Get clean billing cycle name.
+     */
+    public function getFormattedBillingCycleAttribute(): string
+    {
+        return match (strtolower($this->billing_cycle ?? '')) {
+            'biennially', '24months' => 'Biennially',
+            'annually', '12months' => 'Annually',
+            'monthly', '1month' => 'Monthly',
+            default => !empty($this->billing_cycle) ? ucfirst($this->billing_cycle) : 'Monthly',
+        };
     }
 
     public function user(): BelongsTo

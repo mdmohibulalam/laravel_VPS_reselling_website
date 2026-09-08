@@ -1,2 +1,12 @@
 User-agent: *
-Disallow:
+Allow: /
+Allow: /plans
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /cookie-policy
+Disallow: /admin/
+Disallow: /customer/
+Disallow: /checkout/
+Disallow: /stripe/
+
+Sitemap: http://localhost:8000/sitemap.xml

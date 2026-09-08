@@ -36,12 +36,13 @@ class OrderForm
                             ->dehydrated()
                             ->formatStateUsing(fn (string $state): string => match ($state) {
                                 'pending' => 'Pending (Unpaid)',
+                                'payment_confirmed' => 'Payment Confirmed (Ready to Deploy)',
                                 'provision' => 'Provision / Processing (Paid)',
                                 'contabo_ok' => 'Contabo OK (Ready to Deliver)',
                                 'active' => 'Active / Delivered',
                                 'failed' => 'Failed',
                                 'cancelled' => 'Cancelled',
-                                default => ucfirst($state),
+                                default => ucwords(str_replace('_', ' ', $state)),
                             }),
                     ])
                     ->columns(2),

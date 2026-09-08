@@ -12,7 +12,7 @@
     $siteName = config('app.name', 'VortexCloud');
     $pageTitle = $title ? $title . ' | ' . $siteName : $siteName . ' - Lightning-Fast NVMe VPS Hosting for Developers';
     $metaDescription = $description ?? 'Lightning-Fast NVMe VPS Hosting for Developers. Deploy high-performance virtual private servers in seconds with dedicated resources, root access, and unmetered bandwidth.';
-    $metaKeywords = $keywords ?? 'vps hosting, cloud vps, nvme vps, amd epyc server, linux vps, windows rdp, kvm hosting, developer cloud';
+    $metaKeywords = $keywords ?? 'vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, high frequency vps';
     $canonicalUrl = $canonical ?? url()->current();
     $socialImage = $ogImage ?? url('/images/og-cover.png');
 @endphp
@@ -28,6 +28,17 @@
 <meta name="keywords" content="{{ $metaKeywords }}">
 <meta name="robots" content="{{ $robots }}">
 <link rel="canonical" href="{{ $canonicalUrl }}">
+
+@php
+    $googleSiteVerification = config('services.google.site_verification', env('GOOGLE_SITE_VERIFICATION'));
+    $bingSiteVerification = config('services.bing.site_verification', env('BING_SITE_VERIFICATION'));
+@endphp
+@if(!empty($googleSiteVerification))
+<meta name="google-site-verification" content="{{ $googleSiteVerification }}">
+@endif
+@if(!empty($bingSiteVerification))
+<meta name="msvalidate.01" content="{{ $bingSiteVerification }}">
+@endif
 
 <!-- Theme Color for Mobile Browsers -->
 <meta name="theme-color" content="#120024">

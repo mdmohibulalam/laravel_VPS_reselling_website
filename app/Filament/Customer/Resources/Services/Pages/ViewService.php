@@ -23,6 +23,24 @@ class ViewService extends ViewRecord
 
     public ?string $liveStatus = null;
 
+    public function getTitle(): string
+    {
+        return 'Manage Server: ' . ($this->record->formatted_hostname ?? 'Virtual Private Server');
+    }
+
+    public function getHeading(): string
+    {
+        return 'Manage Server: ' . ($this->record->formatted_hostname ?? 'Virtual Private Server');
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/customer/services') => 'My Services',
+            '' => $this->record->formatted_hostname ?? ('Server #' . $this->record->id),
+        ];
+    }
+
     public function mount(int | string $record): void
     {
         parent::mount($record);
@@ -121,7 +139,7 @@ class ViewService extends ViewRecord
                     $invoice = Invoice::create([
                         'user_id' => auth()->id(),
                         'order_id' => $this->record->order_id,
-                        'invoice_number' => 'INV-UPG-' . strtoupper(Str::random(6)),
+                        'invoice_number' => Invoice::generateNextNumber(),
                         'amount' => $proratedDue,
                         'tax' => 0,
                         'total' => $proratedDue,

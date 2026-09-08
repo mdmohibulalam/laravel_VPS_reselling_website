@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Infolists;
 
+use App\Models\User;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
 use Filament\Infolists\Components\TextEntry;
@@ -25,11 +26,28 @@ class UserInfolist
                                     ->label('Email Address')
                                     ->copyable()
                                     ->icon('heroicon-o-envelope'),
-                                TextEntry::make('is_suspended')
-                                    ->label('Account Status')
+                                TextEntry::make('customer_status')
+                                    ->label('Customer Status')
                                     ->badge()
-                                    ->color(fn ($state) => $state ? 'danger' : 'success')
-                                    ->formatStateUsing(fn ($state) => $state ? 'Suspended' : 'Active'),
+                                    ->state(fn (User $record): string => $record->customer_status)
+                                    ->color(function (string $state): string {
+                                        if (str_starts_with($state, 'Active')) {
+                                            return 'success'; // Green
+                                        }
+                                        if (str_starts_with($state, 'Suspended')) {
+                                            return 'warning'; // Amber / Yellow
+                                        }
+                                        return 'gray'; // Neutral Slate
+                                    }),
+                                TextEntry::make('company_name')
+                                    ->label('Company / Organization')
+                                    ->placeholder('Personal')
+                                    ->icon('heroicon-o-building-office'),
+                                TextEntry::make('phone')
+                                    ->label('Phone Number')
+                                    ->placeholder('N/A')
+                                    ->copyable()
+                                    ->icon('heroicon-o-phone'),
                                 TextEntry::make('email_verified_at')
                                     ->label('Email Verified At')
                                     ->dateTime()
@@ -39,9 +57,34 @@ class UserInfolist
                             ]),
                     ]),
 
+                Section::make('Billing & Physical Address')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextEntry::make('address')
+                                    ->label('Street Address')
+                                    ->placeholder('N/A')
+                                    ->columnSpan(2),
+                                TextEntry::make('city')
+                                    ->label('City')
+                                    ->placeholder('N/A'),
+                                TextEntry::make('state')
+                                    ->label('State / Province')
+                                    ->placeholder('N/A'),
+                                TextEntry::make('country')
+                                    ->label('Country')
+                                    ->badge()
+                                    ->color('info')
+                                    ->placeholder('N/A'),
+                                TextEntry::make('zip_code')
+                                    ->label('Postal / Zip Code')
+                                    ->placeholder('N/A'),
+                            ]),
+                    ]),
+
                 Section::make('Meta Information')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(3)
                             ->schema([
                                 TextEntry::make('created_at')
                                     ->label('Registered At')
@@ -51,6 +94,13 @@ class UserInfolist
                                     ->label('Last Updated')
                                     ->dateTime()
                                     ->icon('heroicon-o-clock'),
+                                TextEntry::make('is_suspended')
+                                    ->label('Portal Login Access')
+                                    ->badge()
+                                    ->color('danger')
+                                    ->formatStateUsing(fn () => 'Login Blocked')
+                                    ->icon('heroicon-o-no-symbol')
+                                    ->visible(fn (User $record): bool => (bool) $record->is_suspended),
                             ]),
                     ])
                     ->collapsed(false),

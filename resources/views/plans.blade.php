@@ -1,7 +1,7 @@
 <x-app-layout 
     title="VPS Hosting Plans & Pricing | Enterprise NVMe Cloud" 
-    description="Deploy high-performance NVMe cloud VPS instances powered by AMD EPYC™ processors, DDR5 ECC memory, Gen4 RAID-10 storage, and instant automated provisioning."
-    keywords="vps hosting, cloud vps, nvme vps, amd epyc server, linux vps, windows rdp, kvm hosting, developer cloud, cheap vps"
+    description="Deploy high-performance NVMe cloud VPS instances powered by high-frequency multi-core compute, ECC memory, Gen4 RAID-10 storage, and instant automated provisioning."
+    keywords="vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, cheap vps, high frequency vps"
     headerVariant="solid"
 >
     <x-slot:schema>
@@ -12,7 +12,7 @@
             "@@type": "Product",
             "name": "VortexCloud High-Frequency NVMe VPS Hosting",
             "image": "{{ url('/images/og-cover.png') }}",
-            "description": "Enterprise cloud VPS hosting instances powered by AMD EPYC CPUs, Samsung Gen4 NVMe, and dedicated KVM virtualization.",
+            "description": "Enterprise cloud VPS hosting instances powered by high-frequency server processors, enterprise PCIe NVMe storage, and dedicated KVM virtualization.",
             "brand": {
                 "@@type": "Brand",
                 "name": "VortexCloud"
@@ -101,7 +101,7 @@
                 <!-- Category Capsule Pill -->
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-purple-200 shadow-sm">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Next-Gen AMD EPYC™ 9654 & Gen4 NVMe Cloud</span>
+                    <span>High-Frequency Multi-Core & Gen4 NVMe Cloud</span>
                 </div>
 
                 <!-- Main H1 Headline -->
@@ -122,7 +122,7 @@
                     </div>
                     <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl backdrop-blur-sm">
                         <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Samsung Gen4 NVMe (7,200 MB/s)</span>
+                        <span>Enterprise Gen4 NVMe Storage</span>
                     </div>
                     <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl backdrop-blur-sm">
                         <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
@@ -155,6 +155,9 @@
             <a href="#specs-comparison" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 Specs Comparison
             </a>
+            <a href="#comparison" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                vs Cloud Giants
+            </a>
             <a href="#datacenters" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 Locations
             </a>
@@ -178,7 +181,7 @@
                     Choose Your Virtual Server Configuration
                 </h2>
                 <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
-                    Scale compute, memory, and high-speed NVMe storage on demand. 30-day money-back guarantee on all plans.
+                    Scale compute, memory, and high-speed NVMe storage on demand. 99.99% uptime SLA across all plans.
                 </p>
 
             </div>
@@ -238,7 +241,7 @@
                         <tr>
                             <td class="p-5 font-semibold text-slate-900">CPU Architecture</td>
                             @foreach($packages->take(4) as $pkg)
-                                <td class="p-5 text-center text-slate-600">AMD EPYC™ 9654 (3.70 GHz)</td>
+                                <td class="p-5 text-center text-slate-600">High-Frequency Multi-Core CPU</td>
                             @endforeach
                         </tr>
                         <tr>
@@ -271,7 +274,7 @@
                         <tr>
                             <td class="p-5 font-semibold text-slate-900">Storage Architecture</td>
                             @foreach($packages->take(4) as $pkg)
-                                <td class="p-5 text-center text-slate-600">Samsung® Gen4 Enterprise RAID-10</td>
+                                <td class="p-5 text-center text-slate-600">Enterprise Gen4 NVMe RAID-10</td>
                             @endforeach
                         </tr>
 
@@ -349,7 +352,11 @@
     </section>
 
 
-    <!-- SECTION 5: 1-CLICK OPERATING SYSTEMS & APP STACKS CATALOG -->
+    <!-- SECTION 5: TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE (OPTION 2) -->
+    <x-competitor-comparison :packages="$packages" />
+
+
+    <!-- SECTION 6: 1-CLICK OPERATING SYSTEMS & APP STACKS CATALOG -->
     <section id="operating-systems" class="py-16 md:py-24 bg-slate-50/60 scroll-mt-24 border-t border-slate-200">
         <div class="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
             
@@ -640,7 +647,7 @@
                     <div class="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-[#673DE6]">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900">Samsung Gen4 NVMe RAID-10</h3>
+                    <h3 class="text-xl font-bold text-slate-900">Enterprise Gen4 NVMe RAID-10</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
                         Enterprise SSD arrays delivering over 7,200 MB/s read/write speeds and high random IOPS to power database queries and heavy concurrent workloads.
                     </p>
@@ -759,13 +766,13 @@
                 <!-- Q5 -->
                 <details class="reveal-init delay-200 group bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-6 [&_summary::-webkit-details-marker]:hidden open:border-purple-300 hover:border-purple-200 transition-all duration-200">
                     <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-lg gap-4 group-hover:text-[#673DE6]">
-                        <span>Do you offer a money-back guarantee?</span>
+                        <span>What is your uptime guarantee and SLA?</span>
                         <span class="w-8 h-8 rounded-xl bg-slate-50 group-open:bg-purple-50 text-slate-500 group-open:text-[#673DE6] flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </span>
                     </summary>
                     <div class="mt-4 pt-4 border-t border-slate-100 text-slate-600 leading-relaxed text-sm sm:text-base">
-                        Yes. All VPS packages come with our unconditional 30-day money-back guarantee. If you are not completely satisfied with your server latency or performance, our 24/7 support team will refund your payment.
+                        We provide an enterprise-grade 99.99% network uptime SLA across all high-frequency nodes. If an automated provisioning issue occurs on our platform, our 24/7 technical desk will immediately investigate or credit your account balance.
                     </div>
                 </details>
 
@@ -820,7 +827,7 @@
                         </span>
                         <span class="hidden sm:flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                            30-day money-back guarantee
+                            99.99% uptime guarantee
                         </span>
                     </div>
                 </div>

@@ -44,6 +44,7 @@ class OrderInfolist
                                     ->color(fn (string $state): string => match ($state) {
                                         'active' => 'success',
                                         'contabo_ok' => 'info',
+                                        'payment_confirmed' => 'warning',
                                         'provision' => 'warning',
                                         'pending' => 'gray',
                                         'failed', 'cancelled' => 'danger',
@@ -51,12 +52,13 @@ class OrderInfolist
                                     })
                                     ->formatStateUsing(fn (string $state): string => match ($state) {
                                         'pending' => 'Pending (Unpaid)',
+                                        'payment_confirmed' => 'Payment Confirmed (Ready to Deploy)',
                                         'provision' => 'Provisioning (Paid)',
-                                        'contabo_ok' => 'Contabo OK',
+                                        'contabo_ok' => 'Contabo OK (Ready to Deliver)',
                                         'active' => 'Active / Delivered',
                                         'failed' => 'Provisioning Failed',
                                         'cancelled' => 'Cancelled',
-                                        default => ucfirst($state),
+                                        default => ucwords(str_replace('_', ' ', $state)),
                                     }),
                             ]),
                     ]),
@@ -181,7 +183,16 @@ class OrderInfolist
                                 TextEntry::make('invoice.invoice_number')
                                     ->label('Invoice #')
                                     ->placeholder('No Invoice Attached')
-                                    ->icon('heroicon-o-document-text'),
+                                    ->icon('heroicon-o-document-text')
+                                    ->badge()
+                                    ->color('primary')
+                                    ->suffixAction(
+                                        \Filament\Actions\Action::make('view_invoice')
+                                            ->icon('heroicon-m-arrow-top-right-on-square')
+                                            ->tooltip('View Invoice Details')
+                                            ->visible(fn ($record) => !empty($record->invoice))
+                                            ->url(fn ($record) => \App\Filament\Resources\Invoices\InvoiceResource::getUrl('view', ['record' => $record->invoice->id]))
+                                    ),
                                 TextEntry::make('invoice.status')
                                     ->label('Invoice Status')
                                     ->badge()
@@ -197,6 +208,21 @@ class OrderInfolist
                                     ->dateTime()
                                     ->placeholder('Not Paid')
                                     ->icon('heroicon-o-banknotes'),
+                                TextEntry::make('invoice.crypto_txid')
+                                    ->label('Crypto TxID Proof')
+                                    ->placeholder('N/A')
+                                    ->copyable()
+                                    ->limit(18)
+                                    ->visible(fn ($record) => !empty($record->invoice?->crypto_txid))
+                                    ->suffixAction(
+                                        \Filament\Actions\Action::make('open_explorer_order')
+                                            ->icon('heroicon-m-arrow-top-right-on-square')
+                                            ->tooltip('Open on Blockchain Explorer')
+                                            ->visible(fn ($record) => !empty($record->invoice?->crypto_txid))
+                                            ->url(fn ($record) => (str_starts_with($record->invoice->crypto_txid ?? '', '0x') || str_contains($record->invoice->crypto_network ?? '', 'polygon'))
+                                                ? "https://polygonscan.com/tx/{$record->invoice->crypto_txid}"
+                                                : "https://tronscan.org/#/transaction/{$record->invoice->crypto_txid}", true)
+                                    ),
                             ]),
                     ])
                     ->collapsed(false),

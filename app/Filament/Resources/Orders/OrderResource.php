@@ -10,6 +10,7 @@ use App\Filament\Resources\Orders\Schemas\OrderForm;
 use App\Filament\Resources\Orders\Tables\OrdersTable;
 use App\Models\Order;
 use BackedEnum;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,7 +20,43 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingCart;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Orders';
+
+    public static function getNavigationItems(): array
+    {
+        return [
+            NavigationItem::make('All Orders')
+                ->group('Orders')
+                ->icon(Heroicon::OutlinedShoppingCart)
+                ->sort(1)
+                ->url(static::getUrl('index'))
+                ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.orders.index') && !request()->has('tab')),
+
+            NavigationItem::make('Pending Orders')
+                ->group('Orders')
+                ->icon(Heroicon::OutlinedClock)
+                ->sort(2)
+                ->badge(fn () => Order::where('status', 'pending')->count() ?: null, color: 'warning')
+                ->url(static::getUrl('index', ['tab' => 'pending']))
+                ->isActiveWhen(fn (): bool => request()->get('tab') === 'pending'),
+
+            NavigationItem::make('Inactive Orders')
+                ->group('Orders')
+                ->icon(Heroicon::OutlinedPauseCircle)
+                ->sort(4)
+                ->url(static::getUrl('index', ['tab' => 'inactive']))
+                ->isActiveWhen(fn (): bool => request()->get('tab') === 'inactive'),
+
+            NavigationItem::make('Cancelled Orders')
+                ->group('Orders')
+                ->icon(Heroicon::OutlinedXCircle)
+                ->sort(5)
+                ->url(static::getUrl('index', ['tab' => 'cancelled']))
+                ->isActiveWhen(fn (): bool => request()->get('tab') === 'cancelled'),
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {
