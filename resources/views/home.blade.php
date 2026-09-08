@@ -259,7 +259,7 @@
     </section>
 
     <!-- SECTION 3: TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE -->
-    <x-competitor-comparison />
+    <x-competitor-comparison sectionId="features" />
 
     <!-- SECTION: DEVOPS AUTOMATION & SELF-HOSTED ECOSYSTEM FLOWCHART (HOSTINGER-INSPIRED) -->
     <x-automation-flowchart />
@@ -533,16 +533,18 @@
                 }
             });
 
+            // Sort sections by document position to guarantee strictly ordered scrollspy updates
+            sections.sort((a, b) => a.section.offsetTop - b.section.offsetTop);
+
             function updateActiveSubNav() {
                 const scrollY = window.scrollY + 220;
                 let current = sections[0];
 
-                sections.forEach(item => {
-                    const top = item.section.offsetTop;
-                    if (scrollY >= top) {
-                        current = item;
+                for (let i = 0; i < sections.length; i++) {
+                    if (scrollY >= sections[i].section.offsetTop) {
+                        current = sections[i];
                     }
-                });
+                }
 
                 navLinks.forEach(link => {
                     link.className = 'sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10';
