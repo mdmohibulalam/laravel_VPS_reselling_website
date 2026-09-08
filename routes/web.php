@@ -27,10 +27,15 @@ Route::middleware('throttle:public')->group(function () {
     })->name('legal.cookies');
 
     Route::get('/sitemap.xml', function () {
-        $packages = \App\Models\Package::where('is_active', true)->get();
-        return response()
-            ->view('sitemap', compact('packages'))
-            ->header('Content-Type', 'text/xml');
+        $xmlContent = \Illuminate\Support\Facades\Cache::remember('catalog:sitemap_xml', 86400, function () {
+            $packages = \App\Models\Package::getCachedActivePackages();
+            return view('sitemap', compact('packages'))->render();
+        });
+
+        return response($xmlContent, 200, [
+            'Content-Type' => 'text/xml',
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
     })->name('sitemap');
 });
 

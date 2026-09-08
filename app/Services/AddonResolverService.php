@@ -10,12 +10,24 @@ class AddonResolverService
 {
     /**
      * Resolve all addons for a given package using the 2-Layer Override Hierarchy.
-     * Layer 1 (Global Defaults) overridden by Layer 2 (Package-Specific Overrides).
+     * Cached in memory for 24 hours to eliminate repetitive database queries.
      *
      * @param Package|null $package
      * @return Collection<string, Collection<int, PackageAddon>>
      */
     public function getResolvedAddonsForPackage(?Package $package = null): Collection
+    {
+        $cacheKey = $package ? "catalog:addons:package_{$package->id}" : 'catalog:addons:global';
+
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function () use ($package) {
+            return $this->resolveAddonsHierarchy($package);
+        });
+    }
+
+    /**
+     * Direct database resolution of the 2-Layer Override Hierarchy.
+     */
+    protected function resolveAddonsHierarchy(?Package $package = null): Collection
     {
         // 1. Fetch Global Base Addons (Layer 1)
         $globalAddons = PackageAddon::global()->get();
@@ -24,6 +36,7 @@ class AddonResolverService
         $overrides = $package 
             ? PackageAddon::where('package_id', $package->id)->get()->keyBy(fn($item) => $item->type . ':' . $item->value)
             : collect();
+
 
         $resolved = collect();
 

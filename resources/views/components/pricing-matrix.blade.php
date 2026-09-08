@@ -8,9 +8,7 @@
 @php
     if (is_null($packages)) {
         try {
-            $packages = \Illuminate\Support\Facades\Schema::hasTable('packages') 
-                ? \App\Models\Package::where('is_active', true)->orderBy('price_monthly')->get() 
-                : collect();
+            $packages = \App\Models\Package::getCachedActivePackages();
         } catch (\Throwable $e) {
             $packages = collect();
         }

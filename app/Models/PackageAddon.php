@@ -90,4 +90,39 @@ class PackageAddon extends Model
 
         return 'other';
     }
+
+    /**
+     * The "booted" method of the model to handle automatic addon cache invalidation.
+     */
+    protected static function booted(): void
+    {
+        static::saved(function ($addon) {
+            static::clearAddonCache($addon->package_id);
+        });
+
+        static::deleted(function ($addon) {
+            static::clearAddonCache($addon->package_id);
+        });
+    }
+
+    /**
+     * Invalidate addon cache entries.
+     */
+    public static function clearAddonCache(?int $packageId = null): void
+    {
+        \Illuminate\Support\Facades\Cache::forget('catalog:addons:global');
+        if ($packageId) {
+            \Illuminate\Support\Facades\Cache::forget("catalog:addons:package_{$packageId}");
+        } else {
+            // When a global addon changes, purge all package addon caches
+            try {
+                \App\Models\Package::pluck('id')->each(function ($id) {
+                    \Illuminate\Support\Facades\Cache::forget("catalog:addons:package_{$id}");
+                });
+            } catch (\Throwable $e) {
+                // Ignore during migrations
+            }
+        }
+    }
 }
+
