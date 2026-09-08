@@ -12,12 +12,18 @@ class Login extends BaseLogin
 {
     public function getHeading(): string
     {
-        return 'Sign in to VortexCloud';
+        return 'Log in';
     }
 
-    public function getSubheading(): ?string
+    public function getSubheading(): \Illuminate\Contracts\Support\Htmlable | string | null
     {
-        return 'Access your customer portal, active VPS instances, and invoices.';
+        if (! filament()->hasRegistration()) {
+            return 'Access your customer portal, active VPS instances, and invoices.';
+        }
+
+        return new \Illuminate\Support\HtmlString(
+            '<span class="text-slate-500">Don\'t have an account?</span> ' . $this->registerAction->toHtml()
+        );
     }
 
     public function quickDemoLogin()

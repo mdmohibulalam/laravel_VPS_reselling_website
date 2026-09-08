@@ -87,8 +87,8 @@ This document establishes the mandatory design system rules and visual identity 
       robots="index, follow|noindex, nofollow">
   ```
 * **Header Standards (`<x-header>`)**:
-  - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll. **MANDATORY** for any page with a dark cosmic hero section (e.g. `/` homepage, `/plans`). The navbar initializes completely borderless (`bg-transparent border-b border-transparent shadow-none`). The page's hero section must declare top padding `pt-32 pb-20 md:pt-40 md:pb-28` to provide headroom below the floating navbar.
-  - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-28 sm:pt-32` on `<main>`). Reserved strictly for light-mode text/content inner pages without a dark hero stage (e.g. `/terms-of-service`, `/privacy-policy`, `/cookie-policy`, documentation).
+  - `headerVariant="hero"`: Transparent floating navbar transitioning to frosted glass on scroll. **MANDATORY FOR EVERY PAGE with a dark cosmic hero section or top stage** (e.g. `/` homepage, `/plans` pricing, `/terms-of-service`, `/privacy-policy`, `/cookie-policy`, and any future marketing, product, or documentation pages). The navbar initializes completely borderless (`bg-transparent border-b border-transparent shadow-none`), ensuring **ZERO horizontal border lines** on page load. The page's hero section must declare top padding `pt-32 pb-16 sm:pt-40 sm:pb-24` (or `pt-32 pb-20 md:pt-40 md:pb-28`) to provide natural headroom below the floating navbar.
+  - `headerVariant="solid"`: Pre-activated dark frosted glass navbar with automatic top spacing (`pt-28 sm:pt-32` on `<main>`). **Reserved strictly for light-mode text/content inner pages that do NOT have a dark hero stage** (e.g. `/checkout-payment`, `/checkout-crypto-pay`). **NEVER use `solid` on any page with a dark cosmic background**, as its `border-b border-white/[0.12]` creates an unwanted visible horizontal dividing line.
   - `headerVariant="minimal"`: Distraction-free header with logo & SSL security badge for `/checkout` and auth pages.
   - **Auth Button Standard**: Single unified **`[ 👤 Login / Register ]`** button (`bg-[#673DE6] hover:bg-[#5428D8] text-white px-4 py-2.5 rounded-xl shadow-lg shadow-[#673DE6]/25`) for guests; **`[ 👤 Client Area ]`** for logged-in clients. Never include redundant "Deploy VPS" pills in the header.
   - **Primary Navigation Links Standard (Page Routes Only)**:
@@ -259,7 +259,7 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
 
 ## 14. Legal, Compliance & AUP Architecture Standard
 * **Mandatory Legal Suite**:
-  - The platform must permanently maintain three dedicated, high-typography legal views extending `<x-app-layout headerVariant="solid">`:
+  - The platform must permanently maintain three dedicated, high-typography legal views extending `<x-app-layout headerVariant="hero">`:
     - `/privacy-policy`: Comprehensive GDPR & CCPA compliant data handling, encryption, and subject rights.
     - `/terms-of-service`: Core master contract including mandatory AUP and non-refund clauses.
     - `/cookie-policy`: Detailed explanation of Essential, Analytics, and Marketing cookies with an interactive settings trigger.

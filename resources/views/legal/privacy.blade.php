@@ -2,11 +2,11 @@
     title="Privacy Policy" 
     description="Learn how VortexCloud collects, protects, and handles customer data across our high-performance cloud hosting and NVMe VPS platform."
     keywords="privacy policy, data protection, gdpr compliance, vps privacy, cloud data security"
-    headerVariant="solid"
+    headerVariant="hero"
     robots="index, follow">
 
     <!-- Page Header Stage -->
-    <div class="bg-gradient-to-b from-slate-900 via-[#120024] to-slate-900 text-white py-16 sm:py-24 border-b border-white/10 relative overflow-hidden">
+    <div class="bg-gradient-to-b from-[#120024] via-[#16002C] to-[#120024] text-white pt-32 pb-16 sm:pt-40 sm:pb-24 border-b border-white/10 relative overflow-hidden">
         <!-- Floating Ambient Stage Glows -->
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
         <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none animate-float-reverse"></div>
