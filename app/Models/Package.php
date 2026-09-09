@@ -62,9 +62,23 @@ class Package extends Model
      */
     public static function getCachedActivePackages(): \Illuminate\Database\Eloquent\Collection
     {
-        return \Illuminate\Support\Facades\Cache::remember('catalog:packages:active', 86400, function () {
+        try {
+            $cached = \Illuminate\Support\Facades\Cache::remember('catalog:packages:active', 86400, function () {
+                return static::where('is_active', true)->orderBy('price_monthly')->get();
+            });
+
+            if ($cached instanceof \Illuminate\Database\Eloquent\Collection && $cached->isNotEmpty() && $cached->first() instanceof static) {
+                return $cached;
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Cache retrieval failed for packages: ' . $e->getMessage());
+        }
+
+        try {
             return static::where('is_active', true)->orderBy('price_monthly')->get();
-        });
+        } catch (\Throwable $e) {
+            return new \Illuminate\Database\Eloquent\Collection();
+        }
     }
 
     /**

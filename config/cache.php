@@ -131,6 +131,12 @@ return [
     |
     */
 
-    'serializable_classes' => false,
+    'serializable_classes' => [
+        \Illuminate\Database\Eloquent\Collection::class,
+        \Illuminate\Support\Collection::class,
+        \App\Models\Package::class,
+        \App\Models\PackageAddon::class,
+    ],
 
 ];
+

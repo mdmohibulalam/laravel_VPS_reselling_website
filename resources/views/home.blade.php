@@ -232,8 +232,8 @@
 
             </div>
 
-            <!-- Dynamic Unified Pricing Matrix (Switcher, Cards & Reactivity Encapsulated) -->
-            <x-pricing-matrix />
+            <!-- Dynamic Unified Pricing Matrix (Switcher, Cards & Reactivity Encapsulated - 4 Flagship Plans) -->
+            <x-pricing-matrix :limit="4" />
 
             <!-- Explore More Plans Link & Supported OS Platforms -->
             <div class="reveal-init mt-12 text-center">

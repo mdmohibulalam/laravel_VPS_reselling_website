@@ -3,6 +3,7 @@
     'id' => 'pricing-matrix-' . uniqid(),
     'showSwitcher' => true,
     'defaultCycle' => '24months',
+    'limit' => null,
 ])
 
 @php
@@ -12,6 +13,9 @@
         } catch (\Throwable $e) {
             $packages = collect();
         }
+    }
+    if (!is_null($limit) && $packages instanceof \Illuminate\Support\Collection) {
+        $packages = $packages->take((int)$limit);
     }
 @endphp
 
