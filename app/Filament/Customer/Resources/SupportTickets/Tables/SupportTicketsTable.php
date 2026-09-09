@@ -2,9 +2,7 @@
 
 namespace App\Filament\Customer\Resources\SupportTickets\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -13,37 +11,83 @@ class SupportTicketsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('updated_at', 'desc')
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('formatted_id')
+                    ->label('Ticket ID')
+                    ->weight('bold')
+                    ->color('primary')
+                    ->sortable(query: function ($query, $direction) {
+                        return $query->orderBy('id', $direction);
+                    }),
+
                 TextColumn::make('subject')
-                    ->searchable(),
+                    ->label('Subject')
+                    ->searchable()
+                    ->weight('medium')
+                    ->limit(45),
+
+                TextColumn::make('service.server_name')
+                    ->label('Server')
+                    ->placeholder('General')
+                    ->badge()
+                    ->color('gray'),
+
                 TextColumn::make('department')
-                    ->badge(),
+                    ->label('Department')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'technical' => 'Technical',
+                        'billing' => 'Billing',
+                        'sales' => 'Sales',
+                        default => ucfirst($state),
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'technical' => 'info',
+                        'billing' => 'primary',
+                        'sales' => 'warning',
+                        default => 'gray',
+                    }),
+
                 TextColumn::make('priority')
-                    ->badge(),
+                    ->label('Priority')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'low' => 'gray',
+                        'medium' => 'warning',
+                        'high' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => strtoupper($state)),
+
                 TextColumn::make('status')
-                    ->badge(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'open' => 'warning',
+                        'in_progress' => 'info',
+                        'answered' => 'success',
+                        'closed' => 'gray',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'open' => 'OPEN',
+                        'in_progress' => 'IN PROGRESS',
+                        'answered' => 'ANSWERED',
+                        'closed' => 'CLOSED',
+                        default => strtoupper($state),
+                    }),
+
                 TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Last Activity')
+                    ->since()
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                ViewAction::make(),
             ]);
     }
 }

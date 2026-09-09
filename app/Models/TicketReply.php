@@ -10,7 +10,12 @@ class TicketReply extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'support_ticket_id',
+        'user_id',
+        'admin_id',
+        'message',
+    ];
 
     public function ticket(): BelongsTo
     {
@@ -25,5 +30,19 @@ class TicketReply extends Model
     public function admin(): BelongsTo
     {
         return $this->belongsTo(Admin::class);
+    }
+
+    public function getIsStaffReplyAttribute(): bool
+    {
+        return !empty($this->admin_id);
+    }
+
+    public function getAuthorNameAttribute(): string
+    {
+        if ($this->admin) {
+            return $this->admin->name . ' (VortexCloud Support)';
+        }
+
+        return $this->user?->name ?? 'Customer';
     }
 }

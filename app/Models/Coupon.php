@@ -9,7 +9,14 @@ class Coupon extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'code',
+        'type',
+        'value',
+        'usage_limit',
+        'used_count',
+        'expiry_date',
+    ];
 
     protected function casts(): array
     {

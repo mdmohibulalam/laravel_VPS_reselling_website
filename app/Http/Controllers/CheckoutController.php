@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Stripe\StripeClient;
 use App\Services\AddonResolverService;
@@ -76,7 +78,7 @@ class CheckoutController extends Controller
             'auto_backup' => $request->boolean('auto_backup'),
             'private_networking' => $request->boolean('private_networking'),
             'hostname' => $request->input('hostname'),
-            'root_password' => $request->input('root_password'),
+            'root_password' => $request->filled('root_password') ? Crypt::encryptString($request->input('root_password')) : ($pendingOrder['root_password'] ?? null),
             'coupon_code' => $request->input('coupon_code'),
         ]);
 
@@ -311,7 +313,6 @@ class CheckoutController extends Controller
                     } else {
                         $couponDiscount = min($subtotalAfterCycle, (float) $coupon->value);
                     }
-                    $coupon->increment('used_count');
                 }
             }
         }
@@ -343,54 +344,22 @@ class CheckoutController extends Controller
             }
         }
 
-        // Retrieve or Create Order
-        $order = !empty($pendingOrder['order_id']) ? Order::find($pendingOrder['order_id']) : null;
-        if (!$order) {
-            $order = Order::create([
-                'user_id' => $user->id,
-                'order_number' => 'ORD-' . strtoupper(Str::random(10)),
-                'total_amount' => $finalTotal,
-                'status' => $request->payment_type === 'stripe' ? 'completed' : 'pending',
-            ]);
-        } else {
-            $order->update([
-                'total_amount' => $finalTotal,
-                'status' => $request->payment_type === 'stripe' ? 'completed' : 'pending',
-            ]);
-        }
-
-        // Retrieve or Create Invoice
-        $invoice = !empty($pendingOrder['invoice_id']) ? Invoice::find($pendingOrder['invoice_id']) : null;
-        if (!$invoice) {
-            $invoice = Invoice::create([
-                'user_id' => $user->id,
-                'order_id' => $order->id,
-                'invoice_number' => Invoice::generateNextNumber(),
-                'amount' => $baseTotal,
-                'tax' => 0,
-                'total' => $finalTotal,
-                'status' => $request->payment_type === 'stripe' ? 'paid' : 'pending',
-                'payment_method' => $request->payment_type === 'stripe' ? 'stripe' : 'crypto',
-                'stripe_payment_intent_id' => $paymentIntent->id ?? null,
-                'due_date' => $request->payment_type === 'stripe' ? null : now()->addDays(7),
-                'paid_at' => $request->payment_type === 'stripe' ? now() : null,
-            ]);
-        } else {
-            $invoice->update([
-                'amount' => $baseTotal,
-                'total' => $finalTotal,
-                'status' => $request->payment_type === 'stripe' ? 'paid' : 'pending',
-                'payment_method' => $request->payment_type === 'stripe' ? 'stripe' : 'crypto',
-                'stripe_payment_intent_id' => $paymentIntent->id ?? null,
-                'paid_at' => $request->payment_type === 'stripe' ? now() : null,
-            ]);
-        }
-
-        // Server Provisioning Data
+        // Server Provisioning Spec Preparation
         $specsJson = is_string($package->specs) ? json_decode($package->specs, true) : (is_array($package->specs) ? $package->specs : []);
         $selectedOS = $selectedAddons->firstWhere('type', 'os');
         $selectedRegion = $selectedAddons->firstWhere('type', 'region');
         $selectedStorage = $selectedAddons->firstWhere('type', 'storage');
+
+        // Ensure root_password is encrypted for reversible upstream provisioning
+        $storedPassword = null;
+        if (!empty($pendingOrder['root_password'])) {
+            try {
+                decrypt($pendingOrder['root_password']);
+                $storedPassword = $pendingOrder['root_password'];
+            } catch (\Throwable $e) {
+                $storedPassword = Crypt::encryptString($pendingOrder['root_password']);
+            }
+        }
 
         $serverSpecsConfig = [
             'os' => $selectedOS ? $selectedOS->name : ($pendingOrder['os'] ?? 'Ubuntu 24.04 LTS'),
@@ -401,40 +370,96 @@ class CheckoutController extends Controller
             'auto_backup' => !empty($pendingOrder['auto_backup']),
             'private_networking' => !empty($pendingOrder['private_networking']),
             'hostname' => $pendingOrder['hostname'] ?? ('vps-' . strtolower(Str::random(6)) . '.vortexcloud.net'),
-            'root_password' => !empty($pendingOrder['root_password']) ? Hash::make($pendingOrder['root_password']) : null,
+            'root_password' => $storedPassword,
             'billing_period' => $cycle,
             'coupon_applied' => $appliedCoupon ? $appliedCoupon->code : null,
         ];
 
         $cycleRecurringAmount = round($subtotalAfterCycle, 2);
 
-        Service::create([
-            'user_id' => $user->id,
-            'order_id' => $order->id,
-            'package_id' => $package->id,
-            'status' => 'awaiting_provisioning',
-            'billing_cycle' => $cycle,
-            'recurring_amount' => $cycleRecurringAmount,
-            'specs_snapshot' => [
-                'package_name' => $package->name,
-                'cores' => $specsJson['cores'] ?? 'N/A',
-                'memory' => $specsJson['memory'] ?? 'N/A',
-                'storage' => $selectedStorage ? $selectedStorage->name : ($specsJson['storage'] ?? 'N/A'),
-                'bandwidth' => $specsJson['bandwidth'] ?? ($specsJson['port'] ?? '1 Gbps'),
-                'os' => $selectedOS ? $selectedOS->name : 'Ubuntu 24.04 LTS',
-                'datacenter' => $selectedRegion ? $selectedRegion->name : 'US East (New York)',
-            ],
-            'active_addons' => $selectedAddons->map(fn($a) => [
-                'id' => $a->id,
-                'type' => $a->type,
-                'name' => $a->name,
-                'value' => $a->value,
-                'api_identifier' => $a->api_identifier,
-                'price' => (float) $a->price,
-            ])->toArray(),
-            'next_due_date' => now()->addMonths($months),
-            'encrypted_credentials' => json_encode($serverSpecsConfig),
-        ]);
+        // Atomic Database Transaction for Order, Invoice, Coupon Count & Service
+        [$order, $invoice, $service] = DB::transaction(function () use (
+            $user, $package, $pendingOrder, $finalTotal, $baseTotal, $cycleRecurringAmount,
+            $cycle, $months, $request, $paymentIntent, $appliedCoupon,
+            $selectedAddons, $specsJson, $serverSpecsConfig
+        ) {
+            if ($appliedCoupon) {
+                $appliedCoupon->increment('used_count');
+            }
+
+            // Retrieve or Create Order
+            $order = !empty($pendingOrder['order_id']) ? Order::find($pendingOrder['order_id']) : null;
+            if (!$order) {
+                $order = Order::create([
+                    'user_id' => $user->id,
+                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                    'total_amount' => $finalTotal,
+                    'status' => $request->payment_type === 'stripe' ? 'completed' : 'pending',
+                ]);
+            } else {
+                $order->update([
+                    'total_amount' => $finalTotal,
+                    'status' => $request->payment_type === 'stripe' ? 'completed' : 'pending',
+                ]);
+            }
+
+            // Retrieve or Create Invoice
+            $invoice = !empty($pendingOrder['invoice_id']) ? Invoice::find($pendingOrder['invoice_id']) : null;
+            if (!$invoice) {
+                $invoice = Invoice::create([
+                    'user_id' => $user->id,
+                    'order_id' => $order->id,
+                    'invoice_number' => Invoice::generateNextNumber(),
+                    'amount' => $baseTotal,
+                    'tax' => 0,
+                    'total' => $finalTotal,
+                    'status' => $request->payment_type === 'stripe' ? 'paid' : 'pending',
+                    'payment_method' => $request->payment_type === 'stripe' ? 'stripe' : 'crypto',
+                    'stripe_payment_intent_id' => $paymentIntent->id ?? null,
+                    'due_date' => $request->payment_type === 'stripe' ? null : now()->addDays(7),
+                    'paid_at' => $request->payment_type === 'stripe' ? now() : null,
+                ]);
+            } else {
+                $invoice->update([
+                    'amount' => $baseTotal,
+                    'total' => $finalTotal,
+                    'status' => $request->payment_type === 'stripe' ? 'paid' : 'pending',
+                    'payment_method' => $request->payment_type === 'stripe' ? 'stripe' : 'crypto',
+                    'stripe_payment_intent_id' => $paymentIntent->id ?? null,
+                    'paid_at' => $request->payment_type === 'stripe' ? now() : null,
+                ]);
+            }
+
+            $service = Service::create([
+                'user_id' => $user->id,
+                'order_id' => $order->id,
+                'package_id' => $package->id,
+                'status' => 'awaiting_provisioning',
+                'billing_cycle' => $cycle,
+                'recurring_amount' => $cycleRecurringAmount,
+                'specs_snapshot' => [
+                    'package_name' => $package->name,
+                    'cores' => $specsJson['cores'] ?? 'N/A',
+                    'memory' => $specsJson['memory'] ?? 'N/A',
+                    'storage' => $serverSpecsConfig['storage_type'] ?? ($specsJson['storage'] ?? 'N/A'),
+                    'bandwidth' => $specsJson['bandwidth'] ?? ($specsJson['port'] ?? '1 Gbps'),
+                    'os' => $serverSpecsConfig['os'] ?? 'Ubuntu 24.04 LTS',
+                    'datacenter' => $serverSpecsConfig['datacenter'] ?? 'US East (New York)',
+                ],
+                'active_addons' => $selectedAddons->map(fn($a) => [
+                    'id' => $a->id,
+                    'type' => $a->type,
+                    'name' => $a->name,
+                    'value' => $a->value,
+                    'api_identifier' => $a->api_identifier,
+                    'price' => (float) $a->price,
+                ])->toArray(),
+                'next_due_date' => now()->addMonths($months),
+                'encrypted_credentials' => json_encode($serverSpecsConfig),
+            ]);
+
+            return [$order, $invoice, $service];
+        });
 
         // Clean up pending session order
         session()->forget('pending_order');

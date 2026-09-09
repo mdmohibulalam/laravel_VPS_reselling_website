@@ -10,7 +10,24 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'order_id',
+        'service_id',
+        'invoice_number',
+        'amount',
+        'tax',
+        'total',
+        'status',
+        'payment_method',
+        'crypto_network',
+        'crypto_wallet_address',
+        'crypto_txid',
+        'stripe_payment_intent_id',
+        'due_date',
+        'dunning_reminders',
+        'paid_at',
+    ];
 
     protected function casts(): array
     {
@@ -19,6 +36,7 @@ class Invoice extends Model
             'tax' => 'decimal:2',
             'total' => 'decimal:2',
             'due_date' => 'date',
+            'dunning_reminders' => 'array',
             'paid_at' => 'datetime',
         ];
     }
@@ -28,6 +46,24 @@ class Invoice extends Model
         static::creating(function (Invoice $invoice) {
             if (empty($invoice->invoice_number)) {
                 $invoice->invoice_number = static::generateNextNumber();
+            }
+        });
+
+        static::updated(function (Invoice $invoice) {
+            if ($invoice->wasChanged('status') && $invoice->status === 'paid') {
+                if ($invoice->service_id) {
+                    $invoice->service?->extendBillingCycle();
+                }
+
+                if ($invoice->user) {
+                    try {
+                        \Illuminate\Support\Facades\Mail::to($invoice->user->email)->send(
+                            new \App\Mail\InvoiceReceiptMail($invoice, $invoice->user)
+                        );
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error("Failed to send InvoiceReceiptMail for invoice #{$invoice->invoice_number}: " . $e->getMessage());
+                    }
+                }
             }
         });
     }
@@ -75,5 +111,10 @@ class Invoice extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
     }
 }

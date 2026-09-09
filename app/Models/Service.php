@@ -11,7 +11,27 @@ class Service extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'order_id',
+        'package_id',
+        'contabo_instance_id',
+        'server_name',
+        'default_user',
+        'os_image',
+        'region',
+        'cpu_cores',
+        'ram_size',
+        'disk_size',
+        'ip_address',
+        'encrypted_credentials',
+        'status',
+        'billing_cycle',
+        'recurring_amount',
+        'specs_snapshot',
+        'active_addons',
+        'next_due_date',
+    ];
 
     protected function casts(): array
     {
@@ -40,9 +60,13 @@ class Service extends Model
         if (is_array($data)) {
             if (!empty($data['root_password'])) {
                 try {
-                    return decrypt($data['root_password']);
-                } catch (\Exception $e) {
-                    return $data['root_password'];
+                    return \Illuminate\Support\Facades\Crypt::decryptString($data['root_password']);
+                } catch (\Throwable $e) {
+                    try {
+                        return decrypt($data['root_password']);
+                    } catch (\Throwable $e2) {
+                        return $data['root_password'];
+                    }
                 }
             }
             return null;
@@ -50,9 +74,13 @@ class Service extends Model
 
         // 2. Standard Laravel decrypt
         try {
-            return decrypt($this->encrypted_credentials);
-        } catch (\Exception $e) {
-            return null;
+            return \Illuminate\Support\Facades\Crypt::decryptString($this->encrypted_credentials);
+        } catch (\Throwable $e) {
+            try {
+                return decrypt($this->encrypted_credentials);
+            } catch (\Throwable $e2) {
+                return null;
+            }
         }
     }
 
@@ -148,5 +176,30 @@ class Service extends Model
     public function provisioningLogs(): HasMany
     {
         return $this->hasMany(ProvisioningLog::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * Extend service next_due_date according to billing_cycle and set status back to active.
+     */
+    public function extendBillingCycle(): void
+    {
+        $currentDue = $this->next_due_date ? \Carbon\Carbon::parse($this->next_due_date) : now();
+        $baseDate = $currentDue->isPast() ? now() : $currentDue;
+
+        $newDueDate = match (strtolower($this->billing_cycle ?? 'monthly')) {
+            'biennially', '24months' => $baseDate->copy()->addMonths(24),
+            'annually', '12months' => $baseDate->copy()->addMonths(12),
+            default => $baseDate->copy()->addMonth(),
+        };
+
+        $this->update([
+            'next_due_date' => $newDueDate,
+            'status' => 'active',
+        ]);
     }
 }

@@ -152,6 +152,15 @@
         details[open] summary svg {
             transform: rotate(180deg);
         }
+
+        /* Hide Horizontal Scrollbars on Floating Sub-Nav Pill */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 
     <!-- Page-Specific Styles Stack -->

@@ -9,7 +9,12 @@ class CmsPage extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'is_published',
+    ];
 
     protected function casts(): array
     {

@@ -35,6 +35,10 @@ class CustomerPanelProvider extends PanelProvider
                 'primary' => '#673DE6',
             ])
             ->renderHook(
+                \Filament\View\PanelsRenderHook::SIMPLE_LAYOUT_START,
+                fn () => view('filament.customer.components.auth-decorations')
+            )
+            ->renderHook(
                 \Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
                 fn () => view('filament.customer.components.demo-login')
             )

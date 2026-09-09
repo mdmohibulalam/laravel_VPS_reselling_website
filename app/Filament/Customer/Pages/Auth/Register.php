@@ -11,12 +11,18 @@ class Register extends BaseRegister
 {
     public function getHeading(): string
     {
-        return 'Create your VortexCloud Account';
+        return 'Register';
     }
 
-    public function getSubheading(): ?string
+    public function getSubheading(): \Illuminate\Contracts\Support\Htmlable | string | null
     {
-        return 'Deploy high-performance NVMe cloud VPS instances in seconds.';
+        if (! filament()->hasLogin()) {
+            return 'Deploy high-performance NVMe cloud VPS instances in seconds.';
+        }
+
+        return new \Illuminate\Support\HtmlString(
+            '<span class="text-slate-500">Already have an account?</span> ' . $this->loginAction->toHtml()
+        );
     }
 
     public function form(Schema $schema): Schema
@@ -28,7 +34,7 @@ class Register extends BaseRegister
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
                 Checkbox::make('terms')
-                    ->label(new HtmlString('I have read and agree to the <a href="/terms-of-service" target="_blank" class="text-[#673DE6] underline font-semibold">Terms of Service</a> and <a href="/privacy-policy" target="_blank" class="text-[#673DE6] underline font-semibold">Privacy Policy</a>.'))
+                    ->label(new HtmlString('I have read and agree to the <a href="/terms-of-service" target="_blank" onclick="event.stopPropagation();" class="vortex-legal-link" style="color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px;">Terms of Service</a> and <a href="/privacy-policy" target="_blank" onclick="event.stopPropagation();" class="vortex-legal-link" style="color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px;">Privacy Policy</a>.'))
                     ->accepted()
                     ->required()
                     ->dehydrated(false)

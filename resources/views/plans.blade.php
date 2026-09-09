@@ -2,7 +2,7 @@
     title="VPS Hosting Plans & Pricing | Enterprise NVMe Cloud" 
     description="Deploy high-performance NVMe cloud VPS instances powered by high-frequency multi-core compute, ECC memory, Gen4 RAID-10 storage, and instant automated provisioning."
     keywords="vps hosting, cloud vps, nvme vps, linux vps, windows rdp, kvm hosting, developer cloud, cheap vps, high frequency vps"
-    headerVariant="solid"
+    headerVariant="hero"
 >
     <x-slot:schema>
         <!-- Product & AggregateOffer Schema for Google Search Rich Snippets -->
@@ -88,7 +88,7 @@
     @endphp
 
     <!-- SECTION 1: VPS HERO & VALUE PROPOSITION -->
-    <section class="relative bg-gradient-to-b from-[#120024] via-[#16002C] to-[#120024] text-white pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden">
+    <section class="relative bg-gradient-to-b from-[#120024] via-[#16002C] to-[#120024] text-white pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
         <!-- Ambient Stage Lighting Glows -->
         <div class="absolute -top-32 -left-32 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
         <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-3xl pointer-events-none animate-float-reverse"></div>
@@ -146,20 +146,20 @@
             <a href="#plans" class="sub-nav-link px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 bg-white text-[#120024] shadow-md">
                 Pricing
             </a>
-            <a href="#features" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
-                Features
-            </a>
-            <a href="#operating-systems" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
-                OS Templates
-            </a>
             <a href="#specs-comparison" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 Specs Comparison
             </a>
             <a href="#comparison" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 vs Cloud Giants
             </a>
+            <a href="#operating-systems" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                OS Templates
+            </a>
             <a href="#datacenters" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 Locations
+            </a>
+            <a href="#features" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
+                Features
             </a>
             <a href="#faq" class="sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10">
                 FAQ
@@ -353,7 +353,7 @@
 
 
     <!-- SECTION 5: TRANSPARENT RESOURCE ECONOMICS & VALUE SHOWCASE (OPTION 2) -->
-    <x-competitor-comparison :packages="$packages" />
+    <x-competitor-comparison :packages="$packages" sectionId="comparison" />
 
 
     <!-- SECTION 6: 1-CLICK OPERATING SYSTEMS & APP STACKS CATALOG -->
@@ -851,16 +851,18 @@
                 }
             });
 
+            // Sort sections by document position to guarantee strictly ordered scrollspy updates
+            sections.sort((a, b) => a.section.offsetTop - b.section.offsetTop);
+
             function updateActiveSubNav() {
-                const scrollY = window.scrollY + 200;
+                const scrollY = window.scrollY + 220;
                 let current = sections[0];
 
-                sections.forEach(item => {
-                    const top = item.section.offsetTop;
-                    if (scrollY >= top) {
-                        current = item;
+                for (let i = 0; i < sections.length; i++) {
+                    if (scrollY >= sections[i].section.offsetTop) {
+                        current = sections[i];
                     }
-                });
+                }
 
                 navLinks.forEach(link => {
                     link.className = 'sub-nav-link px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/10';

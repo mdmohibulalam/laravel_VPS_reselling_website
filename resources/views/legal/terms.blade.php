@@ -2,11 +2,11 @@
     title="Terms of Service & Acceptable Use Policy" 
     description="VortexCloud master Terms of Service, Acceptable Use Policy (AUP), server governance rules, billing, and non-refundable digital service guidelines."
     keywords="terms of service, acceptable use policy, aup, vps terms, cloud hosting agreement, refund policy"
-    headerVariant="solid"
+    headerVariant="hero"
     robots="index, follow">
 
     <!-- Page Header Stage -->
-    <div class="bg-gradient-to-b from-slate-900 via-[#120024] to-slate-900 text-white py-16 sm:py-24 border-b border-white/10 relative overflow-hidden">
+    <div class="bg-gradient-to-b from-[#120024] via-[#16002C] to-[#120024] text-white pt-32 pb-16 sm:pt-40 sm:pb-24 border-b border-white/10 relative overflow-hidden">
         <!-- Floating Ambient Stage Glows -->
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
         <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none animate-float-reverse"></div>
@@ -183,6 +183,16 @@
                             <li><strong class="text-slate-900">Provisioning Failure Protection:</strong> If an automated system error on our platform prevents a server from being deployed within 24 hours of successful payment confirmation, and our engineering desk cannot resolve the fault, the client is entitled to a full 100% credit applied directly to their internal account balance or original payment method.</li>
                             <li><strong class="text-slate-900">Payment Disputes & Chargebacks:</strong> Unwarranted chargebacks or payment disputes filed with credit card issuers or payment gateways constitute a breach of this agreement and will result in immediate suspension of all associated services and debt referral.</li>
                         </ul>
+
+                        <div class="p-5 rounded-2xl bg-slate-100 border border-slate-200 space-y-2">
+                            <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                                <span class="text-[#673DE6]">⬆️</span> Plan Upgrades & Non-Downgrade Architecture Policy
+                            </h3>
+                            <ul class="space-y-1.5 text-xs sm:text-sm text-slate-700 leading-relaxed list-disc list-inside">
+                                <li><strong>VPS Upgrades Allowed Anytime:</strong> Clients may upgrade their server tiers (vCPU, RAM, NVMe storage) at any time. Upgrades are billed on a prorated basis for the remainder of the current billing cycle and take effect immediately without requiring operating system reinstallation.</li>
+                                <li><strong>VPS Downgrades Strictly Prohibited:</strong> Downsizing or downgrading an existing VPS instance to a smaller tier is strictly not supported. Under KVM and physical NVMe virtualization architecture, shrinking a virtual disk block partition introduces catastrophic risks of filesystem superblock corruption and irreversible data loss. Clients wishing to utilize a smaller plan must order a new instance and migrate their data independently.</li>
+                            </ul>
+                        </div>
                     </section>
 
                     <!-- Card 4: Server Provisioning & Access -->
@@ -211,13 +221,59 @@
                         </p>
                     </section>
 
-                    <!-- Card 6: Suspension & Termination -->
-                    <section id="section-6" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-4">
-                        <span class="text-xs font-bold text-[#673DE6] tracking-wider uppercase">Section 6</span>
-                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Suspension & Account Termination</h2>
+                    <!-- Card 6: Renewal Dunning & Strict Expiration Termination -->
+                    <section id="section-6" class="bg-white rounded-3xl p-6 sm:p-10 border-2 border-red-200 shadow-sm space-y-5">
+                        <div class="flex items-center gap-2 text-red-600 font-bold text-xs uppercase tracking-wider">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <span>Section 6 &bull; Strict Lifecycle & Termination Rules</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Billing Cycles, Renewal Dunning & Zero-Grace-Period Expiration Termination</h2>
                         <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-                            Services with past-due unpaid renewal invoices are subjected to automated suspension after a <strong>3-day grace period</strong>. If renewal invoices remain unsettled after <strong>7 consecutive days</strong>, the associated virtual machine instance, disk volumes, and IP allocations are permanently decommissioned and purged from our storage arrays without possibility of recovery.
+                            VortexCloud operates as a specialized high-performance cloud infrastructure reseller, reserving dedicated hypervisor compute nodes, physical DDR RAM blocks, and global transit IPv4 routes on non-refundable upstream billing cycles.
                         </p>
+
+                        <div class="space-y-3">
+                            <h3 class="font-bold text-slate-900 text-sm sm:text-base">Automated 4-Stage Renewal Notification Schedule</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200 space-y-1">
+                                    <span class="text-xs font-bold text-[#673DE6] uppercase tracking-wider">14 Days Prior (Day -14)</span>
+                                    <p class="text-xs text-slate-700 font-medium">Renewal invoice generated and dispatched to your email and customer portal.</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 space-y-1">
+                                    <span class="text-xs font-bold text-blue-700 uppercase tracking-wider">7 Days Prior (Day -7)</span>
+                                    <p class="text-xs text-slate-700 font-medium">Second automated payment reminder sent if invoice remains unsettled.</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1">
+                                    <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">3 Days Prior (Day -3)</span>
+                                    <p class="text-xs text-slate-700 font-medium">Urgent 72-hour payment alert sent to prevent service interruption.</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-red-50/70 border border-red-200 space-y-1">
+                                    <span class="text-xs font-bold text-red-700 uppercase tracking-wider">Due Date (Day 0)</span>
+                                    <p class="text-xs text-slate-700 font-medium">Final expiration notice warning of immediate cancellation at 23:59 UTC.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-red-50/80 border border-red-200 space-y-2">
+                            <h3 class="font-bold text-red-900 text-sm sm:text-base flex items-center gap-2">
+                                <span>⚠️</span> Strict Non-Holding Policy: Zero Grace Period Upon Expiration
+                            </h3>
+                            <p class="text-xs sm:text-sm text-red-800 leading-relaxed">
+                                <strong>Because upstream datacenter providers bill for recurring compute instances upfront the exact moment a term expires, VortexCloud cannot and does not hold unpaid instances past their due date.</strong>
+                            </p>
+                            <p class="text-xs sm:text-sm text-red-800 leading-relaxed">
+                                If a renewal invoice is not paid and confirmed by <strong>23:59 UTC on the renewal due date</strong>, the virtual private server instance is <strong>immediately cancelled and terminated with zero grace period</strong>. Upon termination:
+                            </p>
+                            <ul class="text-xs sm:text-sm text-red-800 space-y-1 list-disc list-inside">
+                                <li>The virtual machine is immediately destroyed and wiped from datacenter hypervisors.</li>
+                                <li>All dedicated IPv4 and IPv6 addresses are released back to global routing tables.</li>
+                                <li>All virtual disk volumes and data partitions are permanently deleted with <strong>zero possibility of recovery or restoration</strong>.</li>
+                            </ul>
+                        </div>
                     </section>
 
                     <!-- Card 7: Limitation of Liability -->

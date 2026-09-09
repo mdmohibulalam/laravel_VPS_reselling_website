@@ -12,7 +12,12 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'order_number',
+        'total_amount',
+        'status',
+    ];
 
     protected function casts(): array
     {
