@@ -50,8 +50,20 @@ class Invoice extends Model
         });
 
         static::updated(function (Invoice $invoice) {
-            if ($invoice->wasChanged('status') && $invoice->status === 'paid' && $invoice->service_id) {
-                $invoice->service?->extendBillingCycle();
+            if ($invoice->wasChanged('status') && $invoice->status === 'paid') {
+                if ($invoice->service_id) {
+                    $invoice->service?->extendBillingCycle();
+                }
+
+                if ($invoice->user) {
+                    try {
+                        \Illuminate\Support\Facades\Mail::to($invoice->user->email)->send(
+                            new \App\Mail\InvoiceReceiptMail($invoice, $invoice->user)
+                        );
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error("Failed to send InvoiceReceiptMail for invoice #{$invoice->invoice_number}: " . $e->getMessage());
+                    }
+                }
             }
         });
     }

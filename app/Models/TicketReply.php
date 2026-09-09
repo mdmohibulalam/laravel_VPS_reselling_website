@@ -31,4 +31,18 @@ class TicketReply extends Model
     {
         return $this->belongsTo(Admin::class);
     }
+
+    public function getIsStaffReplyAttribute(): bool
+    {
+        return !empty($this->admin_id);
+    }
+
+    public function getAuthorNameAttribute(): string
+    {
+        if ($this->admin) {
+            return $this->admin->name . ' (VortexCloud Support)';
+        }
+
+        return $this->user?->name ?? 'Customer';
+    }
 }
