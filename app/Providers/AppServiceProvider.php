@@ -26,7 +26,51 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Schema::defaultStringLength(125);
         \Illuminate\Database\Eloquent\Model::unguard();
 
+        $this->configureRedisFallback();
         $this->configureRateLimiting();
+    }
+
+    /**
+     * Ensure session, cache, and queue gracefully fallback to database
+     * if Redis is configured in .env but unreachable on the current host.
+     */
+    protected function configureRedisFallback(): void
+    {
+        $usesRedis = config('session.driver') === 'redis' 
+            || config('cache.default') === 'redis' 
+            || config('queue.default') === 'redis';
+
+        if (!$usesRedis) {
+            return;
+        }
+
+        try {
+            $host = config('database.redis.default.host', '127.0.0.1');
+            $port = (int) config('database.redis.default.port', 6379);
+
+            // Fast socket probe (0.2s timeout)
+            $connection = @fsockopen($host, $port, $errno, $errstr, 0.2);
+            if (!$connection) {
+                $this->applyDriverFallbacks();
+            } else {
+                fclose($connection);
+            }
+        } catch (\Throwable $e) {
+            $this->applyDriverFallbacks();
+        }
+    }
+
+    protected function applyDriverFallbacks(): void
+    {
+        if (config('session.driver') === 'redis') {
+            config(['session.driver' => 'database']);
+        }
+        if (config('cache.default') === 'redis') {
+            config(['cache.default' => 'database']);
+        }
+        if (config('queue.default') === 'redis') {
+            config(['queue.default' => 'database']);
+        }
     }
 
     /**
