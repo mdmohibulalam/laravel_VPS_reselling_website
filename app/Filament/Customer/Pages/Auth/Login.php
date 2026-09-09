@@ -28,7 +28,7 @@ class Login extends BaseLogin
 
     public function quickDemoLogin()
     {
-        if (!config('app.demo_login_enabled')) {
+        if (!config('app.demo_login_enabled') || app()->environment('production')) {
             return;
         }
 

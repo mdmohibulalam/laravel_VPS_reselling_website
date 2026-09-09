@@ -14,7 +14,12 @@ class Admin extends Authenticatable implements FilamentUser
 {
     use HasFactory, HasRoles;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'email',
+        'email_verified_at',
+        'password',
+    ];
 
     public function canAccessPanel(Panel $panel): bool
     {

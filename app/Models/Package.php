@@ -10,7 +10,19 @@ class Package extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'description',
+        'category',
+        'specs',
+        'price_monthly',
+        'price_quarterly',
+        'price_semi_annually',
+        'price_annually',
+        'setup_fee',
+        'contabo_product_id',
+        'is_active',
+    ];
 
     /**
      * Get the attributes that should be cast.

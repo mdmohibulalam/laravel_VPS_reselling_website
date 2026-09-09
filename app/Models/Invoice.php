@@ -10,7 +10,22 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'order_id',
+        'invoice_number',
+        'amount',
+        'tax',
+        'total',
+        'status',
+        'payment_method',
+        'crypto_network',
+        'crypto_wallet_address',
+        'crypto_txid',
+        'stripe_payment_intent_id',
+        'due_date',
+        'paid_at',
+    ];
 
     protected function casts(): array
     {

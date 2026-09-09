@@ -11,7 +11,27 @@ class Service extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'order_id',
+        'package_id',
+        'contabo_instance_id',
+        'server_name',
+        'default_user',
+        'os_image',
+        'region',
+        'cpu_cores',
+        'ram_size',
+        'disk_size',
+        'ip_address',
+        'encrypted_credentials',
+        'status',
+        'billing_cycle',
+        'recurring_amount',
+        'specs_snapshot',
+        'active_addons',
+        'next_due_date',
+    ];
 
     protected function casts(): array
     {
@@ -40,9 +60,13 @@ class Service extends Model
         if (is_array($data)) {
             if (!empty($data['root_password'])) {
                 try {
-                    return decrypt($data['root_password']);
-                } catch (\Exception $e) {
-                    return $data['root_password'];
+                    return \Illuminate\Support\Facades\Crypt::decryptString($data['root_password']);
+                } catch (\Throwable $e) {
+                    try {
+                        return decrypt($data['root_password']);
+                    } catch (\Throwable $e2) {
+                        return $data['root_password'];
+                    }
                 }
             }
             return null;
@@ -50,9 +74,13 @@ class Service extends Model
 
         // 2. Standard Laravel decrypt
         try {
-            return decrypt($this->encrypted_credentials);
-        } catch (\Exception $e) {
-            return null;
+            return \Illuminate\Support\Facades\Crypt::decryptString($this->encrypted_credentials);
+        } catch (\Throwable $e) {
+            try {
+                return decrypt($this->encrypted_credentials);
+            } catch (\Throwable $e2) {
+                return null;
+            }
         }
     }
 

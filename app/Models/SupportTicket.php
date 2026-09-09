@@ -11,7 +11,13 @@ class SupportTicket extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'subject',
+        'department',
+        'priority',
+        'status',
+    ];
 
     public function user(): BelongsTo
     {

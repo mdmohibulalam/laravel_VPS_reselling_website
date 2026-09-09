@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\Schema::defaultStringLength(125);
-        \Illuminate\Database\Eloquent\Model::unguard();
 
         $this->configureRedisFallback();
         $this->configureRateLimiting();

@@ -37,6 +37,21 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'company_name',
+        'address',
+        'city',
+        'state',
+        'country',
+        'zip_code',
+        'notification_preferences',
+        'password',
+        'is_suspended',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *

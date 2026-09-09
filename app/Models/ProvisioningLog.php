@@ -10,7 +10,13 @@ class ProvisioningLog extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'service_id',
+        'action',
+        'request_payload',
+        'response_payload',
+        'is_success',
+    ];
 
     protected function casts(): array
     {

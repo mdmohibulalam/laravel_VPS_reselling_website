@@ -10,7 +10,12 @@ class TicketReply extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'support_ticket_id',
+        'user_id',
+        'admin_id',
+        'message',
+    ];
 
     public function ticket(): BelongsTo
     {

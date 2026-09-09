@@ -72,4 +72,38 @@ Route::get('/customer/invoices/{invoice}/print', function (\App\Models\Invoice $
     return view('customer.invoice-print', ['invoice' => $invoice]);
 })->middleware('auth')->name('customer.invoices.print');
 
+// Deep Health Check Endpoint for Load Balancers (AWS ALB, Cloudflare, NGINX)
+Route::get('/healthz', function () {
+    $dbHealthy = false;
+    $cacheHealthy = false;
+    $errors = [];
+
+    try {
+        \Illuminate\Support\Facades\DB::connection()->getPdo();
+        $dbHealthy = true;
+    } catch (\Throwable $e) {
+        $errors['database'] = $e->getMessage();
+    }
+
+    try {
+        \Illuminate\Support\Facades\Cache::put('healthz_probe', true, 10);
+        $cacheHealthy = \Illuminate\Support\Facades\Cache::get('healthz_probe') === true;
+    } catch (\Throwable $e) {
+        $errors['cache'] = $e->getMessage();
+    }
+
+    $isHealthy = $dbHealthy && $cacheHealthy;
+    $statusCode = $isHealthy ? 200 : 503;
+
+    return response()->json([
+        'status' => $isHealthy ? 'healthy' : 'unhealthy',
+        'timestamp' => now()->toIso8601String(),
+        'services' => [
+            'database' => $dbHealthy ? 'connected' : 'disconnected',
+            'cache' => $cacheHealthy ? 'connected' : 'disconnected',
+        ],
+        'errors' => empty($errors) ? null : $errors,
+    ], $statusCode);
+})->name('healthz');
+
 
