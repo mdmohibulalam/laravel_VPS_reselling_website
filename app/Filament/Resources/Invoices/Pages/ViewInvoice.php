@@ -47,13 +47,22 @@ class ViewInvoice extends ViewRecord
                         $this->record->order->update(['status' => 'payment_confirmed']);
                     }
 
-                    \App\Models\Service::where('order_id', $this->record->order_id)->update(['status' => 'ready_for_provisioning']);
+                    if ($this->record->service_id) {
+                        $this->record->service?->extendBillingCycle();
+                        Notification::make()
+                            ->title('Renewal Payment Confirmed for Invoice #' . $this->record->invoice_number)
+                            ->body('Invoice marked as PAID. Service next due date has been automatically extended.')
+                            ->success()
+                            ->send();
+                    } else {
+                        \App\Models\Service::where('order_id', $this->record->order_id)->update(['status' => 'ready_for_provisioning']);
 
-                    Notification::make()
-                        ->title('Payment Confirmed for Invoice #' . $this->record->invoice_number)
-                        ->body('Invoice marked as PAID. Order is now ready for deployment to Contabo.')
-                        ->success()
-                        ->send();
+                        Notification::make()
+                            ->title('Payment Confirmed for Invoice #' . $this->record->invoice_number)
+                            ->body('Invoice marked as PAID. Order is now ready for deployment.')
+                            ->success()
+                            ->send();
+                    }
                 }),
 
             Action::make('open_order')

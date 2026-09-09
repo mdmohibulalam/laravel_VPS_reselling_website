@@ -13,6 +13,7 @@ class Invoice extends Model
     protected $fillable = [
         'user_id',
         'order_id',
+        'service_id',
         'invoice_number',
         'amount',
         'tax',
@@ -24,6 +25,7 @@ class Invoice extends Model
         'crypto_txid',
         'stripe_payment_intent_id',
         'due_date',
+        'dunning_reminders',
         'paid_at',
     ];
 
@@ -34,6 +36,7 @@ class Invoice extends Model
             'tax' => 'decimal:2',
             'total' => 'decimal:2',
             'due_date' => 'date',
+            'dunning_reminders' => 'array',
             'paid_at' => 'datetime',
         ];
     }
@@ -43,6 +46,12 @@ class Invoice extends Model
         static::creating(function (Invoice $invoice) {
             if (empty($invoice->invoice_number)) {
                 $invoice->invoice_number = static::generateNextNumber();
+            }
+        });
+
+        static::updated(function (Invoice $invoice) {
+            if ($invoice->wasChanged('status') && $invoice->status === 'paid' && $invoice->service_id) {
+                $invoice->service?->extendBillingCycle();
             }
         });
     }
@@ -90,5 +99,10 @@ class Invoice extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
     }
 }

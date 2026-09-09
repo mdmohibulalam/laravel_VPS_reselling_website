@@ -177,4 +177,29 @@ class Service extends Model
     {
         return $this->hasMany(ProvisioningLog::class);
     }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * Extend service next_due_date according to billing_cycle and set status back to active.
+     */
+    public function extendBillingCycle(): void
+    {
+        $currentDue = $this->next_due_date ? \Carbon\Carbon::parse($this->next_due_date) : now();
+        $baseDate = $currentDue->isPast() ? now() : $currentDue;
+
+        $newDueDate = match (strtolower($this->billing_cycle ?? 'monthly')) {
+            'biennially', '24months' => $baseDate->copy()->addMonths(24),
+            'annually', '12months' => $baseDate->copy()->addMonths(12),
+            default => $baseDate->copy()->addMonth(),
+        };
+
+        $this->update([
+            'next_due_date' => $newDueDate,
+            'status' => 'active',
+        ]);
+    }
 }
