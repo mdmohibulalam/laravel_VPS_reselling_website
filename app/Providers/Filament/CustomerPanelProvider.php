@@ -31,6 +31,7 @@ class CustomerPanelProvider extends PanelProvider
             ->profile(\App\Filament\Customer\Pages\Auth\EditProfile::class, isSimple: false)
             ->authGuard('web')
             ->brandName('VortexCloud Customer Portal')
+            ->darkMode(false)
             ->colors([
                 'primary' => '#673DE6',
             ])

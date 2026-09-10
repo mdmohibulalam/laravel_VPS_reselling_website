@@ -18,7 +18,13 @@ class CmsPageResource extends Resource
 {
     protected static ?string $model = CmsPage::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\UnitEnum|null $navigationGroup = 'System Settings';
+
+    protected static ?int $navigationSort = 20;
+
+    protected static ?string $navigationLabel = 'CMS Pages';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     public static function form(Schema $schema): Schema
     {
