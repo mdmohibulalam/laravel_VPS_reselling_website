@@ -54,12 +54,16 @@ class SupportTicketsTable
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'open' => 'success',
-                        'replied' => 'info',
+                        'open' => 'warning',
+                        'in_progress' => 'info',
+                        'answered' => 'success',
                         'closed' => 'gray',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'in_progress' => 'In Progress',
+                        default => ucfirst($state),
+                    })
                     ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Opened At')
@@ -77,7 +81,8 @@ class SupportTicketsTable
                 SelectFilter::make('status')
                     ->options([
                         'open' => 'Open',
-                        'replied' => 'Replied',
+                        'in_progress' => 'In Progress',
+                        'answered' => 'Answered',
                         'closed' => 'Closed',
                     ]),
                 SelectFilter::make('priority')

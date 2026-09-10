@@ -10,6 +10,7 @@ use App\Filament\Resources\SupportTickets\Schemas\SupportTicketForm;
 use App\Filament\Resources\SupportTickets\Tables\SupportTicketsTable;
 use App\Models\SupportTicket;
 use BackedEnum;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,7 +20,50 @@ class SupportTicketResource extends Resource
 {
     protected static ?string $model = SupportTicket::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\UnitEnum|null $navigationGroup = 'Support Tickets';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;
+
+    public static function getNavigationItems(): array
+    {
+        return [
+            NavigationItem::make('All Tickets')
+                ->group('Support Tickets')
+                ->icon(Heroicon::OutlinedInboxStack)
+                ->activeIcon(Heroicon::OutlinedInboxStack)
+                ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.support-tickets.*') && (!request()->filled('tab') || request()->query('tab') === 'all'))
+                ->badge(fn (): ?int => SupportTicket::count() ?: null)
+                ->sort(1)
+                ->url(static::getUrl('index')),
+
+            NavigationItem::make('Active Tickets')
+                ->group('Support Tickets')
+                ->icon(Heroicon::OutlinedChatBubbleLeftEllipsis)
+                ->activeIcon(Heroicon::OutlinedChatBubbleLeftEllipsis)
+                ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.support-tickets.*') && request()->query('tab') === 'active')
+                ->badge(fn (): ?int => SupportTicket::whereIn('status', ['open', 'in_progress'])->count() ?: null, color: 'warning')
+                ->sort(2)
+                ->url(static::getUrl('index', ['tab' => 'active'])),
+
+            NavigationItem::make('Answered')
+                ->group('Support Tickets')
+                ->icon(Heroicon::OutlinedCheckBadge)
+                ->activeIcon(Heroicon::OutlinedCheckBadge)
+                ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.support-tickets.*') && request()->query('tab') === 'answered')
+                ->badge(fn (): ?int => SupportTicket::where('status', 'answered')->count() ?: null, color: 'info')
+                ->sort(3)
+                ->url(static::getUrl('index', ['tab' => 'answered'])),
+
+            NavigationItem::make('Closed / Inactive')
+                ->group('Support Tickets')
+                ->icon(Heroicon::OutlinedArchiveBox)
+                ->activeIcon(Heroicon::OutlinedArchiveBox)
+                ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.support-tickets.*') && request()->query('tab') === 'closed')
+                ->badge(fn (): ?int => SupportTicket::where('status', 'closed')->count() ?: null, color: 'gray')
+                ->sort(4)
+                ->url(static::getUrl('index', ['tab' => 'closed'])),
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {
