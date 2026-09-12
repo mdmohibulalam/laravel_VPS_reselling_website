@@ -18,29 +18,11 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedServerStack;
-
-    protected static string|\UnitEnum|null $navigationGroup = 'VPS Services';
-
-    protected static ?string $navigationLabel = 'VPS Services';
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $modelLabel = 'VPS Service';
 
     protected static ?string $pluralModelLabel = 'VPS Services';
-
-    protected static ?int $navigationSort = 2;
-
-    public static function getNavigationBadge(): ?string
-    {
-        $count = Service::where('status', 'active')->count();
-
-        return $count > 0 ? (string) $count : null;
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'success';
-    }
 
     public static function form(Schema $schema): Schema
     {

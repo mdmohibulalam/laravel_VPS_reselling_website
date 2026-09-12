@@ -530,7 +530,15 @@ class ExamplesTable
 ```
 
 ---
-*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, and mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export).*
+
+## 19. Command Execution & Test Running Constraints Standard
+* **Strict Prohibition of Unsolicited Commands**:
+  - **NEVER** run automated test suites (`php artisan test`, `phpunit`), cache clearing commands (`php artisan view:clear`, `php artisan config:clear`, `php artisan route:clear`, `php artisan cache:clear`), database mutations, migrations, or seeders unless the USER EXPLICITLY asks or commands you to run them.
+  - Making code changes, styling adjustments, or fixing bugs does NOT grant permission to execute test suites or cache flush commands automatically.
+  - If a cache clear or test run is helpful or relevant, mention it in text as an optional suggestion for the user; NEVER trigger or run it autonomously.
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export), and strict prohibition of unsolicited commands.*
 
 
 
