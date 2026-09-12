@@ -27,11 +27,21 @@ class OrdersTable
                     ->sortable()
                     ->weight('bold')
                     ->toggleable(),
+                TextColumn::make('created_at')
+                    ->label('Placed At')
+                    ->dateTime('M d, Y H:i:s')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable()
                     ->sortable()
                     ->description(fn (Order $record) => $record->user->email ?? '')
+                    ->toggleable(),
+                TextColumn::make('services.package.name')
+                    ->label('Package')
+                    ->badge()
+                    ->color('primary')
                     ->toggleable(),
                 TextColumn::make('invoice.invoice_number')
                     ->label('Invoice #')
@@ -39,23 +49,41 @@ class OrdersTable
                     ->placeholder('N/A')
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('services.package.name')
-                    ->label('Package')
-                    ->badge()
-                    ->color('primary')
-                    ->toggleable(),
-                TextColumn::make('services.ip_address')
-                    ->label('Server IP')
-                    ->placeholder('Pending Provisioning')
-                    ->copyable()
-                    ->copyMessage('IP copied to clipboard')
-                    ->toggleable(),
                 TextColumn::make('total_amount')
                     ->label('Total')
                     ->money('USD')
                     ->sortable()
                     ->toggleable(),
+                TextColumn::make('invoice.payment_method')
+                    ->label('Method')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'crypto' => 'info',
+                        'stripe' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A'))
+                    ->toggleable(),
+                TextColumn::make('invoice.status')
+                    ->label('Payment')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'paid' => 'success',
+                        'pending', 'unpaid' => 'warning',
+                        'refunded' => 'info',
+                        'cancelled' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'pending', 'unpaid' => 'Unpaid',
+                        'paid' => 'Paid',
+                        'refunded' => 'Refunded',
+                        'cancelled' => 'Cancelled',
+                        default => ucfirst($state ?? 'N/A'),
+                    })
+                    ->toggleable(),
                 TextColumn::make('status')
+                    ->label('Order Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
@@ -77,12 +105,14 @@ class OrdersTable
                         default => ucwords(str_replace('_', ' ', $state)),
                     })
                     ->toggleable(),
-                TextColumn::make('created_at')
-                    ->label('Placed At')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('services.ip_address')
+                    ->label('Server IP')
+                    ->placeholder('Pending Provisioning')
+                    ->copyable()
+                    ->copyMessage('IP copied to clipboard')
+                    ->toggleable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->columnToggleFormColumns(2)
             ->filters([
                 SelectFilter::make('status')
@@ -122,7 +152,7 @@ class OrdersTable
                         return response()->streamDownload(function () use ($records) {
                             $file = fopen('php://output', 'w');
                             fputs($file, "\xEF\xBB\xBF");
-                            fputcsv($file, ['Order #', 'Customer Name', 'Customer Email', 'Invoice #', 'Packages', 'Server IPs', 'Total Amount', 'Status', 'Placed At']);
+                            fputcsv($file, ['Order #', 'Placed At', 'Customer Name', 'Customer Email', 'Packages', 'Invoice #', 'Total Amount', 'Payment Method', 'Payment Status', 'Order Status', 'Server IPs']);
 
                             foreach ($records as $record) {
                                 $packages = $record->services->map(fn ($s) => $s->package?->name)->filter()->implode(', ');
@@ -130,14 +160,16 @@ class OrdersTable
 
                                 fputcsv($file, [
                                     $record->order_number,
+                                    $record->created_at?->toIso8601String(),
                                     $record->user?->name ?? 'N/A',
                                     $record->user?->email ?? 'N/A',
-                                    $record->invoice?->invoice_number ?? 'N/A',
                                     $packages ?: 'N/A',
-                                    $ips ?: 'Pending',
+                                    $record->invoice?->invoice_number ?? 'N/A',
                                     number_format((float) $record->total_amount, 2, '.', ''),
+                                    strtoupper($record->invoice?->payment_method ?? 'N/A'),
+                                    ucfirst($record->invoice?->status ?? 'Unpaid'),
                                     $record->status,
-                                    $record->created_at?->toIso8601String(),
+                                    $ips ?: 'Pending',
                                 ]);
                             }
                             fclose($file);

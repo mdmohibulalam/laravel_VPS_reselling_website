@@ -22,21 +22,27 @@ class SupportTicketsTable
                     ->sortable()
                     ->weight('bold')
                     ->toggleable(),
+                TextColumn::make('created_at')
+                    ->label('Opened At')
+                    ->dateTime('M d, Y H:i:s')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable()
                     ->sortable()
                     ->placeholder('Guest / Unknown')
-                    ->toggleable(),
-                TextColumn::make('subject')
-                    ->label('Subject')
-                    ->searchable()
-                    ->limit(40)
+                    ->description(fn ($record) => $record->user?->email ?? '')
                     ->toggleable(),
                 TextColumn::make('department')
                     ->label('Department')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->toggleable(),
+                TextColumn::make('subject')
+                    ->label('Subject')
+                    ->searchable()
+                    ->limit(40)
                     ->toggleable(),
                 TextColumn::make('priority')
                     ->label('Priority')
@@ -65,17 +71,13 @@ class SupportTicketsTable
                         default => ucfirst($state),
                     })
                     ->toggleable(),
-                TextColumn::make('created_at')
-                    ->label('Opened At')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(),
                 TextColumn::make('updated_at')
                     ->label('Last Activity')
-                    ->dateTime()
+                    ->dateTime('M d, Y H:i:s')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->columnToggleFormColumns(2)
             ->filters([
                 SelectFilter::make('status')
@@ -117,26 +119,26 @@ class SupportTicketsTable
                             fputs($file, "\xEF\xBB\xBF");
                             fputcsv($file, [
                                 'Ticket #',
+                                'Opened At',
                                 'Customer Name',
                                 'Customer Email',
-                                'Subject',
                                 'Department',
+                                'Subject',
                                 'Priority',
                                 'Status',
-                                'Opened At',
                                 'Last Updated',
                             ]);
 
                             foreach ($records as $record) {
                                 fputcsv($file, [
                                     $record->id,
+                                    $record->created_at?->toIso8601String(),
                                     $record->user?->name ?? 'N/A',
                                     $record->user?->email ?? 'N/A',
-                                    $record->subject,
                                     ucfirst($record->department ?? 'General'),
+                                    $record->subject,
                                     ucfirst($record->priority ?? 'Medium'),
                                     ucfirst($record->status ?? 'Open'),
-                                    $record->created_at?->toIso8601String(),
                                     $record->updated_at?->toIso8601String(),
                                 ]);
                             }

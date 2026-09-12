@@ -20,32 +20,39 @@ class InvoicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->label('Customer')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-                TextColumn::make('order.order_number')
-                    ->label('Order #')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
                 TextColumn::make('invoice_number')
                     ->label('Invoice #')
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->toggleable(),
-                TextColumn::make('amount')
-                    ->label('Subtotal')
-                    ->money('USD')
+                TextColumn::make('created_at')
+                    ->label('Issued At')
+                    ->dateTime('M d, Y H:i:s')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
+                TextColumn::make('order.order_number')
+                    ->label('Order #')
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('N/A')
+                    ->toggleable(),
+                TextColumn::make('user.name')
+                    ->label('Customer')
+                    ->searchable()
+                    ->sortable()
+                    ->description(fn ($record) => $record->user?->email ?? '')
+                    ->toggleable(),
                 TextColumn::make('total')
                     ->label('Total')
                     ->money('USD')
                     ->sortable()
                     ->toggleable(),
+                TextColumn::make('amount')
+                    ->label('Subtotal')
+                    ->money('USD')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -62,6 +69,12 @@ class InvoicesTable
                         'cancelled' => 'Cancelled',
                         default => ucfirst($state),
                     })
+                    ->toggleable(),
+                TextColumn::make('paid_at')
+                    ->label('Paid At')
+                    ->dateTime('M d, Y H:i:s')
+                    ->placeholder('-')
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('payment_method')
                     ->label('Method')
@@ -86,26 +99,19 @@ class InvoicesTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('crypto_txid')
                     ->label('TxID / Hash')
+                    ->placeholder('-')
                     ->copyable()
                     ->limit(14)
                     ->tooltip(fn ($record) => $record->crypto_txid)
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('due_date')
                     ->label('Due Date')
-                    ->date()
+                    ->date('M d, Y')
+                    ->placeholder('-')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('paid_at')
-                    ->label('Paid At')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('created_at')
-                    ->label('Issued At')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->columnToggleFormColumns(2)
             ->filters([
                 SelectFilter::make('status')
@@ -154,35 +160,35 @@ class InvoicesTable
                             fputs($file, "\xEF\xBB\xBF");
                             fputcsv($file, [
                                 'Invoice #',
+                                'Issued At',
                                 'Order #',
                                 'Customer Name',
                                 'Customer Email',
                                 'Subtotal Amount',
                                 'Total Amount',
                                 'Status',
+                                'Paid At',
                                 'Payment Method',
-                                'Crypto Network',
                                 'Crypto TxID',
                                 'Due Date',
-                                'Paid At',
-                                'Issued At',
+                                'Crypto Network',
                             ]);
 
                             foreach ($records as $record) {
                                 fputcsv($file, [
                                     $record->invoice_number,
+                                    $record->created_at?->toIso8601String(),
                                     $record->order?->order_number ?? 'N/A',
                                     $record->user?->name ?? 'N/A',
                                     $record->user?->email ?? 'N/A',
                                     number_format((float) ($record->amount ?? 0), 2, '.', ''),
                                     number_format((float) $record->total, 2, '.', ''),
                                     $record->status,
+                                    $record->paid_at ? $record->paid_at->toIso8601String() : 'N/A',
                                     strtoupper($record->payment_method ?? 'N/A'),
-                                    $record->crypto_network ?? 'N/A',
                                     $record->crypto_txid ?? 'N/A',
                                     $record->due_date ? $record->due_date->format('Y-m-d') : 'N/A',
-                                    $record->paid_at ? $record->paid_at->toIso8601String() : 'N/A',
-                                    $record->created_at?->toIso8601String(),
+                                    $record->crypto_network ?? 'N/A',
                                 ]);
                             }
                             fclose($file);
