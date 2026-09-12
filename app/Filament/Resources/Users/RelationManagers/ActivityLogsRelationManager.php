@@ -34,6 +34,7 @@ class ActivityLogsRelationManager extends RelationManager
             ->heading(null)
             ->recordTitleAttribute('action')
             ->defaultSort('created_at', 'desc')
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('user'))
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Timestamp')
@@ -57,6 +58,12 @@ class ActivityLogsRelationManager extends RelationManager
                     ->placeholder('-')
                     ->copyable()
                     ->icon('heroicon-o-globe-alt')
+                    ->toggleable(),
+                TextColumn::make('location')
+                    ->label('Location / Origin')
+                    ->badge()
+                    ->color(fn (?string $state): string => str_contains($state ?? '', 'LAN') || str_contains($state ?? '', 'Local') ? 'gray' : 'info')
+                    ->icon('heroicon-o-map-pin')
                     ->toggleable(),
             ])
             ->columnToggleFormColumns(2)
@@ -91,7 +98,8 @@ class ActivityLogsRelationManager extends RelationManager
                     ->infolist([
                         TextEntry::make('created_at')->label('Timestamp')->dateTime('M d, Y H:i:s'),
                         TextEntry::make('action')->label('Event / Action')->badge()->color('primary'),
-                        TextEntry::make('ip_address')->label('IP Address')->placeholder('-'),
+                        TextEntry::make('ip_address')->label('IP Address')->placeholder('-')->copyable(),
+                        TextEntry::make('location')->label('Location / Origin')->badge()->icon('heroicon-o-map-pin'),
                         TextEntry::make('description')->label('Description')->columnSpanFull()->prose(),
                     ]),
             ])
@@ -101,13 +109,13 @@ class ActivityLogsRelationManager extends RelationManager
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('gray')
                     ->action(function ($livewire): StreamedResponse {
-                        $records = $livewire->getFilteredTableQuery()->get();
+                        $records = $livewire->getFilteredTableQuery()->with('user')->get();
                         $filename = 'customer-activity-logs-' . now()->format('Y-m-d_His') . '.csv';
 
                         return response()->streamDownload(function () use ($records) {
                             $file = fopen('php://output', 'w');
                             fputs($file, "\xEF\xBB\xBF");
-                            fputcsv($file, ['Timestamp', 'Event / Action', 'Description', 'IP Address']);
+                            fputcsv($file, ['Timestamp', 'Event / Action', 'Description', 'IP Address', 'Location / Origin']);
 
                             foreach ($records as $record) {
                                 fputcsv($file, [
@@ -115,6 +123,7 @@ class ActivityLogsRelationManager extends RelationManager
                                     $record->action,
                                     $record->description,
                                     $record->ip_address ?: 'N/A',
+                                    $record->location,
                                 ]);
                             }
                             fclose($file);
