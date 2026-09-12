@@ -197,6 +197,13 @@ class CheckoutController extends Controller
             $pendingOrder['order_id'] = $order->id;
             $pendingOrder['invoice_id'] = $invoice->id;
             session(['pending_order' => $pendingOrder]);
+
+            \App\Models\UserActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'ORDER_PLACED',
+                'description' => "Placed order #{$order->order_number} for {$package->name} (Total: \${$finalTotal})",
+                'ip_address' => $request->ip(),
+            ]);
         } else {
             // Synchronize totals in case options changed
             $order->update(['total_amount' => $finalTotal]);
@@ -522,6 +529,13 @@ class CheckoutController extends Controller
             'crypto_wallet_address' => $chosenWallet,
             'crypto_txid' => trim($request->crypto_txid),
             'payment_method' => 'crypto',
+        ]);
+
+        \App\Models\UserActivityLog::create([
+            'user_id' => $invoice->user_id,
+            'action' => 'PAYMENT_SUBMITTED',
+            'description' => "Submitted crypto transaction hash for Invoice #{$invoice->invoice_number} ({$request->crypto_network})",
+            'ip_address' => $request->ip(),
         ]);
 
         return back()->with('success', '✓ Transaction hash submitted successfully! Our team will verify the transfer on the blockchain and activate your server.');

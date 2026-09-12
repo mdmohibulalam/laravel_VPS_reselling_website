@@ -6,10 +6,14 @@ use App\Filament\Resources\Invoices\InvoiceResource;
 use App\Models\Invoice;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TransactionsRelationManager extends RelationManager
 {
@@ -41,24 +45,24 @@ class TransactionsRelationManager extends RelationManager
                     ->copyable()
                     ->limit(20)
                     ->weight('bold')
-                    ->tooltip(fn (Invoice $record) => $record->crypto_txid ?: $record->stripe_payment_intent_id)
-                    ->suffixAction(
-                        Action::make('explorer')
-                            ->icon('heroicon-m-arrow-top-right-on-square')
-                            ->tooltip('Verify on Blockchain Explorer')
-                            ->visible(fn (Invoice $record) => !empty($record->crypto_txid))
-                            ->url(fn (Invoice $record) => (str_starts_with($record->crypto_txid ?? '', '0x') || str_contains($record->crypto_network ?? '', 'polygon'))
-                                ? "https://polygonscan.com/tx/{$record->crypto_txid}"
-                                : "https://tronscan.org/#/transaction/{$record->crypto_txid}", true)
-                    ),
+                    ->url(fn (Invoice $record) => !empty($record->crypto_txid)
+                        ? ((str_starts_with($record->crypto_txid, '0x') || str_contains($record->crypto_network ?? '', 'polygon'))
+                            ? "https://polygonscan.com/tx/{$record->crypto_txid}"
+                            : "https://tronscan.org/#/transaction/{$record->crypto_txid}")
+                        : null, true)
+                    ->icon(fn (Invoice $record) => !empty($record->crypto_txid) ? 'heroicon-m-arrow-top-right-on-square' : null)
+                    ->iconPosition('after')
+                    ->toggleable(),
                 TextColumn::make('paid_at')
                     ->label('Date & Time')
                     ->dateTime('M d, Y H:i:s')
-                    ->placeholder(fn (Invoice $record) => $record->created_at?->format('M d, Y H:i:s') ?? '-'),
+                    ->placeholder(fn (Invoice $record) => $record->created_at?->format('M d, Y H:i:s') ?? '-')
+                    ->toggleable(),
                 TextColumn::make('invoice_number')
                     ->label('Invoice #')
                     ->badge()
-                    ->color('primary'),
+                    ->color('primary')
+                    ->toggleable(),
                 TextColumn::make('payment_method')
                     ->label('Gateway')
                     ->badge()
@@ -79,11 +83,13 @@ class TransactionsRelationManager extends RelationManager
                             return "{$method} - {$net}";
                         }
                         return $method;
-                    }),
+                    })
+                    ->toggleable(),
                 TextColumn::make('total')
                     ->label('Amount')
                     ->money('USD')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -93,11 +99,67 @@ class TransactionsRelationManager extends RelationManager
                         'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => ucfirst($state)),
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->toggleable(),
             ])
+            ->columnToggleFormColumns(2)
+            ->filters([
+                SelectFilter::make('payment_method')
+                    ->label('Gateway')
+                    ->options([
+                        'stripe' => 'Stripe / Card',
+                        'crypto' => 'Cryptocurrency',
+                    ]),
+                SelectFilter::make('status')
+                    ->options([
+                        'paid' => 'Paid',
+                        'pending' => 'Pending',
+                        'refunded' => 'Refunded',
+                        'cancelled' => 'Cancelled',
+                    ]),
+                Filter::make('paid_at')
+                    ->form([
+                        DatePicker::make('paid_from')->label('Paid From'),
+                        DatePicker::make('paid_until')->label('Paid Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['paid_from'], fn ($q, $date) => $q->whereDate('paid_at', '>=', $date))
+                            ->when($data['paid_until'], fn ($q, $date) => $q->whereDate('paid_at', '<=', $date));
+                    }),
+            ])
+            ->filtersFormColumns(2)
             ->recordActions([
                 ViewAction::make()
                     ->url(fn (Invoice $record): string => InvoiceResource::getUrl('view', ['record' => $record])),
+            ])
+            ->toolbarActions([
+                Action::make('export')
+                    ->label('Export CSV')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->action(function ($livewire): StreamedResponse {
+                        $records = $livewire->getFilteredTableQuery()->get();
+                        $filename = 'customer-transactions-' . now()->format('Y-m-d_His') . '.csv';
+
+                        return response()->streamDownload(function () use ($records) {
+                            $file = fopen('php://output', 'w');
+                            fputs($file, "\xEF\xBB\xBF");
+                            fputcsv($file, ['TxID / Hash', 'Date & Time', 'Invoice #', 'Gateway', 'Amount', 'Status']);
+
+                            foreach ($records as $record) {
+                                fputcsv($file, [
+                                    $record->crypto_txid ?: ($record->stripe_payment_intent_id ?: "INV-PAY-{$record->id}"),
+                                    $record->paid_at?->format('Y-m-d H:i:s') ?? ($record->created_at?->format('Y-m-d H:i:s') ?? '-'),
+                                    $record->invoice_number,
+                                    strtoupper($record->payment_method ?? 'N/A'),
+                                    number_format((float) $record->total, 2, '.', ''),
+                                    $record->status,
+                                ]);
+                            }
+                            fclose($file);
+                        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+                    }),
             ]);
     }
 }

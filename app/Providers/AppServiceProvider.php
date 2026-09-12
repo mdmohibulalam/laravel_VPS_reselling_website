@@ -27,6 +27,57 @@ class AppServiceProvider extends ServiceProvider
 
         $this->configureRedisFallback();
         $this->configureRateLimiting();
+        $this->configureActivityLogging();
+    }
+
+    /**
+     * Configure automatic customer activity logging for security, auditing, and WHMCS parity.
+     */
+    protected function configureActivityLogging(): void
+    {
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function (\Illuminate\Auth\Events\Login $event) {
+            if ($event->user instanceof \App\Models\User) {
+                \App\Models\UserActivityLog::create([
+                    'user_id' => $event->user->id,
+                    'action' => 'LOGIN',
+                    'description' => 'Customer logged into portal',
+                    'ip_address' => request()->ip(),
+                ]);
+            }
+        });
+
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Logout::class, function (\Illuminate\Auth\Events\Logout $event) {
+            if ($event->user instanceof \App\Models\User) {
+                \App\Models\UserActivityLog::create([
+                    'user_id' => $event->user->id,
+                    'action' => 'LOGOUT',
+                    'description' => 'Customer logged out of portal',
+                    'ip_address' => request()->ip(),
+                ]);
+            }
+        });
+
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\PasswordReset::class, function (\Illuminate\Auth\Events\PasswordReset $event) {
+            if ($event->user instanceof \App\Models\User) {
+                \App\Models\UserActivityLog::create([
+                    'user_id' => $event->user->id,
+                    'action' => 'PASSWORD_RESET',
+                    'description' => 'Customer reset account password',
+                    'ip_address' => request()->ip(),
+                ]);
+            }
+        });
+
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Registered::class, function (\Illuminate\Auth\Events\Registered $event) {
+            if ($event->user instanceof \App\Models\User) {
+                \App\Models\UserActivityLog::create([
+                    'user_id' => $event->user->id,
+                    'action' => 'REGISTERED',
+                    'description' => 'New customer account registered',
+                    'ip_address' => request()->ip(),
+                ]);
+            }
+        });
     }
 
     /**

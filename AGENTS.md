@@ -538,7 +538,24 @@ class ExamplesTable
   - If a cache clear or test run is helpful or relevant, mention it in text as an optional suggestion for the user; NEVER trigger or run it autonomously.
 
 ---
-*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export), and strict prohibition of unsolicited commands.*
+
+## 20. 100% End-to-End Dynamic Implementation Mandate (Zero Mock Code / Zero Half-Baked Features)
+* **Complete Lifecycle Requirement**:
+  - **NEVER** build UI components, tabs, tables, or views without fully implementing and connecting the underlying backend data-capturing pipeline in Laravel.
+  - Creating a database schema and a view table without the corresponding event listeners, observers, controller hooks, or service pipelines that capture and persist data is strictly forbidden.
+  - Every feature must be 100% dynamic end-to-end: from real user/system triggers (e.g. login, order placed, ticket opened, portal blocked) to database persistence, to real-time UI display.
+* **Strict Prohibition of Mock / Fake Code**:
+  - NEVER use hardcoded mock responses, dummy placeholders, or pretend functionality in application code when real Laravel backend logic is required.
+  - All logs, metrics, activity histories, statuses, and counts must be driven by real database records generated from actual system events.
+* **Pre-Declaration Verification Standard**:
+  - You must **NEVER tell the user a feature or task is finished or complete** until every single link in the chain is fully implemented and functioning:
+    1. Database migration and model relationships.
+    2. Real-world event triggers and backend listeners/observers that capture and write data.
+    3. UI views, tables, actions, and infolists that display and manage the data.
+  - If any part of the chain is not yet wired, you must explicitly declare what remains to be connected rather than claiming the feature is complete.
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export), strict prohibition of unsolicited commands, and the 100% end-to-end dynamic implementation mandate.*
 
 
 

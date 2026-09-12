@@ -4,12 +4,16 @@ namespace App\Filament\Resources\Users\RelationManagers;
 
 use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
+use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OrdersRelationManager extends RelationManager
 {
@@ -36,27 +40,33 @@ class OrdersRelationManager extends RelationManager
                     ->label('Order #')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold'),
+                    ->weight('bold')
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Placed At')
                     ->dateTime('M d, Y H:i:s')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('services.package.name')
                     ->label('Package')
                     ->badge()
                     ->color('primary')
-                    ->placeholder('N/A'),
+                    ->placeholder('N/A')
+                    ->toggleable(),
                 TextColumn::make('invoice.invoice_number')
                     ->label('Invoice #')
-                    ->placeholder('N/A'),
+                    ->placeholder('N/A')
+                    ->toggleable(),
                 TextColumn::make('total_amount')
                     ->label('Total')
                     ->money('USD')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('invoice.payment_method')
                     ->label('Method')
                     ->badge()
-                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A')),
+                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A'))
+                    ->toggleable(),
                 TextColumn::make('invoice.status')
                     ->label('Payment')
                     ->badge()
@@ -66,7 +76,8 @@ class OrdersRelationManager extends RelationManager
                         'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (?string $state): string => ucfirst($state ?? 'Unpaid')),
+                    ->formatStateUsing(fn (?string $state): string => ucfirst($state ?? 'Unpaid'))
+                    ->toggleable(),
                 TextColumn::make('status')
                     ->label('Order Status')
                     ->badge()
@@ -78,12 +89,15 @@ class OrdersRelationManager extends RelationManager
                         'failed', 'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state))),
+                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state)))
+                    ->toggleable(),
                 TextColumn::make('services.ip_address')
                     ->label('Server IP')
                     ->placeholder('Pending Provisioning')
-                    ->copyable(),
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->columnToggleFormColumns(2)
             ->filters([
                 SelectFilter::make('status')
                     ->options([
@@ -94,10 +108,51 @@ class OrdersRelationManager extends RelationManager
                         'active' => 'Active',
                         'cancelled' => 'Cancelled',
                     ]),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')->label('Placed From'),
+                        DatePicker::make('created_until')->label('Placed Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
+            ->filtersFormColumns(2)
             ->recordActions([
                 ViewAction::make()
                     ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record])),
+            ])
+            ->toolbarActions([
+                Action::make('export')
+                    ->label('Export CSV')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->action(function ($livewire): StreamedResponse {
+                        $records = $livewire->getFilteredTableQuery()->with(['invoice', 'services.package'])->get();
+                        $filename = 'customer-orders-' . now()->format('Y-m-d_His') . '.csv';
+
+                        return response()->streamDownload(function () use ($records) {
+                            $file = fopen('php://output', 'w');
+                            fputs($file, "\xEF\xBB\xBF");
+                            fputcsv($file, ['Order #', 'Placed At', 'Package', 'Invoice #', 'Total Amount', 'Payment Method', 'Payment Status', 'Order Status']);
+
+                            foreach ($records as $record) {
+                                fputcsv($file, [
+                                    $record->order_number,
+                                    $record->created_at?->format('Y-m-d H:i:s'),
+                                    $record->services->map(fn ($s) => $s->package?->name)->filter()->implode(', ') ?: 'N/A',
+                                    $record->invoice?->invoice_number ?? 'N/A',
+                                    number_format((float) $record->total_amount, 2, '.', ''),
+                                    strtoupper($record->invoice?->payment_method ?? 'N/A'),
+                                    ucfirst($record->invoice?->status ?? 'Unpaid'),
+                                    $record->status,
+                                ]);
+                            }
+                            fclose($file);
+                        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+                    }),
             ]);
     }
 }
