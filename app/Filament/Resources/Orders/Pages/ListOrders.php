@@ -20,26 +20,31 @@ class ListOrders extends ListRecords
         ];
     }
 
+    public function getDefaultActiveTab(): string | int | null
+    {
+        return request()->query('tab', 'all');
+    }
+
     public function getTabs(): array
     {
         return [
             'all' => Tab::make('All Orders')
-                ->badge(Order::count()),
+                ->badge(fn () => Order::count()),
             'pending' => Tab::make('Pending Payment')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))
-                ->badge(Order::where('status', 'pending')->count())
+                ->badge(fn () => Order::where('status', 'pending')->count() ?: null)
                 ->badgeColor('gray'),
             'ready_to_deploy' => Tab::make('Ready to Deploy')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'payment_confirmed'))
-                ->badge(Order::where('status', 'payment_confirmed')->count())
+                ->badge(fn () => Order::where('status', 'payment_confirmed')->count() ?: null)
                 ->badgeColor('warning'),
             'active' => Tab::make('Active / Provisioned')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', ['active', 'completed', 'contabo_ok', 'provision']))
-                ->badge(Order::whereIn('status', ['active', 'completed', 'contabo_ok', 'provision'])->count())
+                ->badge(fn () => Order::whereIn('status', ['active', 'completed', 'contabo_ok', 'provision'])->count() ?: null)
                 ->badgeColor('success'),
             'cancelled' => Tab::make('Cancelled / Failed')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', ['cancelled', 'failed']))
-                ->badge(Order::whereIn('status', ['cancelled', 'failed'])->count())
+                ->badge(fn () => Order::whereIn('status', ['cancelled', 'failed'])->count() ?: null)
                 ->badgeColor('danger'),
         ];
     }

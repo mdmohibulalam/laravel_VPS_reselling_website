@@ -20,15 +20,15 @@ class ServiceResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedServerStack;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Orders';
+    protected static string|\UnitEnum|null $navigationGroup = 'VPS Services';
 
-    protected static ?string $navigationLabel = 'Active Orders';
+    protected static ?string $navigationLabel = 'VPS Services';
 
-    protected static ?string $modelLabel = 'Active Order';
+    protected static ?string $modelLabel = 'VPS Service';
 
-    protected static ?string $pluralModelLabel = 'Active Orders';
+    protected static ?string $pluralModelLabel = 'VPS Services';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
     public static function getNavigationBadge(): ?string
     {
