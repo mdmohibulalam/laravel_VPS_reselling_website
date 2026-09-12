@@ -14,22 +14,22 @@ class SupportTicketPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:SupportTicket');
+        return $authUser->can('ViewAny:SupportTicket') || ! $authUser->is_suspended;
     }
 
     public function view(AuthUser $authUser, SupportTicket $supportTicket): bool
     {
-        return $authUser->can('View:SupportTicket');
+        return $authUser->can('View:SupportTicket') || ($supportTicket->user_id === $authUser->id && ! $authUser->is_suspended);
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:SupportTicket');
+        return $authUser->can('Create:SupportTicket') || ! $authUser->is_suspended;
     }
 
     public function update(AuthUser $authUser, SupportTicket $supportTicket): bool
     {
-        return $authUser->can('Update:SupportTicket');
+        return $authUser->can('Update:SupportTicket') || ($supportTicket->user_id === $authUser->id && ! $authUser->is_suspended);
     }
 
     public function delete(AuthUser $authUser, SupportTicket $supportTicket): bool
@@ -71,5 +71,4 @@ class SupportTicketPolicy
     {
         return $authUser->can('Reorder:SupportTicket');
     }
-
 }

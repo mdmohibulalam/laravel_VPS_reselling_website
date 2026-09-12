@@ -13,7 +13,9 @@ class ListSupportTickets extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('Open New Ticket')
+                ->icon('heroicon-o-plus-circle'),
         ];
     }
 }

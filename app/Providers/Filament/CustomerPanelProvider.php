@@ -43,8 +43,18 @@ class CustomerPanelProvider extends PanelProvider
                 \Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
                 fn () => view('filament.customer.components.demo-login')
             )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::SIDEBAR_NAV_START,
+                fn () => view('filament.customer.components.sidebar-back-button')
+            )
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(\Filament\Support\Enums\Width::Full)
+            ->userMenuItems([
+                \Filament\Navigation\MenuItem::make()
+                    ->label('Back to Website')
+                    ->url(fn (): string => url('/'))
+                    ->icon('heroicon-o-globe-alt'),
+            ])
             ->discoverResources(in: app_path('Filament/Customer/Resources'), for: 'App\Filament\Customer\Resources')
             ->discoverPages(in: app_path('Filament/Customer/Pages'), for: 'App\Filament\Customer\Pages')
             ->pages([

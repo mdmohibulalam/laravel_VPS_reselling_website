@@ -84,10 +84,30 @@ class SupportTicketsTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'open' => 'Open',
+                        'in_progress' => 'In Progress',
+                        'answered' => 'Answered',
+                        'closed' => 'Closed',
+                    ]),
+                \Filament\Tables\Filters\SelectFilter::make('department')
+                    ->options([
+                        'technical' => 'Technical Support',
+                        'billing' => 'Billing',
+                        'sales' => 'Sales',
+                    ]),
             ])
             ->recordActions([
                 ViewAction::make(),
+            ])
+            ->emptyStateHeading('No Support Tickets')
+            ->emptyStateDescription('Need technical assistance, server configuration, or billing help? Open a new support ticket and our engineering team will respond shortly.')
+            ->emptyStateIcon('heroicon-o-ticket')
+            ->emptyStateActions([
+                \Filament\Actions\CreateAction::make()
+                    ->label('Open Support Ticket')
+                    ->icon('heroicon-o-plus-circle'),
             ]);
     }
 }
