@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 'Orders',
                 'Invoices',
                 'Packages',
-                'Support',
+                'Support Tickets',
                 'Users',
                 'System Settings',
             ])

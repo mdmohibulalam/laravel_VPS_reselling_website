@@ -36,8 +36,8 @@ class ViewInvoice extends ViewRecord
 
         if (in_array($this->record->status, ['pending', 'unpaid'])) {
             $actions[] = Action::make('pay_now')
-                ->label('Pay Invoice Now')
-                ->icon('heroicon-m-credit-card')
+                ->label('Pay via Crypto Now')
+                ->icon('heroicon-m-banknotes')
                 ->color('primary')
                 ->url(fn () => route('checkout.crypto-pay', $this->record->id));
         }

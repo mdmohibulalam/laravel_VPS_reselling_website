@@ -49,7 +49,7 @@ class SecurityAndHealthTest extends TestCase
 
         $order = new Order();
         $this->assertEquals(
-            ['user_id', 'order_number', 'total_amount', 'status'],
+            ['user_id', 'order_number', 'total_amount', 'ip_address', 'status'],
             $order->getFillable()
         );
     }

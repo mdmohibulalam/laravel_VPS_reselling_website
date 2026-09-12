@@ -81,6 +81,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Invoice::class);
     }
 
+    public function credits(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Invoice::class)->whereNull('order_id')->whereNull('service_id');
+    }
+
     public const ACTIVE_SERVICE_STATUSES = [
         'active',
         'provisioning',
@@ -146,5 +151,34 @@ class User extends Authenticatable implements FilamentUser
     public function supportTickets(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(SupportTicket::class);
+    }
+
+    public function notes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserNote::class);
+    }
+
+    public function emailLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserEmailLog::class)->orderByDesc('sent_at');
+    }
+
+    public function activityLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserActivityLog::class)->orderByDesc('created_at');
+    }
+
+    /**
+     * Compute current account credit balance from paid deposit invoices.
+     */
+    public function getCreditBalanceAttribute(): float
+    {
+        $deposits = $this->invoices()
+            ->whereNull('order_id')
+            ->whereNull('service_id')
+            ->where('status', 'paid')
+            ->sum('total');
+
+        return round((float) $deposits, 2);
     }
 }

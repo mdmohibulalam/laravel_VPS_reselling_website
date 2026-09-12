@@ -31,6 +31,7 @@ class CustomerPanelProvider extends PanelProvider
             ->profile(\App\Filament\Customer\Pages\Auth\EditProfile::class, isSimple: false)
             ->authGuard('web')
             ->brandName('VortexCloud Customer Portal')
+            ->darkMode(false)
             ->colors([
                 'primary' => '#673DE6',
             ])
@@ -42,8 +43,31 @@ class CustomerPanelProvider extends PanelProvider
                 \Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
                 fn () => view('filament.customer.components.demo-login')
             )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::SIDEBAR_NAV_START,
+                fn () => view('filament.customer.components.sidebar-back-button')
+            )
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(\Filament\Support\Enums\Width::Full)
+            ->userMenuItems([
+                \Filament\Navigation\MenuItem::make()
+                    ->label('Back to Website')
+                    ->url(fn (): string => url('/'))
+                    ->icon('heroicon-o-globe-alt'),
+            ])
+            ->navigationGroups([
+                \Filament\Navigation\NavigationGroup::make('Settings')
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->collapsed(false),
+            ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Profile Setting')
+                    ->group('Settings')
+                    ->icon('heroicon-o-user-circle')
+                    ->sort(1)
+                    ->url(fn (): string => url('/customer/profile'))
+                    ->isActiveWhen(fn (): bool => request()->is('customer/profile*')),
+            ])
             ->discoverResources(in: app_path('Filament/Customer/Resources'), for: 'App\Filament\Customer\Resources')
             ->discoverPages(in: app_path('Filament/Customer/Pages'), for: 'App\Filament\Customer\Pages')
             ->pages([

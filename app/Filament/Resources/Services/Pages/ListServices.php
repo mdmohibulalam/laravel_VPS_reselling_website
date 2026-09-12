@@ -15,7 +15,12 @@ class ListServices extends ListRecords
 
     public function getTitle(): string
     {
-        return 'Active Orders';
+        return 'VPS Services';
+    }
+
+    public function getDefaultActiveTab(): string | int | null
+    {
+        return request()->query('tab', 'all');
     }
 
     protected function getHeaderActions(): array
@@ -28,8 +33,8 @@ class ListServices extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('All Active Orders')
-                ->badge(Service::count()),
+            'all' => Tab::make('All VPS Services')
+                ->badge(fn () => Service::count()),
             'active' => Tab::make('Active VPS')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'active'))
                 ->badge(Service::where('status', 'active')->count())

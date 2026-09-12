@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Orders\Tables;
+namespace App\Filament\Resources\Users\RelationManagers;
 
+use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -15,11 +15,26 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class OrdersTable
+class OrdersRelationManager extends RelationManager
 {
-    public static function configure(Table $table): Table
+    protected static string $relationship = 'orders';
+
+    protected static ?string $title = 'Orders';
+
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-shopping-bag';
+
+    public static function getBadge(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): ?string
+    {
+        $count = $ownerRecord->orders()->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public function table(Table $table): Table
     {
         return $table
+            ->heading(null)
+            ->recordTitleAttribute('order_number')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('order_number')
                     ->label('Order #')
@@ -32,22 +47,15 @@ class OrdersTable
                     ->dateTime('M d, Y H:i:s')
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('user.name')
-                    ->label('Customer')
-                    ->searchable()
-                    ->sortable()
-                    ->description(fn (Order $record) => $record->user->email ?? '')
-                    ->toggleable(),
                 TextColumn::make('services.package.name')
                     ->label('Package')
                     ->badge()
                     ->color('primary')
+                    ->placeholder('N/A')
                     ->toggleable(),
                 TextColumn::make('invoice.invoice_number')
                     ->label('Invoice #')
-                    ->searchable()
                     ->placeholder('N/A')
-                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('total_amount')
                     ->label('Total')
@@ -57,11 +65,6 @@ class OrdersTable
                 TextColumn::make('invoice.payment_method')
                     ->label('Method')
                     ->badge()
-                    ->color(fn (?string $state): string => match ($state) {
-                        'crypto' => 'info',
-                        'stripe' => 'success',
-                        default => 'gray',
-                    })
                     ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'N/A'))
                     ->toggleable(),
                 TextColumn::make('invoice.status')
@@ -70,17 +73,10 @@ class OrdersTable
                     ->color(fn (?string $state): string => match ($state) {
                         'paid' => 'success',
                         'pending', 'unpaid' => 'warning',
-                        'refunded' => 'info',
                         'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (?string $state): string => match ($state) {
-                        'pending', 'unpaid' => 'Unpaid',
-                        'paid' => 'Paid',
-                        'refunded' => 'Refunded',
-                        'cancelled' => 'Cancelled',
-                        default => ucfirst($state ?? 'N/A'),
-                    })
+                    ->formatStateUsing(fn (?string $state): string => ucfirst($state ?? 'Unpaid'))
                     ->toggleable(),
                 TextColumn::make('status')
                     ->label('Order Status')
@@ -88,41 +84,28 @@ class OrdersTable
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
                         'contabo_ok' => 'info',
-                        'payment_confirmed' => 'warning',
-                        'provision' => 'warning',
+                        'payment_confirmed', 'provision' => 'warning',
                         'pending' => 'gray',
                         'failed', 'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'pending' => 'Pending (Unpaid)',
-                        'payment_confirmed' => 'Payment Confirmed (Ready to Deploy)',
-                        'provision' => 'Provisioning (Paid)',
-                        'contabo_ok' => 'Contabo OK (Ready to Deliver)',
-                        'active' => 'Active / Delivered',
-                        'failed' => 'Provisioning Failed',
-                        'cancelled' => 'Cancelled',
-                        default => ucwords(str_replace('_', ' ', $state)),
-                    })
+                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state)))
                     ->toggleable(),
                 TextColumn::make('services.ip_address')
                     ->label('Server IP')
                     ->placeholder('Pending Provisioning')
                     ->copyable()
-                    ->copyMessage('IP copied to clipboard')
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc')
             ->columnToggleFormColumns(2)
             ->filters([
                 SelectFilter::make('status')
                     ->options([
-                        'pending' => 'Pending (Unpaid)',
+                        'pending' => 'Pending',
                         'payment_confirmed' => 'Payment Confirmed',
-                        'provision' => 'Provisioning (Paid)',
-                        'contabo_ok' => 'Contabo OK (Ready)',
-                        'active' => 'Active / Delivered',
-                        'failed' => 'Provisioning Failed',
+                        'provision' => 'Provisioning',
+                        'contabo_ok' => 'Contabo OK',
+                        'active' => 'Active',
                         'cancelled' => 'Cancelled',
                     ]),
                 Filter::make('created_at')
@@ -138,7 +121,8 @@ class OrdersTable
             ])
             ->filtersFormColumns(2)
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record])),
             ])
             ->toolbarActions([
                 Action::make('export')
@@ -146,36 +130,29 @@ class OrdersTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('gray')
                     ->action(function ($livewire): StreamedResponse {
-                        $records = $livewire->getFilteredTableQuery()->with(['user', 'invoice', 'services.package'])->get();
-                        $filename = 'orders-export-' . now()->format('Y-m-d_His') . '.csv';
+                        $records = $livewire->getFilteredTableQuery()->with(['invoice', 'services.package'])->get();
+                        $filename = 'customer-orders-' . now()->format('Y-m-d_His') . '.csv';
 
                         return response()->streamDownload(function () use ($records) {
                             $file = fopen('php://output', 'w');
                             fputs($file, "\xEF\xBB\xBF");
-                            fputcsv($file, ['Order #', 'Placed At', 'Customer Name', 'Customer Email', 'Packages', 'Invoice #', 'Total Amount', 'Payment Method', 'Payment Status', 'Order Status', 'Server IPs']);
+                            fputcsv($file, ['Order #', 'Placed At', 'Package', 'Invoice #', 'Total Amount', 'Payment Method', 'Payment Status', 'Order Status']);
 
                             foreach ($records as $record) {
-                                $packages = $record->services->map(fn ($s) => $s->package?->name)->filter()->implode(', ');
-                                $ips = $record->services->map(fn ($s) => $s->ip_address)->filter()->implode(', ');
-
                                 fputcsv($file, [
                                     $record->order_number,
-                                    $record->created_at?->toIso8601String(),
-                                    $record->user?->name ?? 'N/A',
-                                    $record->user?->email ?? 'N/A',
-                                    $packages ?: 'N/A',
+                                    $record->created_at?->format('Y-m-d H:i:s'),
+                                    $record->services->map(fn ($s) => $s->package?->name)->filter()->implode(', ') ?: 'N/A',
                                     $record->invoice?->invoice_number ?? 'N/A',
                                     number_format((float) $record->total_amount, 2, '.', ''),
                                     strtoupper($record->invoice?->payment_method ?? 'N/A'),
                                     ucfirst($record->invoice?->status ?? 'Unpaid'),
                                     $record->status,
-                                    $ips ?: 'Pending',
                                 ]);
                             }
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

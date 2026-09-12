@@ -20,6 +20,11 @@ class ListInvoices extends ListRecords
         ];
     }
 
+    public function getDefaultActiveTab(): string | int | null
+    {
+        return request()->query('tab', 'all');
+    }
+
     public function getTabs(): array
     {
         return [

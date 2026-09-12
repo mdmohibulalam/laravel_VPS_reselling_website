@@ -12,6 +12,21 @@ class ViewUser extends ViewRecord
 {
     protected static string $resource = UserResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Profile';
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-o-user-circle';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -26,6 +41,12 @@ class ViewUser extends ViewRecord
                     ->visible(fn () => !$this->record->is_suspended)
                     ->action(function () {
                         $this->record->update(['is_suspended' => true]);
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => $this->record->id,
+                            'action' => 'PORTAL_BLOCKED',
+                            'description' => 'Staff blocked customer portal access',
+                            'ip_address' => request()->ip(),
+                        ]);
                         \Filament\Notifications\Notification::make()->title('Portal Login Blocked')->danger()->send();
                     }),
                 \Filament\Actions\Action::make('unsuspend')
@@ -38,6 +59,12 @@ class ViewUser extends ViewRecord
                     ->visible(fn () => $this->record->is_suspended)
                     ->action(function () {
                         $this->record->update(['is_suspended' => false]);
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => $this->record->id,
+                            'action' => 'PORTAL_RESTORED',
+                            'description' => 'Staff restored customer portal access',
+                            'ip_address' => request()->ip(),
+                        ]);
                         \Filament\Notifications\Notification::make()->title('Portal Login Restored')->success()->send();
                     }),
                 EditAction::make(),

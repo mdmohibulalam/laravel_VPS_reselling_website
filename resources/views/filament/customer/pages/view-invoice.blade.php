@@ -329,8 +329,8 @@
                     </div>
                 </div>
                 <a href="{{ route('checkout.crypto-pay', $invoice->id) }}" class="vortex-btn-primary" style="flex-shrink: 0;">
-                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                    <span>Pay Invoice Now</span>
+                    <span style="font-size: 15px;">🪙</span>
+                    <span>Pay via Crypto Now</span>
                     <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
@@ -424,7 +424,7 @@
                     <div style="font-size: 15px; font-weight: 800; color: #0F172A;">VortexCloud Global Solutions Inc.</div>
                     <div style="font-size: 13px; color: #475569; margin-top: 3px;">Cloud Hosting & Bare Metal Operations</div>
                     <div style="font-size: 12px; color: #64748B; margin-top: 6px;">Support: <span style="color: #0F172A;">billing@vortexcloud.net</span></div>
-                    <div style="font-size: 12px; color: #64748B; margin-top: 3px;">Settlement Gateway: <span style="color: #059669; font-weight: 700;">Instant Crypto & Card Verified</span></div>
+                    <div style="font-size: 12px; color: #64748B; margin-top: 3px;">Settlement Gateway: <span style="color: #059669; font-weight: 700;">Instant Cryptocurrency (USDT / USDC)</span></div>
                 </div>
             </div>
 
@@ -513,6 +513,26 @@
                                 </td>
                             </tr>
                         @endforeach
+                    @elseif(empty($invoice->order_id) && empty($invoice->service_id))
+                        <tr>
+                            <td>
+                                <div style="font-size: 15px; font-weight: 800; color: #0F172A;">💳 Account Credit & Balance Top-Up</div>
+                                <div style="font-size: 12px; color: #64748B; margin-top: 4px; line-height: 1.6;">
+                                    <span>Pre-funded account balance for automated cloud VPS renewals and instant service deployment.</span><br>
+                                    <span>Wallet credit applied automatically upon blockchain confirmation · Never expires</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center; vertical-align: top;">
+                                <span style="font-size: 12px; font-weight: 700; background: #FAF5FF; color: #673DE6; border: 1px solid #E9D5FF; padding: 4px 10px; border-radius: 8px;">
+                                    Account Deposit
+                                </span>
+                            </td>
+                            <td style="vertical-align: top;">
+                                <span class="vortex-mono" style="font-size: 15px; font-weight: 800; color: #0F172A;">
+                                    ${{ number_format((float) $invoice->amount, 2) }}
+                                </span>
+                            </td>
+                        </tr>
                     @else
                         <tr>
                             <td>
@@ -605,8 +625,8 @@
                     </a>
                     @if($isUnpaid)
                         <a href="{{ route('checkout.crypto-pay', $invoice->id) }}" class="vortex-btn-primary">
-                            <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                            Pay ${{ number_format($invoice->total, 2) }}
+                            <span style="font-size: 14px;">🪙</span>
+                            Pay ${{ number_format($invoice->total, 2) }} via Crypto
                         </a>
                     @endif
                 </div>

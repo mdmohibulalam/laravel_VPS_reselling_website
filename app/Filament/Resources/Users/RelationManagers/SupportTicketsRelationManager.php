@@ -1,38 +1,50 @@
 <?php
 
-namespace App\Filament\Resources\SupportTickets\Tables;
+namespace App\Filament\Resources\Users\RelationManagers;
 
+use App\Filament\Resources\SupportTickets\SupportTicketResource;
+use App\Models\SupportTicket;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class SupportTicketsTable
+class SupportTicketsRelationManager extends RelationManager
 {
-    public static function configure(Table $table): Table
+    protected static string $relationship = 'supportTickets';
+
+    protected static ?string $title = 'Support Tickets';
+
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-ticket';
+
+    public static function getBadge(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): ?string
+    {
+        $count = $ownerRecord->supportTickets()->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public function table(Table $table): Table
     {
         return $table
+            ->heading(null)
+            ->recordTitleAttribute('subject')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('id')
                     ->label('Ticket #')
-                    ->sortable()
                     ->weight('bold')
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Opened At')
                     ->dateTime('M d, Y H:i:s')
                     ->sortable()
-                    ->toggleable(),
-                TextColumn::make('user.name')
-                    ->label('Customer')
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('Guest / Unknown')
-                    ->description(fn ($record) => $record->user?->email ?? '')
                     ->toggleable(),
                 TextColumn::make('department')
                     ->label('Department')
@@ -41,8 +53,8 @@ class SupportTicketsTable
                     ->toggleable(),
                 TextColumn::make('subject')
                     ->label('Subject')
-                    ->searchable()
                     ->limit(40)
+                    ->searchable()
                     ->toggleable(),
                 TextColumn::make('priority')
                     ->label('Priority')
@@ -75,9 +87,8 @@ class SupportTicketsTable
                     ->label('Last Activity')
                     ->dateTime('M d, Y H:i:s')
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc')
             ->columnToggleFormColumns(2)
             ->filters([
                 SelectFilter::make('status')
@@ -101,9 +112,21 @@ class SupportTicketsTable
                         'sales' => 'Sales',
                         'general' => 'General Inquiry',
                     ]),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')->label('Opened From'),
+                        DatePicker::make('created_until')->label('Opened Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
+            ->filtersFormColumns(2)
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn (SupportTicket $record): string => SupportTicketResource::getUrl('view', ['record' => $record])),
             ])
             ->toolbarActions([
                 Action::make('export')
@@ -111,43 +134,28 @@ class SupportTicketsTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('gray')
                     ->action(function ($livewire): StreamedResponse {
-                        $records = $livewire->getFilteredTableQuery()->with(['user'])->get();
-                        $filename = 'support-tickets-export-' . now()->format('Y-m-d_His') . '.csv';
+                        $records = $livewire->getFilteredTableQuery()->get();
+                        $filename = 'customer-tickets-' . now()->format('Y-m-d_His') . '.csv';
 
                         return response()->streamDownload(function () use ($records) {
                             $file = fopen('php://output', 'w');
                             fputs($file, "\xEF\xBB\xBF");
-                            fputcsv($file, [
-                                'Ticket #',
-                                'Opened At',
-                                'Customer Name',
-                                'Customer Email',
-                                'Department',
-                                'Subject',
-                                'Priority',
-                                'Status',
-                                'Last Updated',
-                            ]);
+                            fputcsv($file, ['Ticket #', 'Opened At', 'Department', 'Subject', 'Priority', 'Status', 'Last Activity']);
 
                             foreach ($records as $record) {
                                 fputcsv($file, [
                                     $record->id,
-                                    $record->created_at?->toIso8601String(),
-                                    $record->user?->name ?? 'N/A',
-                                    $record->user?->email ?? 'N/A',
+                                    $record->created_at?->format('Y-m-d H:i:s'),
                                     ucfirst($record->department ?? 'General'),
                                     $record->subject,
                                     ucfirst($record->priority ?? 'Medium'),
                                     ucfirst($record->status ?? 'Open'),
-                                    $record->updated_at?->toIso8601String(),
+                                    $record->updated_at?->format('Y-m-d H:i:s'),
                                 ]);
                             }
                             fclose($file);
                         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }

@@ -207,7 +207,10 @@
         display: none !important; /* Logo is cleanly in top-left corner of the page */
     }
 
-    .fi-simple-header .fi-header-heading {
+    .fi-simple-header-heading,
+    .fi-simple-header .fi-header-heading,
+    .fi-simple-header h1,
+    h1.fi-simple-header-heading {
         font-size: 28px !important;
         font-weight: 800 !important;
         color: #0F172A !important;
@@ -216,7 +219,10 @@
         margin: 0 0 6px 0 !important;
     }
 
-    .fi-simple-header .fi-header-subheading {
+    .fi-simple-header-subheading,
+    .fi-simple-header .fi-header-subheading,
+    .fi-simple-header p,
+    p.fi-simple-header-subheading {
         font-size: 13.5px !important;
         color: #64748B !important;
         margin: 0 !important;
@@ -313,13 +319,38 @@
         outline: none !important;
     }
 
-    /* Form Labels */
+    /* Form Labels (Targeting both label element and Filament v3 .fi-fo-field-label-content) */
     .fi-simple-main label,
-    .fi-simple-main .fi-fo-field-wrp-label {
+    .fi-simple-main .fi-fo-field-label,
+    .fi-simple-main .fi-fo-field-label-content,
+    .fi-simple-main .fi-fo-field-label-content > span,
+    .fi-simple-main .fi-checkbox-label {
         font-size: 13px !important;
-        font-weight: 500 !important;
-        color: #475569 !important;
+        font-weight: 600 !important;
+        color: #334155 !important;
         margin-bottom: 5px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Required Asterisk */
+    .fi-simple-main .fi-fo-field-label-required-mark {
+        color: #DC2626 !important;
+        font-weight: 700 !important;
+        margin-left: 2px !important;
+    }
+
+    /* Password Reveal Eye Button */
+    .fi-simple-main .fi-icon-btn,
+    .fi-simple-main .fi-input-wrp-action button,
+    .fi-simple-main .fi-ac-icon-btn-action {
+        color: #64748B !important;
+        transition: color 0.15s ease !important;
+    }
+
+    .fi-simple-main .fi-icon-btn:hover,
+    .fi-simple-main .fi-input-wrp-action button:hover,
+    .fi-simple-main .fi-ac-icon-btn-action:hover {
+        color: #0F172A !important;
     }
 
     /* Forgot Password Link */
@@ -338,7 +369,7 @@
         text-decoration: underline !important;
     }
 
-    /* Checkbox */
+    /* Checkbox & Remember Me / Terms Label */
     .fi-simple-main input[type="checkbox"] {
         border-radius: 5px !important;
         border: 1.5px solid #CBD5E1 !important;
@@ -370,4 +401,59 @@
         opacity: 0.7 !important;
         text-decoration-thickness: 2px !important;
     }
+
+    /* Absolute Dark-Mode Proofing: Enforces Clean SaaS Light Interior Across All Browsers & Extensions */
+    html.dark .fi-simple-main,
+    .dark .fi-simple-main {
+        background: #FFFFFF !important;
+        border-color: rgba(226, 232, 240, 0.95) !important;
+        color: #0F172A !important;
+    }
+
+    html.dark .fi-simple-header-heading,
+    .dark .fi-simple-header-heading {
+        color: #0F172A !important;
+    }
+
+    html.dark .fi-simple-header-subheading,
+    .dark .fi-simple-header-subheading {
+        color: #64748B !important;
+    }
+
+    html.dark .fi-simple-main label,
+    .dark .fi-simple-main label,
+    html.dark .fi-simple-main .fi-fo-field-label,
+    .dark .fi-simple-main .fi-fo-field-label,
+    html.dark .fi-simple-main .fi-fo-field-label-content,
+    .dark .fi-simple-main .fi-fo-field-label-content {
+        color: #334155 !important;
+    }
+
+    html.dark .fi-simple-main .fi-input-wrp,
+    .dark .fi-simple-main .fi-input-wrp {
+        background-color: #FFFFFF !important;
+        border-color: #E2E8F0 !important;
+    }
+
+    html.dark .fi-simple-main input.fi-input,
+    .dark .fi-simple-main input.fi-input,
+    html.dark .fi-simple-main input[type="email"],
+    .dark .fi-simple-main input[type="email"],
+    html.dark .fi-simple-main input[type="password"],
+    .dark .fi-simple-main input[type="password"],
+    html.dark .fi-simple-main input[type="text"],
+    .dark .fi-simple-main input[type="text"] {
+        color: #0F172A !important;
+        background-color: transparent !important;
+    }
 </style>
+
+<script>
+    // Enforce Clean SaaS Light Interior across all browsers (including Edge & Brave)
+    if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+    }
+    try {
+        localStorage.setItem('theme', 'light');
+    } catch (e) {}
+</script>
