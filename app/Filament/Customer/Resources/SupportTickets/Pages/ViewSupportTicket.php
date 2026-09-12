@@ -15,6 +15,37 @@ class ViewSupportTicket extends ViewRecord
 
     protected string $view = 'filament.pages.view-support-ticket';
 
+    public string $quickReplyMessage = '';
+
+    public function sendQuickReply(): void
+    {
+        $message = trim($this->quickReplyMessage);
+        if (empty($message)) {
+            Notification::make()->title('Please enter a message before sending')->warning()->send();
+            return;
+        }
+
+        TicketReply::create([
+            'support_ticket_id' => $this->record->id,
+            'user_id' => auth()->id(),
+            'message' => $message,
+        ]);
+
+        $this->record->update([
+            'status' => 'in_progress',
+        ]);
+
+        $this->record->refresh();
+
+        $this->quickReplyMessage = '';
+
+        Notification::make()
+            ->title('Reply Sent')
+            ->body('Your message has been added to the ticket thread.')
+            ->success()
+            ->send();
+    }
+
     public function getTitle(): string
     {
         return "[{$this->record->formatted_id}] " . $this->record->subject;
@@ -27,7 +58,7 @@ class ViewSupportTicket extends ViewRecord
 
     public function getSubheading(): ?string
     {
-        return "Ticket {$this->record->formatted_id} &bull; Created " . $this->record->created_at->format('M d, Y H:i T');
+        return "Ticket {$this->record->formatted_id} · Created " . $this->record->created_at->format('M d, Y · H:i T');
     }
 
     protected function getHeaderActions(): array

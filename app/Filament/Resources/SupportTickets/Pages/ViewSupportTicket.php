@@ -23,6 +23,49 @@ class ViewSupportTicket extends ViewRecord
 
     protected string $view = 'filament.pages.view-support-ticket';
 
+    public string $quickReplyMessage = '';
+
+    public function sendQuickReply(): void
+    {
+        $message = trim($this->quickReplyMessage);
+        if (empty($message)) {
+            Notification::make()->title('Please enter a response message before sending')->warning()->send();
+            return;
+        }
+
+        $adminId = auth('admin')->id() ?? Admin::first()?->id;
+
+        $reply = TicketReply::create([
+            'support_ticket_id' => $this->record->id,
+            'admin_id' => $adminId,
+            'message' => $message,
+        ]);
+
+        $this->record->update([
+            'status' => 'answered',
+        ]);
+
+        if ($this->record->user) {
+            try {
+                Mail::to($this->record->user->email)->send(
+                    new TicketReplyCustomerMail($this->record, $reply, $this->record->user)
+                );
+            } catch (\Throwable $e) {
+                Log::error("Failed to dispatch TicketReplyCustomerMail: " . $e->getMessage());
+            }
+        }
+
+        $this->record->refresh();
+
+        $this->quickReplyMessage = '';
+
+        Notification::make()
+            ->title('Staff Reply Posted')
+            ->body("Response posted and emailed to {$this->record->user?->email}.")
+            ->success()
+            ->send();
+    }
+
     public function getTitle(): string
     {
         return "[{$this->record->formatted_id}] " . $this->record->subject;
@@ -35,8 +78,8 @@ class ViewSupportTicket extends ViewRecord
 
     public function getSubheading(): ?string
     {
-        $customerName = $this->record->user?->name ?? 'Guest';
-        return "Ticket {$this->record->formatted_id} &bull; Customer: {$customerName} &bull; " . $this->record->created_at->format('M d, Y H:i T');
+        $customerName = $this->record->user?->name ?? 'Customer';
+        return "Ticket {$this->record->formatted_id} · Customer: {$customerName} · Created " . $this->record->created_at->format('M d, Y · H:i T');
     }
 
     protected function getHeaderActions(): array
