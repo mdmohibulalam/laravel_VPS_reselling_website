@@ -12,6 +12,21 @@ class ViewUser extends ViewRecord
 {
     protected static string $resource = UserResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Profile';
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-o-user-circle';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
