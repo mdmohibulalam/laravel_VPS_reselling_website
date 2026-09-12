@@ -20,11 +20,11 @@ class CmsPageResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'System Settings';
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 40;
 
     protected static ?string $navigationLabel = 'CMS Pages';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+    protected static string|BackedEnum|null $navigationIcon = null;
 
     public static function form(Schema $schema): Schema
     {

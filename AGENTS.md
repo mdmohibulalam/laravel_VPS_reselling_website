@@ -555,7 +555,25 @@ class ExamplesTable
   - If any part of the chain is not yet wired, you must explicitly declare what remains to be connected rather than claiming the feature is complete.
 
 ---
-*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export), strict prohibition of unsolicited commands, and the 100% end-to-end dynamic implementation mandate.*
+
+## 21. Payment Gateway Architecture Standard: Crypto-Only Default Mandate
+* **Cryptocurrency as Permanent & Sole Default**:
+  - **Cryptocurrency (USDT TRC-20, USDC Polygon, USDT Polygon)** is the platform's permanent, non-negotiable **DEFAULT and ONLY active payment gateway** out-of-the-box.
+  - Stripe / Credit Card payment processing is strictly **DISABLED BY DEFAULT** across all configurations (`PAYMENT_STRIPE_ENABLED=false` and `config('services.stripe.enabled', false)`).
+* **Strict Prohibition of Unsolicited Credit Card Activation**:
+  - **NEVER** activate, display, or default to Credit Card / Stripe anywhere in checkout pages, client invoice areas, email templates, or controllers unless the user/administrator **explicitly** sets `PAYMENT_STRIPE_ENABLED=true` in `.env` **AND** supplies valid, non-empty `STRIPE_KEY` and `STRIPE_SECRET`.
+  - In [config/services.php](file:///c:/wamp64/www/laravel_VPS_reselling_website/config/services.php), `stripe.enabled` must always evaluate:
+    ```php
+    'enabled' => filter_var(env('PAYMENT_STRIPE_ENABLED', false), FILTER_VALIDATE_BOOLEAN) && !empty(env('STRIPE_KEY')) && !empty(env('STRIPE_SECRET'))
+    ```
+    If either Stripe API key is blank or missing, Stripe MUST remain completely disabled and hidden, with zero exceptions.
+* **Conversion Flow Priority**:
+  - In all checkout views, invoice payment actions, and payment controllers, **Cryptocurrency (`manual` / `crypto`) is always the first-priority default payment method**.
+  - All customer invoices and payment buttons (e.g. `Pay via Crypto Now`) must direct users to the native Crypto Payment Station (`/checkout/invoice/{invoice}/crypto-pay`).
+
+---
+*Note: Any subsequent frontend pages, Filament resources, customer dashboards, admin panels, and backend services must inherit these exact design tokens, animation standards, color ratios, component architecture standards, floating capsule navigation, `<x-pricing-card>` rules, Filament table/details action separation rules, code hygiene/dead code elimination standards, .env/.env.example synchronization rules, Contabo OpenAPI compliance rules, white-labeling rules, legal & AUP architecture, frictionless checkout rules, cookie consent standards, mandatory Filament admin table standards (Column Toggle, Smart Filters, and Data Export), strict prohibition of unsolicited commands, the 100% end-to-end dynamic implementation mandate, and the Crypto-Only Default Mandate.*
+
 
 
 

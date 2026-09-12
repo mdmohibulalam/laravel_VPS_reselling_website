@@ -6,11 +6,10 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
+use App\Filament\Customer\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -44,10 +43,12 @@ class CustomerPanelProvider extends PanelProvider
                 fn () => view('filament.customer.components.demo-login')
             )
             ->renderHook(
-                \Filament\View\PanelsRenderHook::SIDEBAR_NAV_START,
-                fn () => view('filament.customer.components.sidebar-back-button')
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => view('filament.components.sub-menu-tree-styles')
             )
             ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('15.5rem')
+            ->collapsedSidebarWidth('4.5rem')
             ->maxContentWidth(\Filament\Support\Enums\Width::Full)
             ->userMenuItems([
                 \Filament\Navigation\MenuItem::make()
@@ -58,12 +59,15 @@ class CustomerPanelProvider extends PanelProvider
             ->navigationGroups([
                 \Filament\Navigation\NavigationGroup::make('Settings')
                     ->icon('heroicon-o-cog-6-tooth')
-                    ->collapsed(false),
+                    ->collapsible(true),
             ])
             ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Back to Website')
+                    ->url(fn (): string => url('/'))
+                    ->icon('heroicon-o-arrow-left-on-rectangle')
+                    ->sort(-10),
                 \Filament\Navigation\NavigationItem::make('Profile Setting')
                     ->group('Settings')
-                    ->icon('heroicon-o-user-circle')
                     ->sort(1)
                     ->url(fn (): string => url('/customer/profile'))
                     ->isActiveWhen(fn (): bool => request()->is('customer/profile*')),
@@ -74,9 +78,7 @@ class CustomerPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Customer/Widgets'), for: 'App\Filament\Customer\Widgets')
-            ->widgets([
-                AccountWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

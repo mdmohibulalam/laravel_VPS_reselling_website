@@ -187,4 +187,38 @@ class EditProfile extends BaseEditProfile
 
         return $data;
     }
+
+    protected function afterSave(): void
+    {
+        $user = $this->getUser();
+        $ip = request()->ip();
+
+        // 1. Audit Password Updates
+        if (!empty($this->data['password'])) {
+            \App\Models\UserActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'PASSWORD_CHANGED',
+                'description' => 'Customer updated account security password from profile settings',
+                'ip_address' => $ip,
+            ]);
+        }
+
+        // 2. Audit Profile & Contact Details Changes
+        $changedFields = [];
+        $tracked = ['name', 'email', 'phone', 'company_name', 'address', 'city', 'state', 'country', 'zip_code'];
+        foreach ($tracked as $field) {
+            if ($user->wasChanged($field)) {
+                $changedFields[] = ucwords(str_replace('_', ' ', $field));
+            }
+        }
+
+        if (!empty($changedFields)) {
+            \App\Models\UserActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'PROFILE_UPDATED',
+                'description' => 'Customer updated profile details: ' . implode(', ', $changedFields),
+                'ip_address' => $ip,
+            ]);
+        }
+    }
 }

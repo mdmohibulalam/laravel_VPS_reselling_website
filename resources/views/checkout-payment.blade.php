@@ -11,15 +11,15 @@
         $storageVal = $pendingOrder['storage_type'] ?? ($specsJson['storage'] ?? '100 GB Gen4 NVMe');
         $portVal = $specsJson['bandwidth'] ?? ($specsJson['port'] ?? '1 Gbps');
 
-        $stripeActive = $stripeEnabled ?? config('services.stripe.enabled', true);
+        $stripeActive = $stripeEnabled ?? config('services.stripe.enabled', false);
         $cryptoActive = $cryptoEnabled ?? config('services.crypto.enabled', true);
 
         $defaultPaymentMethod = old('payment_type');
         if (!$defaultPaymentMethod) {
-            if ($stripeActive) {
-                $defaultPaymentMethod = 'stripe';
-            } elseif ($cryptoActive) {
+            if ($cryptoActive) {
                 $defaultPaymentMethod = 'manual';
+            } elseif ($stripeActive) {
+                $defaultPaymentMethod = 'stripe';
             } else {
                 $defaultPaymentMethod = '';
             }

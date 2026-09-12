@@ -199,6 +199,12 @@ class ViewService extends ViewRecord
                     $res = $service->startInstance($this->record->contabo_instance_id);
                     if ($res->success) {
                         $this->liveStatus = 'running';
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => auth()->id(),
+                            'action' => 'SERVER_STARTED',
+                            'description' => "Powered on server {$this->record->formatted_hostname} ({$this->record->ip_address})",
+                            'ip_address' => request()->ip(),
+                        ]);
                         Notification::make()->title('Power On Initiated')->body('Your server is starting up.')->success()->send();
                     } else {
                         Notification::make()->title('Failed to Start Server')->body($res->message)->danger()->send();
@@ -217,6 +223,12 @@ class ViewService extends ViewRecord
                     $res = $service->rebootInstance($this->record->contabo_instance_id);
                     if ($res->success) {
                         $this->liveStatus = 'rebooting';
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => auth()->id(),
+                            'action' => 'SERVER_REBOOTED',
+                            'description' => "Rebooted server {$this->record->formatted_hostname} ({$this->record->ip_address})",
+                            'ip_address' => request()->ip(),
+                        ]);
                         Notification::make()->title('Reboot Initiated')->body('Your server is now rebooting.')->success()->send();
                     } else {
                         Notification::make()->title('Failed to Reboot')->body($res->message)->danger()->send();
@@ -235,6 +247,12 @@ class ViewService extends ViewRecord
                     $res = $service->stopInstance($this->record->contabo_instance_id);
                     if ($res->success) {
                         $this->liveStatus = 'stopped';
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => auth()->id(),
+                            'action' => 'SERVER_STOPPED',
+                            'description' => "Forced power-off on server {$this->record->formatted_hostname} ({$this->record->ip_address})",
+                            'ip_address' => request()->ip(),
+                        ]);
                         Notification::make()->title('Server Powered Off')->body('Your server has been powered off.')->warning()->send();
                     } else {
                         Notification::make()->title('Failed to Power Off')->body($res->message)->danger()->send();
@@ -252,6 +270,12 @@ class ViewService extends ViewRecord
                 ->action(function (ProvisioningServiceInterface $service) {
                     $res = $service->shutdownInstance($this->record->contabo_instance_id);
                     if ($res->success) {
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => auth()->id(),
+                            'action' => 'SERVER_SHUTDOWN',
+                            'description' => "Sent ACPI graceful shutdown signal to server {$this->record->formatted_hostname} ({$this->record->ip_address})",
+                            'ip_address' => request()->ip(),
+                        ]);
                         Notification::make()->title('Shutdown Signal Sent')->body('The OS has been instructed to shut down cleanly.')->info()->send();
                     } else {
                         Notification::make()->title('Failed to Shutdown')->body($res->message)->danger()->send();
@@ -279,6 +303,12 @@ class ViewService extends ViewRecord
                     $res = $service->resetPassword($this->record->contabo_instance_id, $data['new_password']);
                     if ($res->success) {
                         $this->record->update(['encrypted_credentials' => encrypt($data['new_password'])]);
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => auth()->id(),
+                            'action' => 'SERVER_PASSWORD_RESET',
+                            'description' => "Reset root password for server {$this->record->formatted_hostname} ({$this->record->ip_address})",
+                            'ip_address' => request()->ip(),
+                        ]);
                         Notification::make()->title('Password Reset Successful')->body('Your root password has been updated.')->success()->send();
                     } else {
                         Notification::make()->title('Password Reset Failed')->body($res->message)->danger()->send();
@@ -303,6 +333,12 @@ class ViewService extends ViewRecord
                     $res = $service->rescueInstance($this->record->contabo_instance_id, $data['rescue_password']);
                     if ($res->success) {
                         $this->liveStatus = 'rescue';
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => auth()->id(),
+                            'action' => 'SERVER_RESCUE_MODE',
+                            'description' => "Booted server {$this->record->formatted_hostname} into rescue recovery mode",
+                            'ip_address' => request()->ip(),
+                        ]);
                         Notification::make()->title('Server in Rescue Mode')->body("Login with root / password: {$data['rescue_password']}")->warning()->duration(15000)->send();
                     } else {
                         Notification::make()->title('Rescue Mode Failed')->body($res->message)->danger()->send();

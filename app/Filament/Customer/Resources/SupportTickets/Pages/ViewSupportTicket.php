@@ -31,6 +31,13 @@ class ViewSupportTicket extends ViewRecord
             'message' => $message,
         ]);
 
+        \App\Models\UserActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'TICKET_REPLIED',
+            'description' => "Posted reply on support ticket [{$this->record->formatted_id}] '{$this->record->subject}'",
+            'ip_address' => request()->ip(),
+        ]);
+
         $this->record->update([
             'status' => 'in_progress',
         ]);
@@ -86,6 +93,13 @@ class ViewSupportTicket extends ViewRecord
                         'message' => $data['message'],
                     ]);
 
+                    \App\Models\UserActivityLog::create([
+                        'user_id' => auth()->id(),
+                        'action' => 'TICKET_REPLIED',
+                        'description' => "Posted reply on support ticket [{$this->record->formatted_id}] '{$this->record->subject}'",
+                        'ip_address' => request()->ip(),
+                    ]);
+
                     $this->record->update([
                         'status' => 'in_progress',
                     ]);
@@ -109,6 +123,13 @@ class ViewSupportTicket extends ViewRecord
                 ->action(function () {
                     $this->record->update(['status' => 'closed']);
 
+                    \App\Models\UserActivityLog::create([
+                        'user_id' => auth()->id(),
+                        'action' => 'TICKET_CLOSED',
+                        'description' => "Customer closed support ticket [{$this->record->formatted_id}] '{$this->record->subject}'",
+                        'ip_address' => request()->ip(),
+                    ]);
+
                     Notification::make()
                         ->title('Ticket Closed')
                         ->body('This ticket has been marked as closed.')
@@ -127,6 +148,13 @@ class ViewSupportTicket extends ViewRecord
                 ->visible(fn () => $this->record->status === 'closed')
                 ->action(function () {
                     $this->record->update(['status' => 'open']);
+
+                    \App\Models\UserActivityLog::create([
+                        'user_id' => auth()->id(),
+                        'action' => 'TICKET_REOPENED',
+                        'description' => "Customer reopened support ticket [{$this->record->formatted_id}] '{$this->record->subject}'",
+                        'ip_address' => request()->ip(),
+                    ]);
 
                     Notification::make()
                         ->title('Ticket Reopened')

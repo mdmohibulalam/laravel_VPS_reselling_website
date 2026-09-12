@@ -55,6 +55,32 @@ class Invoice extends Model
                     $invoice->service?->extendBillingCycle();
                 }
 
+                // Log customer activity footprint for invoice settlement / credit added
+                if ($invoice->user_id) {
+                    if (empty($invoice->order_id) && empty($invoice->service_id)) {
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => $invoice->user_id,
+                            'action' => 'CREDIT_ADDED',
+                            'description' => "Account credit balance credited with \${$invoice->total} USD (Deposit Invoice #{$invoice->invoice_number})",
+                            'ip_address' => request()->ip(),
+                        ]);
+                    } elseif ($invoice->service_id) {
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => $invoice->user_id,
+                            'action' => 'SERVICE_RENEWED',
+                            'description' => "Service renewed: Invoice #{$invoice->invoice_number} paid (\${$invoice->total} USD)",
+                            'ip_address' => request()->ip(),
+                        ]);
+                    } else {
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => $invoice->user_id,
+                            'action' => 'INVOICE_PAID',
+                            'description' => "Invoice #{$invoice->invoice_number} paid in full (\${$invoice->total} USD)",
+                            'ip_address' => request()->ip(),
+                        ]);
+                    }
+                }
+
                 if ($invoice->user) {
                     try {
                         \Illuminate\Support\Facades\Mail::to($invoice->user->email)->send(

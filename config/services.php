@@ -34,7 +34,8 @@ return [
     ],
 
     'stripe' => [
-        'enabled' => (bool) env('PAYMENT_STRIPE_ENABLED', true),
+        // Crypto is the platform default. Stripe is strictly disabled by default unless PAYMENT_STRIPE_ENABLED=true AND both keys are present.
+        'enabled' => filter_var(env('PAYMENT_STRIPE_ENABLED', false), FILTER_VALIDATE_BOOLEAN) && !empty(env('STRIPE_KEY')) && !empty(env('STRIPE_SECRET')),
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),

@@ -210,7 +210,7 @@ class CheckoutController extends Controller
             $invoice->update(['amount' => $baseTotal, 'total' => $finalTotal]);
         }
 
-        $stripeEnabled = (bool) config('services.stripe.enabled', true);
+        $stripeEnabled = (bool) config('services.stripe.enabled', false);
         $cryptoEnabled = (bool) config('services.crypto.enabled', true);
 
         return view('checkout-payment', compact(
@@ -253,7 +253,7 @@ class CheckoutController extends Controller
         }
 
         $allowedPaymentTypes = [];
-        if (config('services.stripe.enabled', true)) {
+        if (config('services.stripe.enabled', false)) {
             $allowedPaymentTypes[] = 'stripe';
         }
         if (config('services.crypto.enabled', true)) {

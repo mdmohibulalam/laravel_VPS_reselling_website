@@ -136,4 +136,21 @@ Every newly added page, section, card grid, or interactive component **MUST AUTO
   - Must use `animate-fade-in-up` with staggered inline styles (`style="animation-delay: 150ms;"`, `style="animation-delay: 250ms;"`).
 
 ---
-*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, and component architecture standards.*
+
+## 9. Payment Gateway Architecture Standard: Crypto-Only Default Mandate
+* **Cryptocurrency as Permanent & Sole Default**:
+  - **Cryptocurrency (USDT TRC-20, USDC Polygon, USDT Polygon)** is the platform's permanent, non-negotiable **DEFAULT and ONLY active payment gateway** out-of-the-box.
+  - Stripe / Credit Card payment processing is strictly **DISABLED BY DEFAULT** across all configurations (`PAYMENT_STRIPE_ENABLED=false` and `config('services.stripe.enabled', false)`).
+* **Strict Prohibition of Unsolicited Credit Card Activation**:
+  - **NEVER** activate, display, or default to Credit Card / Stripe anywhere in checkout pages, client invoice areas, email templates, or controllers unless the user/administrator **explicitly** sets `PAYMENT_STRIPE_ENABLED=true` in `.env` **AND** supplies valid, non-empty `STRIPE_KEY` and `STRIPE_SECRET`.
+  - In [config/services.php](file:///c:/wamp64/www/laravel_VPS_reselling_website/config/services.php), `stripe.enabled` must always evaluate:
+    ```php
+    'enabled' => filter_var(env('PAYMENT_STRIPE_ENABLED', false), FILTER_VALIDATE_BOOLEAN) && !empty(env('STRIPE_KEY')) && !empty(env('STRIPE_SECRET'))
+    ```
+    If either Stripe API key is blank or missing, Stripe MUST remain completely disabled and hidden, with zero exceptions.
+* **Conversion Flow Priority**:
+  - In all checkout views, invoice payment actions, and payment controllers, **Cryptocurrency (`manual` / `crypto`) is always the first-priority default payment method**.
+  - All customer invoices and payment buttons (e.g. `Pay via Crypto Now`) must direct users to the native Crypto Payment Station (`/checkout/invoice/{invoice}/crypto-pay`).
+
+---
+*Note: Any subsequent frontend pages (e.g. checkout, package catalogs, customer dashboards, error pages) must inherit these exact design tokens, animation standards, color ratios, component architecture standards, and the Crypto-Only Default Mandate.*

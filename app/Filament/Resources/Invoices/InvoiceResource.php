@@ -19,7 +19,7 @@ class InvoiceResource extends Resource
 {
     protected static ?string $model = Invoice::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+    protected static string|BackedEnum|null $navigationIcon = null;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Invoices';
 
@@ -28,14 +28,12 @@ class InvoiceResource extends Resource
         return [
             NavigationItem::make('All Invoices')
                 ->group('Invoices')
-                ->icon(Heroicon::OutlinedDocumentText)
                 ->sort(1)
                 ->url(static::getUrl('index'))
                 ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.invoices.index') && !request()->has('tab')),
 
             NavigationItem::make('Pending Approval')
                 ->group('Invoices')
-                ->icon(Heroicon::OutlinedShieldExclamation)
                 ->sort(2)
                 ->badge(fn () => Invoice::whereIn('status', ['pending', 'unpaid'])->whereNotNull('crypto_txid')->where('crypto_txid', '!=', '')->count() ?: null, color: 'warning')
                 ->url(static::getUrl('index', ['tab' => 'pending_approval']))
@@ -43,7 +41,6 @@ class InvoiceResource extends Resource
 
             NavigationItem::make('Unpaid Invoices')
                 ->group('Invoices')
-                ->icon(Heroicon::OutlinedExclamationCircle)
                 ->sort(3)
                 ->badge(fn () => Invoice::whereIn('status', ['pending', 'unpaid'])->where(fn ($q) => $q->whereNull('crypto_txid')->orWhere('crypto_txid', ''))->count() ?: null, color: 'danger')
                 ->url(static::getUrl('index', ['tab' => 'unpaid']))
@@ -51,7 +48,6 @@ class InvoiceResource extends Resource
 
             NavigationItem::make('Paid Invoices')
                 ->group('Invoices')
-                ->icon(Heroicon::OutlinedCheckCircle)
                 ->sort(4)
                 ->badge(fn () => Invoice::where('status', 'paid')->count() ?: null, color: 'success')
                 ->url(static::getUrl('index', ['tab' => 'paid']))
@@ -59,7 +55,6 @@ class InvoiceResource extends Resource
 
             NavigationItem::make('Cancelled Invoices')
                 ->group('Invoices')
-                ->icon(Heroicon::OutlinedXCircle)
                 ->sort(5)
                 ->url(static::getUrl('index', ['tab' => 'cancelled']))
                 ->isActiveWhen(fn (): bool => request()->get('tab') === 'cancelled'),

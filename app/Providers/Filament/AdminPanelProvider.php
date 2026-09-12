@@ -37,27 +37,41 @@ class AdminPanelProvider extends PanelProvider
                 \Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
                 fn () => view('filament.components.admin-demo-login')
             )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => view('filament.components.sub-menu-tree-styles')
+            )
             ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('15.5rem')
+            ->collapsedSidebarWidth('4.5rem')
             ->maxContentWidth(\Filament\Support\Enums\Width::Full)
             ->navigationGroups([
-                'Orders',
-                'Invoices',
-                'Packages',
-                'Support Tickets',
-                'Users',
-                'System Settings',
+                \Filament\Navigation\NavigationGroup::make('Orders')
+                    ->icon('heroicon-o-shopping-bag')
+                    ->collapsible(true),
+                \Filament\Navigation\NavigationGroup::make('Invoices')
+                    ->icon('heroicon-o-document-currency-dollar')
+                    ->collapsible(true),
+                \Filament\Navigation\NavigationGroup::make('Packages')
+                    ->icon('heroicon-o-server-stack')
+                    ->collapsible(true),
+                \Filament\Navigation\NavigationGroup::make('Support Tickets')
+                    ->icon('heroicon-o-chat-bubble-left-right')
+                    ->collapsible(true),
+                \Filament\Navigation\NavigationGroup::make('Users')
+                    ->icon('heroicon-o-users')
+                    ->collapsible(true),
+                \Filament\Navigation\NavigationGroup::make('System Settings')
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->collapsible(true),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
-                Dashboard::class,
+                \App\Filament\Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-                \App\Filament\Widgets\DashboardStats::class,
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

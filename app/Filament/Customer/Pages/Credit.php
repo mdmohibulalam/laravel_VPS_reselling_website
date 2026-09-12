@@ -15,7 +15,7 @@ class Credit extends Page
 
     protected static ?string $navigationLabel = 'Credit';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-banknotes';
+    protected static string | \BackedEnum | null $navigationIcon = null;
 
     protected static ?int $navigationSort = 2;
 

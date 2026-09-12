@@ -37,44 +37,71 @@ class AppServiceProvider extends ServiceProvider
     {
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function (\Illuminate\Auth\Events\Login $event) {
             if ($event->user instanceof \App\Models\User) {
-                \App\Models\UserActivityLog::create([
+                \App\Models\UserActivityLog::record([
                     'user_id' => $event->user->id,
+                    'actor_type' => 'user',
                     'action' => 'LOGIN',
-                    'description' => 'Customer logged into portal',
-                    'ip_address' => request()->ip(),
+                    'description' => 'Customer logged into client portal',
+                ]);
+            } elseif ($event->user instanceof \App\Models\Admin) {
+                \App\Models\UserActivityLog::record([
+                    'admin_id' => $event->user->id,
+                    'actor_type' => 'admin',
+                    'action' => 'ADMIN_LOGIN',
+                    'description' => "Administrator {$event->user->name} logged into Admin Console",
                 ]);
             }
         });
 
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Logout::class, function (\Illuminate\Auth\Events\Logout $event) {
             if ($event->user instanceof \App\Models\User) {
-                \App\Models\UserActivityLog::create([
+                \App\Models\UserActivityLog::record([
                     'user_id' => $event->user->id,
+                    'actor_type' => 'user',
                     'action' => 'LOGOUT',
-                    'description' => 'Customer logged out of portal',
-                    'ip_address' => request()->ip(),
+                    'description' => 'Customer logged out of client portal',
+                ]);
+            } elseif ($event->user instanceof \App\Models\Admin) {
+                \App\Models\UserActivityLog::record([
+                    'admin_id' => $event->user->id,
+                    'actor_type' => 'admin',
+                    'action' => 'ADMIN_LOGOUT',
+                    'description' => "Administrator {$event->user->name} logged out of Admin Console",
                 ]);
             }
         });
 
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Failed::class, function (\Illuminate\Auth\Events\Failed $event) {
+            $email = $event->credentials['email'] ?? 'Unknown Account';
+            $guard = $event->guard ?? 'web';
+            $target = $guard === 'admin' ? 'Admin Console' : 'Client Portal';
+
+            \App\Models\UserActivityLog::record([
+                'user_id' => $event->user?->id,
+                'actor_type' => $guard === 'admin' ? 'admin' : 'user',
+                'action' => 'FAILED_LOGIN',
+                'description' => "Failed authentication attempt for '{$email}' on {$target}",
+            ]);
+        });
+
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\PasswordReset::class, function (\Illuminate\Auth\Events\PasswordReset $event) {
             if ($event->user instanceof \App\Models\User) {
-                \App\Models\UserActivityLog::create([
+                \App\Models\UserActivityLog::record([
                     'user_id' => $event->user->id,
+                    'actor_type' => 'user',
                     'action' => 'PASSWORD_RESET',
-                    'description' => 'Customer reset account password',
-                    'ip_address' => request()->ip(),
+                    'description' => 'Customer successfully reset account password via recovery link',
                 ]);
             }
         });
 
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Registered::class, function (\Illuminate\Auth\Events\Registered $event) {
             if ($event->user instanceof \App\Models\User) {
-                \App\Models\UserActivityLog::create([
+                \App\Models\UserActivityLog::record([
                     'user_id' => $event->user->id,
+                    'actor_type' => 'user',
                     'action' => 'REGISTERED',
                     'description' => 'New customer account registered',
-                    'ip_address' => request()->ip(),
                 ]);
             }
         });

@@ -19,7 +19,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+    protected static string|BackedEnum|null $navigationIcon = null;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Users';
 
@@ -28,7 +28,6 @@ class UserResource extends Resource
         return [
             NavigationItem::make('All Users')
                 ->group('Users')
-                ->icon(Heroicon::OutlinedUsers)
                 ->sort(1)
                 ->badge(fn () => User::count() ?: null)
                 ->url(static::getUrl('index', ['tab' => 'all']))
@@ -36,7 +35,6 @@ class UserResource extends Resource
 
             NavigationItem::make('Active Users')
                 ->group('Users')
-                ->icon(Heroicon::OutlinedCheckCircle)
                 ->sort(2)
                 ->badge(fn () => User::activeCustomer()->count() ?: null, color: 'success')
                 ->url(static::getUrl('index', ['tab' => 'active']))
@@ -44,7 +42,6 @@ class UserResource extends Resource
 
             NavigationItem::make('Suspended Users')
                 ->group('Users')
-                ->icon(Heroicon::OutlinedExclamationTriangle)
                 ->sort(3)
                 ->badge(fn () => User::suspendedCustomer()->count() ?: null, color: 'warning')
                 ->url(static::getUrl('index', ['tab' => 'suspended']))
@@ -52,7 +49,6 @@ class UserResource extends Resource
 
             NavigationItem::make('Inactive Users')
                 ->group('Users')
-                ->icon(Heroicon::OutlinedXCircle)
                 ->sort(4)
                 ->badge(fn () => User::inactiveCustomer()->count() ?: null, color: 'gray')
                 ->url(static::getUrl('index', ['tab' => 'inactive']))

@@ -11,15 +11,15 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class CustomerRecentServices extends BaseWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     protected int | string | array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
         return $table
-            ->heading('My Cloud VPS Servers')
-            ->description('Active cloud server instances provisioned on the high-speed NVMe infrastructure')
+            ->heading('My Cloud Servers')
+            ->description('Active virtual machines and network configurations.')
             ->query(
                 Service::query()->where('user_id', auth()->id())->latest()
             )
@@ -31,31 +31,30 @@ class CustomerRecentServices extends BaseWidget
                     ->weight('bold'),
 
                 TextColumn::make('ip_address')
-                    ->label('Dedicated IP')
+                    ->label('Dedicated IPv4')
                     ->copyable()
                     ->copyMessage('IP copied to clipboard')
-                    ->placeholder('Pending Assignment')
+                    ->placeholder('Allocating IP...')
                     ->weight('bold'),
 
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
-                        'contabo_ok' => 'info',
+                        'active', 'contabo_ok', 'provisioned' => 'success',
                         'awaiting_provisioning', 'provisioning' => 'warning',
                         'suspended' => 'danger',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'active' => 'Active',
-                        'awaiting_provisioning' => 'Awaiting Provisioning',
+                        'active', 'contabo_ok', 'provisioned' => 'Active',
+                        'awaiting_provisioning', 'provisioning' => 'Provisioning',
                         'suspended' => 'Suspended',
                         default => ucfirst($state),
                     }),
 
                 TextColumn::make('billing_cycle')
                     ->label('Billing Cycle')
-                    ->formatStateUsing(fn (string $state): string => ucfirst($state)),
+                    ->formatStateUsing(fn (?string $state): string => $state ? ucfirst($state) : 'Monthly'),
 
                 TextColumn::make('recurring_amount')
                     ->label('Renewal Rate')
@@ -69,10 +68,20 @@ class CustomerRecentServices extends BaseWidget
             ->recordActions([
                 Action::make('manage')
                     ->label('Manage Server')
-                    ->icon('heroicon-m-server')
                     ->button()
+                    ->size('sm')
                     ->color('primary')
                     ->url(fn (Service $record): string => ServiceResource::getUrl('view', ['record' => $record])),
+            ])
+            ->emptyStateHeading('No Cloud Servers Yet')
+            ->emptyStateDescription('Deploy your high-performance NVMe cloud VPS in under 60 seconds.')
+            ->emptyStateActions([
+                Action::make('deploy')
+                    ->label('+ Deploy Server')
+                    ->button()
+                    ->color('primary')
+                    ->url(url('/plans'))
+                    ->openUrlInNewTab(),
             ])
             ->paginated([5]);
     }

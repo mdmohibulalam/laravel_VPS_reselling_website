@@ -39,6 +39,11 @@ services:
         value: "true"
       - key: PROVISIONING_MODE
         value: mock
+      # Payment Gateways (Crypto is active by default; Stripe is disabled until explicitly enabled with keys)
+      - key: PAYMENT_CRYPTO_ENABLED
+        value: "true"
+      - key: PAYMENT_STRIPE_ENABLED
+        value: "false"
       # Payment Gateway Keys (Configure secrets in the Render Dashboard)
       - key: STRIPE_KEY
         sync: false

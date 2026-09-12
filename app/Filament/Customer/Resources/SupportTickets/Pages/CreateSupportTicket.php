@@ -26,6 +26,13 @@ class CreateSupportTicket extends CreateRecord
             'user_id' => auth()->id(),
             'message' => $message,
         ]);
+
+        \App\Models\UserActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'TICKET_OPENED',
+            'description' => "Opened support ticket [{$this->record->formatted_id}] '{$this->record->subject}' (Department: " . ucfirst($this->record->department) . ', Priority: ' . ucfirst($this->record->priority) . ')',
+            'ip_address' => request()->ip(),
+        ]);
     }
 
     protected function getRedirectUrl(): string

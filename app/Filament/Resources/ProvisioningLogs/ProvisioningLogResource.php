@@ -20,11 +20,11 @@ class ProvisioningLogResource extends Resource
 
     protected static ?string $navigationLabel = 'API Error Logs';
     protected static string|\UnitEnum|null $navigationGroup = 'System Settings';
-    protected static ?int $navigationSort = 100;
+    protected static ?int $navigationSort = 20;
     protected static ?string $modelLabel = 'API Log';
     protected static ?string $pluralModelLabel = 'API Logs';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBugAnt;
+    protected static string|BackedEnum|null $navigationIcon = null;
 
     public static function form(Schema $schema): Schema
     {

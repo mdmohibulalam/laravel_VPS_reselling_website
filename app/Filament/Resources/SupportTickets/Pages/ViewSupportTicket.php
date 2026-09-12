@@ -53,6 +53,14 @@ class ViewSupportTicket extends ViewRecord
             } catch (\Throwable $e) {
                 Log::error("Failed to dispatch TicketReplyCustomerMail: " . $e->getMessage());
             }
+
+            $staffName = auth('admin')->user()?->name ?? 'Support Staff';
+            \App\Models\UserActivityLog::create([
+                'user_id' => $this->record->user_id,
+                'action' => 'STAFF_TICKET_REPLY',
+                'description' => "Support staff ({$staffName}) replied to ticket [{$this->record->formatted_id}] '{$this->record->subject}'",
+                'ip_address' => request()->ip(),
+            ]);
         }
 
         $this->record->refresh();
@@ -120,6 +128,14 @@ class ViewSupportTicket extends ViewRecord
                         } catch (\Throwable $e) {
                             Log::error("Failed to dispatch TicketReplyCustomerMail: " . $e->getMessage());
                         }
+
+                        $staffName = auth('admin')->user()?->name ?? 'Support Staff';
+                        \App\Models\UserActivityLog::create([
+                            'user_id' => $this->record->user_id,
+                            'action' => 'STAFF_TICKET_REPLY',
+                            'description' => "Support staff ({$staffName}) replied to ticket [{$this->record->formatted_id}] '{$this->record->subject}'",
+                            'ip_address' => request()->ip(),
+                        ]);
                     }
 
                     Notification::make()
