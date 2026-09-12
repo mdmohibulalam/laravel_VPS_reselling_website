@@ -81,6 +81,7 @@ class UserResource extends Resource
             RelationManagers\OrdersRelationManager::class,
             RelationManagers\ServicesRelationManager::class,
             RelationManagers\InvoicesRelationManager::class,
+            RelationManagers\CreditsRelationManager::class,
             RelationManagers\TransactionsRelationManager::class,
             RelationManagers\SupportTicketsRelationManager::class,
             RelationManagers\EmailsRelationManager::class,

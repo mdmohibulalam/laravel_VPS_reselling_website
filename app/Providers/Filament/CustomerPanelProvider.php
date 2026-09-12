@@ -55,6 +55,19 @@ class CustomerPanelProvider extends PanelProvider
                     ->url(fn (): string => url('/'))
                     ->icon('heroicon-o-globe-alt'),
             ])
+            ->navigationGroups([
+                \Filament\Navigation\NavigationGroup::make('Settings')
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->collapsed(false),
+            ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Profile Setting')
+                    ->group('Settings')
+                    ->icon('heroicon-o-user-circle')
+                    ->sort(1)
+                    ->url(fn (): string => url('/customer/profile'))
+                    ->isActiveWhen(fn (): bool => request()->is('customer/profile*')),
+            ])
             ->discoverResources(in: app_path('Filament/Customer/Resources'), for: 'App\Filament\Customer\Resources')
             ->discoverPages(in: app_path('Filament/Customer/Pages'), for: 'App\Filament\Customer\Pages')
             ->pages([

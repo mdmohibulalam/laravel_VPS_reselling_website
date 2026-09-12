@@ -452,6 +452,26 @@
                             </td>
                         </tr>
                     @endforeach
+                @elseif(empty($invoice->order_id) && empty($invoice->service_id))
+                    <tr>
+                        <td>
+                            <div style="font-size: 14px; font-weight: 800; color: #0F172A;">💳 Account Credit & Balance Top-Up</div>
+                            <div style="font-size: 12px; color: #64748B; margin-top: 3px; line-height: 1.5;">
+                                <span>Pre-funded account balance for zero-downtime automated VPS renewals and instant service deployment.</span><br>
+                                <span>Wallet credit applied automatically upon blockchain confirmation · Never expires</span>
+                            </div>
+                        </td>
+                        <td style="text-align: center; vertical-align: top;">
+                            <span style="font-size: 12px; font-weight: 700; background: #FAF5FF; color: #673DE6; border: 1px solid #E9D5FF; padding: 4px 10px; border-radius: 8px;">
+                                Account Deposit
+                            </span>
+                        </td>
+                        <td style="vertical-align: top;">
+                            <span class="vortex-mono" style="font-size: 14px; font-weight: 800; color: #0F172A;">
+                                ${{ number_format((float) $invoice->amount, 2) }}
+                            </span>
+                        </td>
+                    </tr>
                 @else
                     <tr>
                         <td>
