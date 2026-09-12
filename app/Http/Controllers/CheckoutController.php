@@ -179,6 +179,7 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
                 'order_number' => 'ORD-' . strtoupper(Str::random(10)),
                 'total_amount' => $finalTotal,
+                'ip_address' => $request->ip(),
                 'status' => 'pending',
             ]);
 
