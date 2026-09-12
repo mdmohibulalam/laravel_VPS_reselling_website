@@ -5,13 +5,16 @@ services:
     env: docker
     plan: free
     dockerCommand: /usr/local/bin/start
+    healthCheckPath: /
     envVars:
-      - key: APP_KEY
-        value: "base64:JRxkRng5kuYlFlfibw9k5WDAvkbZIb/+istB8KUO8IE="
+      - key: APP_NAME
+        value: "VortexCloud"
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
+      - key: APP_KEY
+        sync: false
       - key: APP_URL
         fromService:
           type: web
@@ -19,25 +22,44 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
       - key: DB_CONNECTION
         value: pgsql
+      # For Supabase / External PostgreSQL: configure connection string in Render Dashboard.
+      # sync: false prevents Blueprint deployments from overwriting your custom database credentials.
       - key: DATABASE_URL
-        fromDatabase:
-          name: vps-reselling-db
-          property: connectionString
+        sync: false
+      - key: DB_URL
+        sync: false
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_ENCRYPT
+        value: true
+      # Runs queue:work in the background on free tier so VPS provisioning works without a paid worker
+      - key: RUN_QUEUE_WORKER
+        value: "true"
       - key: PROVISIONING_MODE
         value: mock
-      # NOTE: Make sure to add your real Stripe keys inside the Render Dashboard!
+      # Payment Gateway Keys (Configure secrets in the Render Dashboard)
       - key: STRIPE_KEY
-        value: ""
+        sync: false
       - key: STRIPE_SECRET
-        value: ""
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
 
-  # 2. The Background Queue Worker (For Provisioning Jobs)
+  # 2. Dedicated Background Queue Worker (Optional - For Production Scaling)
+  # NOTE: The web service above already processes queue jobs in the background on the Free tier.
+  # If you deploy this dedicated worker on Render, it requires at least the 'starter' plan ($7/mo).
   - type: worker
     name: vps-reselling-worker
     env: docker
-    plan: free
-    dockerCommand: php artisan queue:work --sleep=3 --tries=3
+    plan: starter
+    dockerCommand: php artisan queue:work --sleep=3 --tries=3 --timeout=90
     envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
       - key: APP_KEY
         fromService:
           type: web
@@ -46,12 +68,18 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DATABASE_URL
-        fromDatabase:
-          name: vps-reselling-db
-          property: connectionString
+        sync: false
+      - key: DB_URL
+        sync: false
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: PROVISIONING_MODE
+        value: mock
 
 databases:
-  # 3. The Managed PostgreSQL Database
+  # 3. Optional Managed PostgreSQL Database on Render
+  # NOTE: Free databases on Render expire after 30 days.
+  # For permanent free PostgreSQL, connect Supabase / Neon via DATABASE_URL above.
   - name: vps-reselling-db
     databaseName: vps_app
     user: vps_user

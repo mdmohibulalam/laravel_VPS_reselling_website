@@ -12,8 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First convert ENUMs to VARCHAR using native statements if changing them fails
-        // Laravel handles this well with DBAL if installed, but string is usually safe.
+        // Drop PostgreSQL enum check constraints if running on PostgreSQL
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE orders DROP CONSTRAINT IF EXISTS orders_status_check');
+            DB::statement('ALTER TABLE invoices DROP CONSTRAINT IF EXISTS invoices_status_check');
+            DB::statement('ALTER TABLE services DROP CONSTRAINT IF EXISTS services_status_check');
+        }
         
         Schema::table('orders', function (Blueprint $table) {
             $table->string('status')->default('pending')->change();
